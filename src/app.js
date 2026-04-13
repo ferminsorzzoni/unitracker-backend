@@ -8,7 +8,8 @@ import authRoutes from "./modules/auth/auth.routes.js";
 const app = express();
 
 app.use(helmet());
-app.use(cors());
+app.use(cors({
+}));
 app.use(express.json());
 app.use(passport.initialize());
 
