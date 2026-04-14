@@ -5,6 +5,7 @@ import passport from "passport";
 import cookieParser from "cookie-parser";
 import "./config/passport.js";
 import authRoutes from "./modules/auth/auth.routes.js";
+import errorHandler from "./middleware/errorHandler.js";
 
 const app = express();
 
@@ -16,5 +17,7 @@ app.use(express.json());
 app.use(passport.initialize());
 
 app.use("/api/auth", authRoutes);
+
+app.use(errorHandler);
 
 export default app;

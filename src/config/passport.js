@@ -27,11 +27,13 @@ passport.use(new GoogleStrategy({
     async (accessToken, refreshToken, profile, cb) => {
         try {
             let user = await findUserByProviderId(profile.id);
-            if(!user) user = await createUser({
+            if(!user) {
+                user = await createUser({
                 providerId: profile.id,
                 email: profile.emails[0].value,
                 name: profile.displayName
             });
+            }
             return cb(null, user);
         } catch(err) {
             return cb(err);

@@ -1,8 +1,8 @@
 import passport from "passport";
-import { generateAccessToken, generateRefreshToken, getRefreshToken } from "./auth.service.js";
+import { generateAccessToken, generateRefreshToken, getRefreshToken, loginService, registerService } from "./auth.service.js";
 
 const refreshAccessController = [verifyRefreshToken, sendAccessToken];
-const registerController = [register, setRefreshToken, sendAccessToken];
+const registerController = [validateRegisterCredentials, register, setRefreshToken, sendAccessToken];
 const loginController = [login, setRefreshToken, sendAccessToken];
 const googleController = [passport.authenticate("google", { scope: ["email", "profile"]})];
 const googleCallbackController = [passport.authenticate("google", { session: false }), setRefreshToken, sendAccessToken];
@@ -10,7 +10,6 @@ const googleCallbackController = [passport.authenticate("google", { session: fal
 async function verifyRefreshToken(req, res, next) {
     try {
         const tokenData = await getRefreshToken(req.cookies.refreshToken);
-        if(!tokenData) return res.status(401).json({ error: "Unauthorized" });
         req.user = { id: tokenData.userId };
         next();
     } catch(err) {
@@ -33,12 +32,33 @@ async function setRefreshToken(req, res, next) {
     }
 }
 
+function validateRegisterCredentials(req, res, next) {
+
+}
+
 async function register(req, res, next) {
+    const { email, password, name } = req.body;
+
+    try {
+        const user = await registerService(email, password, name);
+        req.user = user;
+        next();
+    } catch(err) {
+        next(err);
+    }
 
 }
 
 async function login(req, res, next) {
-// importante setear user
+    const { email, password } = req.body;
+
+    try {
+        const user = await loginService(email, password);
+        req.user = user;
+        next();
+    } catch(err) {
+        next(err);
+    }
 }
 
 export { refreshAccessController, registerController, loginController, googleController, googleCallbackController };

@@ -1,7 +1,9 @@
-import { env } from "../config/env.js";
 import jwt from "jsonwebtoken";
-import crypto from "crypto"
-import { createHashedToken, deleteExpiredTokens, findRefreshToken } from "./auth.repository.js";
+import crypto from "crypto";
+import bcrypt from "bcrypt";
+import { env } from "../config/env.js";
+import { createHashedToken, deleteExpiredTokens, findRefreshToken, findUserByEmail } from "./auth.repository.js";
+import { UnauthorizedError } from "../../utils/errors.js";
 
 function generateAccessToken(userId) {
     return jwt.sign({ sub: userId }, env.JWT_SECRET, { expiresIn: "15m" });
@@ -21,12 +23,29 @@ async function getRefreshToken(token) {
 
     const refreshToken = await findRefreshToken(hashedToken);
 
-    if(!refreshToken) return null;
+    if(!refreshToken) throw new UnauthorizedError("Invalid refresh token");
     if(refreshToken.expiresAt < new Date()) {
         await deleteExpiredTokens(refreshToken.userId);
-        return null;
+        throw new UnauthorizedError("Invalid refresh token");
     }
     return refreshToken;
 }
 
-export { generateAccessToken, generateRefreshToken, getRefreshToken };
+async function registerService(email, password, name) {
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await createUser({ email, password: hashedPassword, name });
+    return { id: user.id, email: user.email, name: user.name };
+}
+
+async function loginService(email, password) {
+    const user = await findUserByEmail(email);
+    if(!user) throw new UnauthorizedError("Invalid credentials");
+
+    const isPassword = await bcrypt.compare(password, user.password);
+    if(!isPassword) throw new UnauthorizedError("Invalid credentials");
+
+    return { id: user.id, email: user.email, name: user.name };
+}
+
+export { generateAccessToken, generateRefreshToken, getRefreshToken, registerService, loginService };
