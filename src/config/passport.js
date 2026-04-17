@@ -2,7 +2,7 @@ import passport from "passport";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { env } from "./env.js";
-import { findUserById, findUserByProviderId, createUser } from "../modules/auth/auth.repository.js";
+import { findUserById, createUser, findUserByGoogleId } from "../modules/auth/auth.repository.js";
 
 passport.use(new JwtStrategy({ 
         secretOrKey: env.JWT_SECRET,
@@ -26,10 +26,10 @@ passport.use(new GoogleStrategy({
     },
     async (accessToken, refreshToken, profile, cb) => {
         try {
-            let user = await findUserByProviderId(profile.id);
+            let user = await findUserByGoogleId(profile.id);
             if(!user) {
                 user = await createUser({
-                providerId: profile.id,
+                googleId: profile.id,
                 email: profile.emails[0].value,
                 name: profile.displayName
             });

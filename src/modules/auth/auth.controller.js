@@ -39,7 +39,7 @@ async function register(req, res, next) {
 
     try {
         const user = await registerService(email, password, name);
-        req.user = user;
+        req.user = { id: user.id };
         next();
     } catch(err) {
         next(err);
@@ -52,7 +52,7 @@ async function login(req, res, next) {
 
     try {
         const user = await loginService(email, password);
-        req.user = user;
+        req.user = {id: user.id };
         next();
     } catch(err) {
         next(err);

@@ -1,27 +1,34 @@
 import { ConflictError } from "../../utils/errors.js";
+import { prisma } from "../../config/database.js";
 
 async function findUserById(id) {
-    
+    return await prisma.user.findUnique({
+        where: { id: id },
+    });
 }
 
-async function findUserByProviderId(providerId) {
-
+async function findUserByGoogleId(googleId) {
+    return await prisma.user.findUnique({
+        where: { googleId: googleId },
+    });
 }
 
 async function findUserByEmail(email) {
-    // prisma.user.findUnique({ where: { email }});
+    return await prisma.user.findUnique({ 
+        where: { email }
+    });
 }
 
-async function createUser({ email, password, name, providerId }) {
+async function createUser({ email, password, name, googleId }) {
     let existing = await findUserByEmail(email);
 
     if(existing && existing.password && password) throw new ConflictError("Email already registered");
 
-    if(providerId) {
+    if(googleId) {
         existing = await prisma.user.upsert({
             where: { email },
-            update: { googleId: providerId },
-            create: { email, name, googleId: providerId }
+            update: { googleId: googleId },
+            create: { email, name, googleId }
         })
     }
 
@@ -36,16 +43,28 @@ async function createUser({ email, password, name, providerId }) {
     return existing;
 }
 
-async function findRefreshToken(userId, hashedToken) {
-
+async function findRefreshToken(hashedToken) {
+    return await prisma.refreshToken.findUnique({
+        where: { token: hashedToken }
+    });
 }
 
 async function deleteExpiredTokens(userId) {
-
+    return await prisma.refreshToken.deleteMany({
+        where: { userId: userId,
+        expiresAt: { lt: new Date() }
+    }
+    });
 }
 
 async function createHashedToken(userId, hashedToken, expiresAt) {
-
+    return await prisma.refreshToken.create({
+        data: {
+            userId,
+            token: hashedToken,
+            expiresAt
+        }
+    });
 }
 
-export { findUserById, findUserByProviderId, findUserByEmail, createUser, findRefreshToken, deleteExpiredTokens, createHashedToken };
+export { findUserById, findUserByGoogleId, findUserByEmail, createUser, findRefreshToken, deleteExpiredTokens, createHashedToken };
