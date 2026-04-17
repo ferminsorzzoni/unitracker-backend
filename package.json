@@ -8,6 +8,7 @@
     "prisma": "^7.7.0"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.7.0",
     "@prisma/client": "^7.7.0",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
@@ -19,6 +20,7 @@
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.1",
+    "pg": "^8.20.0",
     "zod": "^4.3.6"
   }
 }
