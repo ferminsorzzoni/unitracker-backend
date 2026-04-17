@@ -1,7 +1,7 @@
-class ConflictError extends Error {
+class BadRequestError extends Error {
     constructor(message) {
         super(message);
-        this.status = 409;
+        this.status = 400;
     }
 }
 
@@ -12,4 +12,11 @@ class UnauthorizedError extends Error {
     }
 }
 
-export { ConflictError, UnauthorizedError };
+class ConflictError extends Error {
+    constructor(message) {
+        super(message);
+        this.status = 409;
+    }
+}
+
+export { BadRequestError, UnauthorizedError, ConflictError };

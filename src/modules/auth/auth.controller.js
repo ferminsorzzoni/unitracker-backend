@@ -1,8 +1,10 @@
 import passport from "passport";
 import { generateAccessToken, generateRefreshToken, getRefreshToken, loginService, registerService } from "./auth.service.js";
+import { validate } from "../../middleware/validate.js";
+import { registerSchema } from "./auth.schema.js";
 
 const refreshAccessController = [verifyRefreshToken, sendAccessToken];
-const registerController = [validateRegisterCredentials, register, setRefreshToken, sendAccessToken];
+const registerController = [validate(registerSchema), register, setRefreshToken, sendAccessToken];
 const loginController = [login, setRefreshToken, sendAccessToken];
 const googleController = [passport.authenticate("google", { scope: ["email", "profile"]})];
 const googleCallbackController = [passport.authenticate("google", { session: false }), setRefreshToken, sendAccessToken];
@@ -30,10 +32,6 @@ async function setRefreshToken(req, res, next) {
     } catch(err) {
         next(err);
     }
-}
-
-function validateRegisterCredentials(req, res, next) {
-
 }
 
 async function register(req, res, next) {
