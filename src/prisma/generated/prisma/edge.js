@@ -30,7 +30,7 @@ const {
   Public,
   getRuntime,
   createParam,
-} = require('./runtime/client.js')
+} = require('./runtime/wasm-compiler-edge.js')
 
 
 const Prisma = {}
@@ -81,7 +81,6 @@ Prisma.NullTypes = NullTypes
 
 
 
-  const path = require('path')
 
 /**
  * Enums
@@ -137,7 +136,7 @@ const config = {
   "clientVersion": "7.7.0",
   "engineVersion": "75cbdc1eb7150937890ad5465d861175c6624711",
   "activeProvider": "postgresql",
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Get a free hosted Postgres database in seconds: `npx create-db`\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id            String         @id @default(uuid())\n  email         String         @unique\n  name          String\n  password      String?\n  googleId      String?\n  createdAt     DateTime       @default(now())\n  refreshTokens RefreshToken[]\n}\n\nmodel RefreshToken {\n  id        String   @id @default(uuid())\n  token     String   @unique\n  userId    String\n  user      User     @relation(fields: [userId], references: [id])\n  expiresAt DateTime\n}\n"
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Get a free hosted Postgres database in seconds: `npx create-db`\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id            String         @id @default(uuid())\n  email         String         @unique\n  name          String\n  password      String?\n  googleId      String?\n  createdAt     DateTime       @default(now())\n  refreshTokens RefreshToken[]\n}\n\nmodel RefreshToken {\n  id        String   @id @default(uuid())\n  token     String   @unique\n  userId    String\n  user      User     @relation(fields: [userId], references: [id])\n  expiresAt DateTime\n}\n"
 }
 
 config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"googleId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"refreshTokens\",\"kind\":\"object\",\"type\":\"RefreshToken\",\"relationName\":\"RefreshTokenToUser\"}],\"dbName\":null},\"RefreshToken\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"token\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"RefreshTokenToUser\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
@@ -147,16 +146,17 @@ config.parameterizationSchema = {
   graph: "ahIgCgQAAEYAICwAAEIAMC0AAAkAEC4AAEIAMC8BAAAAAT4BAAAAAT8BAEMAIUABAEQAIUEBAEQAIUJAAEUAIQEAAAABACAIAwAASAAgLAAARwAwLQAAAwAQLgAARwAwLwEAQwAhMAEAQwAhMQEAQwAhMkAARQAhAQMAAGQAIAgDAABIACAsAABHADAtAAADABAuAABHADAvAQAAAAEwAQAAAAExAQBDACEyQABFACEDAAAAAwAgAQAABAAwAgAABQAgAQAAAAMAIAEAAAABACAKBAAARgAgLAAAQgAwLQAACQAQLgAAQgAwLwEAQwAhPgEAQwAhPwEAQwAhQAEARAAhQQEARAAhQkAARQAhAwQAAGMAIEAAAFAAIEEAAFAAIAMAAAAJACABAAAKADACAAABACADAAAACQAgAQAACgAwAgAAAQAgAwAAAAkAIAEAAAoAMAIAAAEAIAcEAABiACAvAQAAAAE-AQAAAAE_AQAAAAFAAQAAAAFBAQAAAAFCQAAAAAEBCwAADgAgBi8BAAAAAT4BAAAAAT8BAAAAAUABAAAAAUEBAAAAAUJAAAAAAQELAAAQADABCwAAEAAwBwQAAFUAIC8BAEwAIT4BAEwAIT8BAEwAIUABAFQAIUEBAFQAIUJAAE0AIQIAAAABACALAAATACAGLwEATAAhPgEATAAhPwEATAAhQAEAVAAhQQEAVAAhQkAATQAhAgAAAAkAIAsAABUAIAIAAAAJACALAAAVACADAAAAAQAgEgAADgAgEwAAEwAgAQAAAAEAIAEAAAAJACAFBQAAUQAgGAAAUwAgGQAAUgAgQAAAUAAgQQAAUAAgCSwAAD0AMC0AABwAEC4AAD0AMC8BADYAIT4BADYAIT8BADYAIUABAD4AIUEBAD4AIUJAADcAIQMAAAAJACABAAAbADAXAAAcACADAAAACQAgAQAACgAwAgAAAQAgAQAAAAUAIAEAAAAFACADAAAAAwAgAQAABAAwAgAABQAgAwAAAAMAIAEAAAQAMAIAAAUAIAMAAAADACABAAAEADACAAAFACAFAwAATwAgLwEAAAABMAEAAAABMQEAAAABMkAAAAABAQsAACQAIAQvAQAAAAEwAQAAAAExAQAAAAEyQAAAAAEBCwAAJgAwAQsAACYAMAUDAABOACAvAQBMACEwAQBMACExAQBMACEyQABNACECAAAABQAgCwAAKQAgBC8BAEwAITABAEwAITEBAEwAITJAAE0AIQIAAAADACALAAArACACAAAAAwAgCwAAKwAgAwAAAAUAIBIAACQAIBMAACkAIAEAAAAFACABAAAAAwAgAwUAAEkAIBgAAEsAIBkAAEoAIAcsAAA1ADAtAAAyABAuAAA1ADAvAQA2ACEwAQA2ACExAQA2ACEyQAA3ACEDAAAAAwAgAQAAMQAwFwAAMgAgAwAAAAMAIAEAAAQAMAIAAAUAIAcsAAA1ADAtAAAyABAuAAA1ADAvAQA2ACEwAQA2ACExAQA2ACEyQAA3ACEOBQAAOQAgGAAAPAAgGQAAPAAgMwEAAAABNAEAAAAENQEAAAAENgEAAAABNwEAAAABOAEAAAABOQEAAAABOgEAOwAhOwEAAAABPAEAAAABPQEAAAABCwUAADkAIBgAADoAIBkAADoAIDNAAAAAATRAAAAABDVAAAAABDZAAAAAATdAAAAAAThAAAAAATlAAAAAATpAADgAIQsFAAA5ACAYAAA6ACAZAAA6ACAzQAAAAAE0QAAAAAQ1QAAAAAQ2QAAAAAE3QAAAAAE4QAAAAAE5QAAAAAE6QAA4ACEIMwIAAAABNAIAAAAENQIAAAAENgIAAAABNwIAAAABOAIAAAABOQIAAAABOgIAOQAhCDNAAAAAATRAAAAABDVAAAAABDZAAAAAATdAAAAAAThAAAAAATlAAAAAATpAADoAIQ4FAAA5ACAYAAA8ACAZAAA8ACAzAQAAAAE0AQAAAAQ1AQAAAAQ2AQAAAAE3AQAAAAE4AQAAAAE5AQAAAAE6AQA7ACE7AQAAAAE8AQAAAAE9AQAAAAELMwEAAAABNAEAAAAENQEAAAAENgEAAAABNwEAAAABOAEAAAABOQEAAAABOgEAPAAhOwEAAAABPAEAAAABPQEAAAABCSwAAD0AMC0AABwAEC4AAD0AMC8BADYAIT4BADYAIT8BADYAIUABAD4AIUEBAD4AIUJAADcAIQ4FAABAACAYAABBACAZAABBACAzAQAAAAE0AQAAAAU1AQAAAAU2AQAAAAE3AQAAAAE4AQAAAAE5AQAAAAE6AQA_ACE7AQAAAAE8AQAAAAE9AQAAAAEOBQAAQAAgGAAAQQAgGQAAQQAgMwEAAAABNAEAAAAFNQEAAAAFNgEAAAABNwEAAAABOAEAAAABOQEAAAABOgEAPwAhOwEAAAABPAEAAAABPQEAAAABCDMCAAAAATQCAAAABTUCAAAABTYCAAAAATcCAAAAATgCAAAAATkCAAAAAToCAEAAIQszAQAAAAE0AQAAAAU1AQAAAAU2AQAAAAE3AQAAAAE4AQAAAAE5AQAAAAE6AQBBACE7AQAAAAE8AQAAAAE9AQAAAAEKBAAARgAgLAAAQgAwLQAACQAQLgAAQgAwLwEAQwAhPgEAQwAhPwEAQwAhQAEARAAhQQEARAAhQkAARQAhCzMBAAAAATQBAAAABDUBAAAABDYBAAAAATcBAAAAATgBAAAAATkBAAAAAToBADwAITsBAAAAATwBAAAAAT0BAAAAAQszAQAAAAE0AQAAAAU1AQAAAAU2AQAAAAE3AQAAAAE4AQAAAAE5AQAAAAE6AQBBACE7AQAAAAE8AQAAAAE9AQAAAAEIM0AAAAABNEAAAAAENUAAAAAENkAAAAABN0AAAAABOEAAAAABOUAAAAABOkAAOgAhA0MAAAMAIEQAAAMAIEUAAAMAIAgDAABIACAsAABHADAtAAADABAuAABHADAvAQBDACEwAQBDACExAQBDACEyQABFACEMBAAARgAgLAAAQgAwLQAACQAQLgAAQgAwLwEAQwAhPgEAQwAhPwEAQwAhQAEARAAhQQEARAAhQkAARQAhRgAACQAgRwAACQAgAAAAAUsBAAAAAQFLQAAAAAEFEgAAZgAgEwAAaQAgSAAAZwAgSQAAaAAgTgAAAQAgAxIAAGYAIEgAAGcAIE4AAAEAIAAAAAABSwEAAAABCxIAAFYAMBMAAFsAMEgAAFcAMEkAAFgAMEoAAFkAIEsAAFoAMEwAAFoAME0AAFoAME4AAFoAME8AAFwAMFAAAF0AMAMvAQAAAAEwAQAAAAEyQAAAAAECAAAABQAgEgAAYQAgAwAAAAUAIBIAAGEAIBMAAGAAIAELAABlADAIAwAASAAgLAAARwAwLQAAAwAQLgAARwAwLwEAAAABMAEAAAABMQEAQwAhMkAARQAhAgAAAAUAIAsAAGAAIAIAAABeACALAABfACAHLAAAXQAwLQAAXgAQLgAAXQAwLwEAQwAhMAEAQwAhMQEAQwAhMkAARQAhBywAAF0AMC0AAF4AEC4AAF0AMC8BAEMAITABAEMAITEBAEMAITJAAEUAIQMvAQBMACEwAQBMACEyQABNACEDLwEATAAhMAEATAAhMkAATQAhAy8BAAAAATABAAAAATJAAAAAAQQSAABWADBIAABXADBKAABZACBOAABaADAAAwQAAGMAIEAAAFAAIEEAAFAAIAMvAQAAAAEwAQAAAAEyQAAAAAEGLwEAAAABPgEAAAABPwEAAAABQAEAAAABQQEAAAABQkAAAAABAgAAAAEAIBIAAGYAIAMAAAAJACASAABmACATAABqACAIAAAACQAgCwAAagAgLwEATAAhPgEATAAhPwEATAAhQAEAVAAhQQEAVAAhQkAATQAhBi8BAEwAIT4BAEwAIT8BAEwAIUABAFQAIUEBAFQAIUJAAE0AIQIEBgIFAAMBAwABAQQHAAAAAAMFAAgYAAkZAAoAAAADBQAIGAAJGQAKAQMAAQEDAAEDBQAPGAAQGQARAAAAAwUADxgAEBkAEQYCAQcIAQgLAQkMAQoNAQwPAQ0RBA4SBQ8UARAWBBEXBhQYARUZARYaBBodBxseCxwfAh0gAh4hAh8iAiAjAiElAiInBCMoDCQqAiUsBCYtDScuAigvAikwBCozDis0Eg"
 }
 config.compilerWasm = {
-      getRuntime: async () => require('./query_compiler_fast_bg.js'),
-      getQueryCompilerWasmModule: async () => {
-        const { Buffer } = require('node:buffer')
-        const { wasm } = require('./query_compiler_fast_bg.wasm-base64.js')
-        const queryCompilerWasmFileBytes = Buffer.from(wasm, 'base64')
-
-        return new WebAssembly.Module(queryCompilerWasmFileBytes)
-      },
-      importName: './query_compiler_fast_bg.js',
-    }
+  getRuntime: async () => require('./query_compiler_fast_bg.js'),
+  getQueryCompilerWasmModule: async () => {
+    const loader = (await import('#wasm-compiler-loader')).default
+    const compiler = (await loader).default
+    return compiler
+  },
+  importName: './query_compiler_fast_bg.js',
+}
+if (typeof globalThis !== 'undefined' && globalThis['DEBUG'] || (typeof process !== 'undefined' && process.env && process.env.DEBUG) || undefined) {
+  Debug.enable(typeof globalThis !== 'undefined' && globalThis['DEBUG'] || (typeof process !== 'undefined' && process.env && process.env.DEBUG) || undefined)
+}
 
 const PrismaClient = getPrismaClient(config)
 exports.PrismaClient = PrismaClient
