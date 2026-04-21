@@ -6,4 +6,14 @@ const registerSchema = z.object({
     name: z.string().min(2)
 });
 
-export { registerSchema };
+const loginSchema = z.object({
+    email: z.email(),
+    password: z.string().min(1)
+});
+
+const refreshTokenSchema = z.object({
+    refreshToken: z.string().min(1)
+});
+
+
+export { registerSchema, loginSchema, refreshTokenSchema };

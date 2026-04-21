@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import bcrypt from "bcrypt";
 import { env } from "../../config/env.js";
-import { createHashedToken, deleteExpiredTokens, findRefreshToken, findUserByEmail } from "./auth.repository.js";
+import { createHashedToken, deleteExpiredTokens, deleteRefreshToken, findRefreshToken, findUserByEmail } from "./auth.repository.js";
 import { UnauthorizedError } from "../../utils/errors.js";
 
 function generateAccessToken(userId) {
@@ -48,4 +48,10 @@ async function loginService(email, password) {
     return { id: user.id, email: user.email, name: user.name };
 }
 
-export { generateAccessToken, generateRefreshToken, getRefreshToken, registerService, loginService };
+async function logoutService(refreshToken) {
+    const hashedRefreshToken = crypto.createHash("sha256").update(refreshToken).digest("hex");
+
+    await deleteRefreshToken(hashedRefreshToken);
+}
+
+export { generateAccessToken, generateRefreshToken, getRefreshToken, registerService, loginService, logoutService };

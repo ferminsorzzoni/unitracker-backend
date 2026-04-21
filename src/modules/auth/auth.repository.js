@@ -57,6 +57,14 @@ async function deleteExpiredTokens(userId) {
     });
 }
 
+async function deleteRefreshToken(hashedToken) {
+    return await prisma.refreshToken.delete({
+        where: {
+            token: hashedToken
+        },
+    });
+}
+
 async function createHashedToken(userId, hashedToken, expiresAt) {
     return await prisma.refreshToken.create({
         data: {
@@ -67,4 +75,4 @@ async function createHashedToken(userId, hashedToken, expiresAt) {
     });
 }
 
-export { findUserById, findUserByGoogleId, findUserByEmail, createUser, findRefreshToken, deleteExpiredTokens, createHashedToken };
+export { findUserById, findUserByGoogleId, findUserByEmail, createUser, findRefreshToken, deleteExpiredTokens, deleteRefreshToken, createHashedToken };

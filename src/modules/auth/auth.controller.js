@@ -1,11 +1,12 @@
 import passport from "passport";
-import { generateAccessToken, generateRefreshToken, getRefreshToken, loginService, registerService } from "./auth.service.js";
-import { validate } from "../../middleware/validate.js";
-import { registerSchema } from "./auth.schema.js";
+import { generateAccessToken, generateRefreshToken, getRefreshToken, loginService, logoutService, registerService } from "./auth.service.js";
+import { validateBody, validateCookies } from "../../middleware/validate.js";
+import { loginSchema, refreshTokenSchema, registerSchema } from "./auth.schema.js";
 
-const refreshAccessController = [verifyRefreshToken, sendAccessToken];
-const registerController = [validate(registerSchema), register, setRefreshToken, sendAccessToken];
-const loginController = [login, setRefreshToken, sendAccessToken];
+const refreshAccessController = [validateCookies(refreshTokenSchema),verifyRefreshToken, sendAccessToken];
+const registerController = [validateBody(registerSchema), register, setRefreshToken, sendAccessToken];
+const loginController = [validateBody(loginSchema), login, setRefreshToken, sendAccessToken];
+const logoutController = [validateCookies(refreshTokenSchema), logout];
 const googleController = [passport.authenticate("google", { scope: ["email", "profile"]})];
 const googleCallbackController = [passport.authenticate("google", { session: false }), setRefreshToken, sendAccessToken];
 
@@ -59,4 +60,15 @@ async function login(req, res, next) {
     }
 }
 
-export { refreshAccessController, registerController, loginController, googleController, googleCallbackController };
+async function logout(req, res, next) {
+    const refreshToken = req.cookies.refreshToken;
+
+    try {
+        await logoutService(refreshToken);
+        res.json({ message: "Logged out successfully" });
+    } catch(err) {
+        next(err);
+    }
+}
+
+export { refreshAccessController, registerController, loginController, logoutController, googleController, googleCallbackController };
