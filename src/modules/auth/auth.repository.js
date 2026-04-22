@@ -22,7 +22,12 @@ async function findUserByEmail(email) {
 async function createUser({ email, password, name, googleId }) {
     let existing = await findUserByEmail(email);
 
+    if(existing) throw new ConflictError("Email already registered");
+
+    /*
+    Para cuando implemente la sync de cuentas
     if(existing && existing.password && password) throw new ConflictError("Email already registered");
+    */
 
     if(googleId) {
         existing = await prisma.user.upsert({

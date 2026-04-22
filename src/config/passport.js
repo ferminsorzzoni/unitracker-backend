@@ -26,6 +26,7 @@ passport.use(new GoogleStrategy({
     },
     async (accessToken, refreshToken, profile, cb) => {
         try {
+            let created = false;
             let user = await findUserByGoogleId(profile.id);
             if(!user) {
                 user = await createUser({
@@ -33,8 +34,9 @@ passport.use(new GoogleStrategy({
                 email: profile.emails[0].value,
                 name: profile.displayName
             });
+            created = true;
             }
-            return cb(null, user);
+            return cb(null, { user, created });
         } catch(err) {
             return cb(err);
         }

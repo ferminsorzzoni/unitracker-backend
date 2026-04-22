@@ -2,13 +2,14 @@ import passport from "passport";
 import { generateAccessToken, generateRefreshToken, getRefreshToken, loginService, logoutService, registerService } from "./auth.service.js";
 import { validateBody, validateCookies } from "../../middleware/validate.js";
 import { loginSchema, refreshTokenSchema, registerSchema } from "./auth.schema.js";
+import { setStatus } from "../../middleware/setStatus.js";
 
 const refreshAccessController = [validateCookies(refreshTokenSchema),verifyRefreshToken, sendAccessToken];
-const registerController = [validateBody(registerSchema), register, setRefreshToken, sendAccessToken];
+const registerController = [validateBody(registerSchema), register, setRefreshToken, setStatus(201), sendAccessToken];
 const loginController = [validateBody(loginSchema), login, setRefreshToken, sendAccessToken];
 const logoutController = [validateCookies(refreshTokenSchema), logout];
 const googleController = [passport.authenticate("google", { scope: ["email", "profile"]})];
-const googleCallbackController = [passport.authenticate("google", { session: false }), setRefreshToken, sendAccessToken];
+const googleCallbackController = [passport.authenticate("google", { session: false }), googleCallback, setRefreshToken, sendAccessToken];
 
 async function verifyRefreshToken(req, res, next) {
     try {
@@ -21,8 +22,8 @@ async function verifyRefreshToken(req, res, next) {
 }
 
 function sendAccessToken(req, res) {
-    const token = generateAccessToken(req.user.id);
-    return res.json({ token });
+    const accessToken = generateAccessToken(req.user.id);
+    return res.json({ accessToken });
 }
 
 async function setRefreshToken(req, res, next) {
@@ -65,10 +66,17 @@ async function logout(req, res, next) {
 
     try {
         await logoutService(refreshToken);
-        res.json({ message: "Logged out successfully" });
+        res.sendStatus(204);
     } catch(err) {
         next(err);
     }
+}
+
+function googleCallback(req, res, next) {
+    const { user, created } = req.user;
+    req.user = user;
+    res.status(created ? 201 : 200);
+    next();
 }
 
 export { refreshAccessController, registerController, loginController, logoutController, googleController, googleCallbackController };

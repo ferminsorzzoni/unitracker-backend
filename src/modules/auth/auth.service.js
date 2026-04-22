@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import bcrypt from "bcrypt";
 import { env } from "../../config/env.js";
-import { createHashedToken, deleteExpiredTokens, deleteRefreshToken, findRefreshToken, findUserByEmail } from "./auth.repository.js";
+import { createHashedToken, createUser, deleteExpiredTokens, deleteRefreshToken, findRefreshToken, findUserByEmail } from "./auth.repository.js";
 import { UnauthorizedError } from "../../utils/errors.js";
 
 function generateAccessToken(userId) {

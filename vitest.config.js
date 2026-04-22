@@ -1,12 +1,14 @@
 import { defineConfig } from "vitest/config";
-import { env } from "./src/config/env.js";
+import { config } from "dotenv";
+
+const { parsed } = config({ path: ".env.test" });
 
 export default defineConfig({
     test: {
         setupFiles: ["./src/config/vitest.js"],
         env: {
-            JWT_SECRET: env.JWT_SECRET,
-            DATABASE_URL: env.TEST_DATABASE_URL
+            JWT_SECRET: parsed.JWT_SECRET,
+            DATABASE_URL: parsed.DATABASE_URL
         }
     }
 })

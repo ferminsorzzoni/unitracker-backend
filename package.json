@@ -1,9 +1,10 @@
 {
   "type": "module",
   "scripts": {
-    "test": "vitest"
+    "test": "dotenv -e .env.test -- prisma db push && vitest"
   },
   "devDependencies": {
+    "dotenv-cli": "^11.0.0",
     "eslint": "^10.2.0",
     "eslint-config-prettier": "^10.1.8",
     "nodemon": "^3.1.14",
