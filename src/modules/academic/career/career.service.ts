@@ -1,10 +1,6 @@
 import { Career, Prisma } from '../../../prisma/generated/prisma/client.js';
 import type { Role, User } from '../../../types/user.js';
-import {
-    ConflictError,
-    ForbiddenError,
-    NotFoundError,
-} from '../../../utils/errors.js';
+import { ForbiddenError, NotFoundError } from '../../../utils/errors.js';
 import { isAdmin } from '../academic.utils.js';
 import * as careerRepository from './career.repository.js';
 import type { CreateCareerDTO, UpdateCareerDTO } from './career.types.js';
@@ -55,6 +51,9 @@ async function remove(careerId: string): Promise<Career> {
     }
 }
 
+// TODO
+async function clone(_careerId: string, _user: User) {}
+
 async function checkCareerOwnership(careerId: string, user: User) {
     const career = await findById(careerId);
     const isOwner = career.userId === user.id;
@@ -62,4 +61,4 @@ async function checkCareerOwnership(careerId: string, user: User) {
         throw new ForbiddenError('User does not own the career');
 }
 
-export { create, findById, update, remove, checkCareerOwnership };
+export { create, findById, update, remove, clone, checkCareerOwnership };

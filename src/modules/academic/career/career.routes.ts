@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import {
+    cloneCareerHandler,
     createCareerHandler,
     deleteCareerHandler,
     getCareerHandler,
@@ -12,5 +13,6 @@ careerRouter.post('/', createCareerHandler);
 careerRouter.get('/:careerId', getCareerHandler);
 careerRouter.patch('/:careerId', updateCareerHandler);
 careerRouter.delete('/:careerId', deleteCareerHandler);
+careerRouter.post('/:careerId/clone', cloneCareerHandler);
 
 export default careerRouter;

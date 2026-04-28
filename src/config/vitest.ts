@@ -3,6 +3,7 @@ import { prisma } from './database.js';
 
 beforeEach(async () => {
     await prisma.refreshToken.deleteMany();
+    await prisma.career.deleteMany();
     await prisma.user.deleteMany();
 });
 

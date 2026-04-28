@@ -25,6 +25,7 @@ async function create({
     password,
     name,
     googleId,
+    role,
 }: CreateUserDTO): Promise<User> {
     return prisma.user.create({
         data: {
@@ -32,6 +33,7 @@ async function create({
             password,
             name,
             googleId,
+            role,
         },
     });
 

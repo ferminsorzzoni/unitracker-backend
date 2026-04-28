@@ -27,13 +27,13 @@ const deleteCareerHandler = [
     checkCareerOwnership,
     deleteCareer,
 ];
+// TODO
+const cloneCareerHandler = [cloneCareer];
 
 async function createCareer(req: Request, res: Response, next: NextFunction) {
     try {
-        const career = await careerService.create(
-            res.locals.parsedBody,
-            req.user!,
-        );
+        const user = req.user!;
+        const career = await careerService.create(res.locals.parsedBody, user);
 
         return res.status(201).json(career);
     } catch (err) {
@@ -76,6 +76,17 @@ async function deleteCareer(req: Request, res: Response, next: NextFunction) {
     }
 }
 
+async function cloneCareer(req: Request, res: Response, next: NextFunction) {
+    try {
+        const { careerId } = res.locals.parsedParams;
+        const user = req.user!;
+        const career = await careerService.clone(careerId, user);
+        return res.status(201).json(career);
+    } catch (err) {
+        return next(err);
+    }
+}
+
 async function checkCareerOwnership(
     req: Request,
     res: Response,
@@ -95,4 +106,5 @@ export {
     getCareerHandler,
     updateCareerHandler,
     deleteCareerHandler,
+    cloneCareerHandler,
 };
