@@ -1,26 +1,33 @@
-import { prisma } from "../../../config/database.js";
-import type { CreateCareerDTO, UpdateCareerDTO } from "./career.types.js";
+import { prisma } from '../../../config/database.js';
+import { Career } from '../../../prisma/generated/prisma/client.js';
+import type { CreateCareerDTO, UpdateCareerDTO } from './career.types.js';
 
-async function create(career: CreateCareerDTO, userId: string) {
+async function create(
+    career: CreateCareerDTO,
+    userId: string,
+): Promise<Career> {
     return await prisma.career.create({
         data: {
             name: career.name,
             institution: career.institution,
             isOfficial: career.isOfficial,
-            userId
-        }
-    })
+            userId,
+        },
+    });
 }
 
-async function findById(careerId: string) {
+async function findById(careerId: string): Promise<Career | null> {
     return await prisma.career.findUnique({
         where: {
-            id: careerId
-        }
-    })
+            id: careerId,
+        },
+    });
 }
 
-async function update(careerId: string, career: UpdateCareerDTO) {
+async function update(
+    careerId: string,
+    career: UpdateCareerDTO,
+): Promise<Career> {
     return await prisma.career.update({
         where: {
             id: careerId,
@@ -28,17 +35,17 @@ async function update(careerId: string, career: UpdateCareerDTO) {
         data: {
             name: career.name,
             institution: career.institution,
-            isOfficial: career.isOfficial
-        }
-    })
+            isOfficial: career.isOfficial,
+        },
+    });
 }
 
-async function remove(careerId: string) {
+async function remove(careerId: string): Promise<Career> {
     return await prisma.career.delete({
         where: {
             id: careerId,
-        }
-    })
+        },
+    });
 }
 
 export { create, findById, update, remove };

@@ -1,17 +1,7 @@
-import 'express';
+import type { User } from './user.js';
 
-type Role = "USER" | "ADMIN";
-interface User {
-    id: string;
-    role: Role;
-}
-
-declare global {
-    namespace Express {
-        interface Request {
-            user?: User;
-        }
+declare module 'express-serve-static-core' {
+    interface Request {
+        user?: User;
     }
 }
-
-export { Role, User };

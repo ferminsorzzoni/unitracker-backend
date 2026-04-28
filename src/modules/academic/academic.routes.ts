@@ -7,8 +7,8 @@ import subjectRouter from './subject/subject.routes.js';
 const academicRouter = Router();
 
 academicRouter.use('/careers', careerRouter);
-academicRouter.use("/categories", categoryRouter);
-academicRouter.use("/subcategories", subcategoryRouter);
-academicRouter.use("/subjects", subjectRouter);
+academicRouter.use('/categories', categoryRouter);
+academicRouter.use('/subcategories', subcategoryRouter);
+academicRouter.use('/subjects', subjectRouter);
 
 export default academicRouter;

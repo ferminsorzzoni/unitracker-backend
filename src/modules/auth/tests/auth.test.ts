@@ -1,9 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import request from 'supertest';
 import app from './../../../app.js';
-import { createHashedToken, createUser } from './../auth.repository.js';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
+import * as userRepository from './../user.repository.js';
+import * as refreshTokenRepository from './../refreshToken.repository.js';
+import { generateAccessToken } from '../auth.utils.js';
 
 describe('/refresh', () => {
     it('retorna 400 Bad Request si la cookie "refreshToken" no existe', async () => {
@@ -29,7 +31,7 @@ describe('/refresh', () => {
     });
 
     it('retorna 401 Unauthorized si el refreshToken expiró', async () => {
-        const user = await createUser({
+        const user = await userRepository.create({
             email: 'test@test.com',
             password: 'test',
             name: 'Juan Test',
@@ -38,7 +40,7 @@ describe('/refresh', () => {
             .createHash('sha256')
             .update('test123')
             .digest('hex');
-        await createHashedToken(
+        await refreshTokenRepository.create(
             user.id,
             hashedToken,
             new Date(Date.now() - 1000),
@@ -52,7 +54,7 @@ describe('/refresh', () => {
     });
 
     it('es exitoso y retorna 200 OK y el body con "accessToken"', async () => {
-        const user = await createUser({
+        const user = await userRepository.create({
             email: 'test@test.com',
             password: 'testpassword',
             name: 'Juan Test',
@@ -61,7 +63,7 @@ describe('/refresh', () => {
             .createHash('sha256')
             .update('test123')
             .digest('hex');
-        await createHashedToken(
+        await refreshTokenRepository.create(
             user.id,
             hashedToken,
             new Date(Date.now() + 100000),
@@ -94,7 +96,7 @@ describe('/register', () => {
     });
 
     it('retorna 409 Conflict si el email ya está registrado', async () => {
-        await createUser({
+        await userRepository.create({
             email: 'test@test.com',
             password: 'test',
             name: 'Juan Test',
@@ -148,7 +150,7 @@ describe('/login', () => {
 
     it('es exitoso y retorna 200 OK, la cookie "refreshToken" y el body con "accessToken"', async () => {
         const hashedPassword = await bcrypt.hash('testpassword', 10);
-        await createUser({
+        await userRepository.create({
             email: 'test@test.com',
             password: hashedPassword,
             name: 'Juan Test',
@@ -167,30 +169,21 @@ describe('/login', () => {
 
 describe('/logout', () => {
     it('retorna 400 Bad Request si la cookie "refreshToken" no existe', async () => {
-        const res = await request(app).post('/api/auth/logout');
-
-        expect(res.status).toBe(400);
-    });
-
-    it('retorna 400 Bad Request si la cookie "refreshToken" esta mal formada', async () => {
-        const res = await request(app)
-            .post('/api/auth/logout')
-            .set('Cookie', 'refreshToken=');
-
-        expect(res.status).toBe(400);
-    });
-
-    it('es exitoso y retorna 204 No Content', async () => {
-        const user = await createUser({
+        const user = await userRepository.create({
             email: 'test@test.com',
             password: 'testpassword',
             name: 'Juan Test',
         });
+        const accessToken = generateAccessToken({
+            id: user.id,
+            role: user.role,
+        });
+
         const hashedToken = crypto
             .createHash('sha256')
             .update('test123')
             .digest('hex');
-        await createHashedToken(
+        await refreshTokenRepository.create(
             user.id,
             hashedToken,
             new Date(Date.now() + 100000),
@@ -198,6 +191,64 @@ describe('/logout', () => {
 
         const res = await request(app)
             .post('/api/auth/logout')
+            .set('Authorization', `Bearer ${accessToken}`);
+
+        expect(res.status).toBe(400);
+    });
+
+    it('retorna 400 Bad Request si la cookie "refreshToken" esta mal formada', async () => {
+        const user = await userRepository.create({
+            email: 'test@test.com',
+            password: 'testpassword',
+            name: 'Juan Test',
+        });
+        const accessToken = generateAccessToken({
+            id: user.id,
+            role: user.role,
+        });
+
+        const hashedToken = crypto
+            .createHash('sha256')
+            .update('test123')
+            .digest('hex');
+        await refreshTokenRepository.create(
+            user.id,
+            hashedToken,
+            new Date(Date.now() + 100000),
+        );
+
+        const res = await request(app)
+            .post('/api/auth/logout')
+            .set('Authorization', `Bearer ${accessToken}`)
+            .set('Cookie', 'refreshToken=');
+
+        expect(res.status).toBe(400);
+    });
+
+    it('es exitoso y retorna 204 No Content', async () => {
+        const user = await userRepository.create({
+            email: 'test@test.com',
+            password: 'testpassword',
+            name: 'Juan Test',
+        });
+        const accessToken = generateAccessToken({
+            id: user.id,
+            role: user.role,
+        });
+
+        const hashedToken = crypto
+            .createHash('sha256')
+            .update('test123')
+            .digest('hex');
+        await refreshTokenRepository.create(
+            user.id,
+            hashedToken,
+            new Date(Date.now() + 100000),
+        );
+
+        const res = await request(app)
+            .post('/api/auth/logout')
+            .set('Authorization', `Bearer ${accessToken}`)
             .set('Cookie', 'refreshToken=test123');
 
         expect(res.status).toBe(204);

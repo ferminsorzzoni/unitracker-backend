@@ -1,12 +1,5 @@
 import passport from 'passport';
-import {
-    generateAccessToken,
-    generateRefreshToken,
-    getRefreshToken,
-    loginService,
-    logoutService,
-    registerService,
-} from './auth.service.js';
+import * as authService from './auth.service.js';
 import { validateBody, validateCookies } from '../../middleware/validate.js';
 import {
     loginSchema,
@@ -15,30 +8,36 @@ import {
 } from './auth.schema.js';
 import { setStatus } from '../../middleware/setStatus.js';
 import { Request, Response, NextFunction } from 'express';
+import { generateAccessToken } from './auth.utils.js';
+import { requireAuth } from '../../middleware/requireAuth.js';
 
-const refreshAccessController = [
+const refreshAccessHandler = [
     validateCookies(refreshTokenSchema),
     verifyRefreshToken,
     sendAccessToken,
 ];
-const registerController = [
+const registerHandler = [
     validateBody(registerSchema),
-    register,
+    registerController,
     setRefreshToken,
     setStatus(201),
     sendAccessToken,
 ];
-const loginController = [
+const loginHandler = [
     validateBody(loginSchema),
-    login,
+    loginController,
     setRefreshToken,
     sendAccessToken,
 ];
-const logoutController = [validateCookies(refreshTokenSchema), logout];
-const googleController = [
+const logoutHandler = [
+    requireAuth,
+    validateCookies(refreshTokenSchema),
+    logoutController,
+];
+const googleHandler = [
     passport.authenticate('google', { scope: ['email', 'profile'] }),
 ];
-const googleCallbackController = [
+const googleCallbackHandler = [
     passport.authenticate('google', { session: false }),
     setRefreshToken,
     sendAccessToken,
@@ -50,16 +49,18 @@ async function verifyRefreshToken(
     next: NextFunction,
 ) {
     try {
-        const tokenData = await getRefreshToken(req.cookies.refreshToken);
-        req.user = { id: tokenData.userId };
-        next();
+        const { refreshToken } = res.locals.parsedCookies;
+        const user = await authService.validateRefreshToken(refreshToken);
+        req.user = user;
+        return next();
     } catch (err) {
-        next(err);
+        return next(err);
     }
 }
 
 function sendAccessToken(req: Request, res: Response) {
-    const accessToken = generateAccessToken(req.user!.id);
+    const user = req.user!;
+    const accessToken = generateAccessToken(user);
     return res.json({ accessToken });
 }
 
@@ -69,46 +70,60 @@ async function setRefreshToken(
     next: NextFunction,
 ) {
     try {
-        const token = await generateRefreshToken(req.user!.id);
+        const { id } = req.user!;
+        const token = await authService.createRefreshToken(id);
         res.cookie('refreshToken', token, {
             httpOnly: true,
             sameSite: 'strict',
         });
-        next();
+        return next();
     } catch (err) {
-        next(err);
+        return next(err);
     }
 }
 
-async function register(req: Request, res: Response, next: NextFunction) {
-    const { email, password, name } = req.body;
+async function registerController(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) {
+    const { email, password, name } = res.locals.parsedBody;
 
     try {
-        const user = await registerService(email, password, name);
-        req.user = { id: user.id };
-        next();
+        const user = await authService.register(email, password, name);
+        req.user = user;
+        return next();
     } catch (err) {
-        next(err);
+        return next(err);
     }
 }
 
-async function login(req: Request, res: Response, next: NextFunction) {
-    const { email, password } = req.body;
+async function loginController(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) {
+    const { email, password } = res.locals.parsedBody;
 
     try {
-        const user = await loginService(email, password);
-        req.user = { id: user.id };
-        next();
+        const user = await authService.login(email, password);
+        req.user = user;
+        return next();
     } catch (err) {
-        next(err);
+        return next(err);
     }
 }
 
-async function logout(req: Request, res: Response, next: NextFunction) {
-    const refreshToken = req.cookies.refreshToken;
+async function logoutController(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) {
+    const { refreshToken } = res.locals.parsedCookies;
+    const { id } = req.user!;
 
     try {
-        await logoutService(refreshToken);
+        await authService.logout(refreshToken, id);
         res.sendStatus(204);
     } catch (err) {
         next(err);
@@ -116,10 +131,10 @@ async function logout(req: Request, res: Response, next: NextFunction) {
 }
 
 export {
-    refreshAccessController,
-    registerController,
-    loginController,
-    logoutController,
-    googleController,
-    googleCallbackController,
+    refreshAccessHandler,
+    registerHandler,
+    loginHandler,
+    logoutHandler,
+    googleHandler,
+    googleCallbackHandler,
 };

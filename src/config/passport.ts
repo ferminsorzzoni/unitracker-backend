@@ -2,11 +2,7 @@ import passport from 'passport';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { env } from './env.js';
-import {
-    findUserById,
-    createUser,
-    findUserByGoogleId,
-} from '../modules/auth/auth.repository.js';
+import * as userRepository from './../modules/auth/user.repository.js';
 
 passport.use(
     new JwtStrategy(
@@ -16,7 +12,7 @@ passport.use(
         },
         async (jwt_payload, done) => {
             try {
-                const user = await findUserById(jwt_payload.sub);
+                const user = await userRepository.findById(jwt_payload.sub);
                 if (user) return done(null, { id: user.id, role: user.role });
                 return done(null, false);
             } catch (err) {
@@ -37,9 +33,9 @@ passport.use(
             try {
                 const email = profile.emails?.[0]?.value;
                 if (!email) throw new Error('Email not provided');
-                let user = await findUserByGoogleId(profile.id);
+                let user = await userRepository.findByGoogleId(profile.id);
                 if (!user) {
-                    user = await createUser({
+                    user = await userRepository.create({
                         googleId: profile.id,
                         email: email,
                         name: profile.displayName,
