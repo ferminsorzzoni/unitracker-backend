@@ -36,8 +36,6 @@ async function update(
         return await careerRepository.update(careerId, career);
     } catch (err) {
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
-            if (err.code === 'P2002')
-                throw new ConflictError('Conflict updating unique attributes');
             if (err.code === 'P2025')
                 throw new NotFoundError('Career not found');
         }
