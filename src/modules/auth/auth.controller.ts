@@ -124,9 +124,9 @@ async function logoutController(
 
     try {
         await authService.logout(refreshToken, id);
-        res.sendStatus(204);
+        return res.sendStatus(204);
     } catch (err) {
-        next(err);
+        return next(err);
     }
 }
 
