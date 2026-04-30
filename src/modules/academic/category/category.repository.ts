@@ -43,7 +43,7 @@ async function remove(categoryId: string): Promise<Category> {
 async function findMaxOrder(careerId: string) {
     return await prisma.category.aggregate({
         where: {
-            id: careerId,
+            careerId: careerId,
         },
         _max: {
             order: true,

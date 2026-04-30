@@ -3,7 +3,7 @@ import { createCategoryHandler, deleteCategoryHandler, updateCategoryHandler } f
 
 const categoryRouter = Router();
 
-categoryRouter.post("/:careerId", createCategoryHandler);
+categoryRouter.post("/", createCategoryHandler);
 categoryRouter.patch("/:categoryId", updateCategoryHandler);
 categoryRouter.delete("/:categoryId", deleteCategoryHandler);
 

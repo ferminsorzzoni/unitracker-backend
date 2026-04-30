@@ -112,7 +112,7 @@ describe("POST /", () => {
             .set('Cookie', 'refreshToken=test1232')
             .send({
                 name: "La mejor categoria",
-                categoryId: career.id,
+                careerId: career.id,
             });
 
         expect(res.status).toBe(403);
