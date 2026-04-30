@@ -7,6 +7,7 @@ import {
 } from './career.schema.js';
 import { validateBody, validateParams } from '../../../middleware/validate.js';
 import { requireAuth } from '../../../middleware/requireAuth.js';
+import { checkCareerOwnershipFromParams } from '../../../middleware/checkCareerOwnership.js';
 
 const createCareerHandler = [
     requireAuth,
@@ -18,13 +19,13 @@ const updateCareerHandler = [
     requireAuth,
     validateParams(careerParamsSchema),
     validateBody(updateCareerSchema),
-    checkCareerOwnership,
+    checkCareerOwnershipFromParams,
     updateCareer,
 ];
 const deleteCareerHandler = [
     requireAuth,
     validateParams(careerParamsSchema),
-    checkCareerOwnership,
+    checkCareerOwnershipFromParams,
     deleteCareer,
 ];
 // TODO
@@ -82,20 +83,6 @@ async function cloneCareer(req: Request, res: Response, next: NextFunction) {
         const user = req.user!;
         const career = await careerService.clone(careerId, user);
         return res.status(201).json(career);
-    } catch (err) {
-        return next(err);
-    }
-}
-
-async function checkCareerOwnership(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-) {
-    try {
-        const { careerId } = res.locals.parsedParams;
-        await careerService.checkCareerOwnership(careerId, req.user!);
-        return next();
     } catch (err) {
         return next(err);
     }
