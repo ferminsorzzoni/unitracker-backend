@@ -22,4 +22,12 @@ async function checkCategoryOwnershipFromBody(req: Request, res: Response, next:
     }
 }
 
-export { checkCareerOwnershipFromBody, checkCategoryOwnershipFromBody };
+async function checkSubjectOwnershipFromBody(req: Request, res: Response, next: NextFunction) {
+    try {
+        todo
+    } catch(err) {
+        return next(err);
+    }
+}
+
+export { checkCareerOwnershipFromBody, checkCategoryOwnershipFromBody, checkSubjectOwnershipFromBody };

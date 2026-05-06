@@ -1,7 +1,6 @@
 import { prisma } from "../../../config/database.js";
-import { Subcategory } from "../../../prisma/generated/prisma/client.js";
+import type { Subcategory } from "../../../prisma/generated/prisma/client.js";
 import type { CreateSubcategoryDTO, UpdateSubcategoryDTO } from "./subcategory.types.js";
-
 
 async function create(subcategory: CreateSubcategoryDTO, order: number): Promise<Subcategory> {
     return await prisma.subcategory.create({

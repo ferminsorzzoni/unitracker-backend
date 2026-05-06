@@ -98,4 +98,6 @@ model Prerequisite {
   subject Subject @relation("SubjectPrerequisites", fields: [subjectId], references: [id], onDelete: Cascade)
   prerequisiteId String
   prerequisite Subject @relation("PrerequisiteOf", fields: [prerequisiteId], references: [id], onDelete: Cascade)
+
+  @@unique([subjectId, prerequisiteId])
 }
