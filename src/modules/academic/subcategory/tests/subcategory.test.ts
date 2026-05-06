@@ -5,7 +5,8 @@ import crypto from 'crypto';
 import * as userRepository from './../../../auth/user.repository.js';
 import * as refreshTokenRepository from './../../../auth/refreshToken.repository.js';
 import * as careerRepository from "./../../career/career.repository.js";
-import * as categoryRepository from "./../category.repository.js";
+import * as categoryRepository from "./../../category/category.repository.js";
+import * as subcategoryRepository from "./../subcategory.repository.js";
 import { generateAccessToken } from '../../../auth/auth.utils.js';
 
 describe("POST /", () => {
@@ -31,7 +32,7 @@ describe("POST /", () => {
         );
 
         const res = await request(app)
-            .post('/api/academic/categories/')
+            .post('/api/academic/subcategories/')
             .set('Authorization', `Bearer ${accessToken}`)
             .set('Cookie', 'refreshToken=test123');
 
@@ -60,12 +61,12 @@ describe("POST /", () => {
         );
 
         const res = await request(app)
-            .post('/api/academic/categories/')
+            .post('/api/academic/subcategories/')
             .set('Authorization', `Bearer ${accessToken}`)
             .set('Cookie', 'refreshToken=test123')
             .send({
                 name: "",
-                careerId: "esto-no-es-un-uuid",
+                categoryId: "esto-no-es-un-uuid",
             });
 
         expect(res.status).toBe(400);
@@ -85,6 +86,11 @@ describe("POST /", () => {
             },
             user1.id,
         );
+
+        const category = await categoryRepository.create({
+            name: "La mejor categoria",
+            careerId: career.id,
+        }, 1);
 
         const user2 = await userRepository.create({
             email: 'test2@test.com',
@@ -107,18 +113,18 @@ describe("POST /", () => {
         );
 
         const res = await request(app)
-            .post(`/api/academic/categories/`)
+            .post(`/api/academic/subcategories/`)
             .set('Authorization', `Bearer ${accessToken2}`)
             .set('Cookie', 'refreshToken=test1232')
             .send({
-                name: "La mejor categoria",
-                careerId: career.id,
+                name: "La mejor subcategoria",
+                categoryId: category.id,
             });
 
         expect(res.status).toBe(403);
     });
 
-    it("retorna 404 Not Found si no existe la Career asociada", async () => {
+    it("retorna 404 Not Found si no existe la Category asociada", async () => {
         const user = await userRepository.create({
             email: 'test@test.com',
             password: 'testpassword',
@@ -140,18 +146,18 @@ describe("POST /", () => {
         );
 
         const res = await request(app)
-            .post('/api/academic/categories/')
+            .post('/api/academic/subcategories/')
             .set('Authorization', `Bearer ${accessToken}`)
             .set('Cookie', 'refreshToken=test123')
             .send({
                 name: "La mejor categoria",
-                careerId: "123e4567-e89b-12d3-a456-426614174000",
+                categoryId: "123e4567-e89b-12d3-a456-426614174000",
             });
 
         expect(res.status).toBe(404);
     });
 
-    it("el usuario no es ADMIN, es exitoso y retorna 201 Created y el body con Category", async () => {
+    it("el usuario no es ADMIN, es exitoso y retorna 201 Created y el body con Subcategory", async () => {
         const user = await userRepository.create({
             email: 'test@test.com',
             password: 'testpassword',
@@ -180,38 +186,43 @@ describe("POST /", () => {
             user.id,
         );
 
+        const category = await categoryRepository.create({
+            name: "La mejor categoria",
+            careerId: career.id
+        }, 1);
+
         const res1 = await request(app)
-            .post(`/api/academic/categories/`)
+            .post(`/api/academic/subcategories/`)
             .set('Authorization', `Bearer ${accessToken}`)
             .set('Cookie', 'refreshToken=test123')
             .send({
-                name: 'La mejor categoria',
-                careerId: career.id,
+                name: 'La mejor subcategoria',
+                categoryId: category.id,
             });
 
         expect(res1.status).toBe(201);
         expect(res1.body).toHaveProperty('id');
-        expect(res1.body.name).toBe('La mejor categoria');
+        expect(res1.body.name).toBe('La mejor subcategoria');
         expect(res1.body.order).toBe(1);
-        expect(res1.body.careerId).toBe(career.id);
+        expect(res1.body.categoryId).toBe(category.id);
 
         const res2 = await request(app)
-            .post(`/api/academic/categories/`)
+            .post(`/api/academic/subcategories/`)
             .set('Authorization', `Bearer ${accessToken}`)
             .set('Cookie', 'refreshToken=test123')
             .send({
-                name: 'La segunda mejor categoria',
-                careerId: career.id,
+                name: 'La segunda mejor subcategoria',
+                categoryId: category.id,
             });
 
         expect(res2.status).toBe(201);
         expect(res2.body).toHaveProperty('id');
-        expect(res2.body.name).toBe('La segunda mejor categoria');
+        expect(res2.body.name).toBe('La segunda mejor subcategoria');
         expect(res2.body.order).toBe(2);
-        expect(res2.body.careerId).toBe(career.id);
+        expect(res2.body.categoryId).toBe(category.id);
     });
 
-    it("el usuario es ADMIN, no tiene ownership sobre la Career asociada, es exitoso y retorna 201 Created y el body con Category", async () => {
+    it("el usuario es ADMIN, no tiene ownership sobre la Career asociada, es exitoso y retorna 201 Created y el body con Subategory", async () => {
         const user1 = await userRepository.create({
             email: 'test1@test.com',
             password: 'testpassword1',
@@ -225,6 +236,11 @@ describe("POST /", () => {
             },
             user1.id,
         );
+
+        const category = await categoryRepository.create({
+            name: "La mejor categoria",
+            careerId: career.id,
+        }, 1)
 
         const user2 = await userRepository.create({
             email: 'test2@test.com',
@@ -248,40 +264,41 @@ describe("POST /", () => {
         );
 
         const res1 = await request(app)
-            .post(`/api/academic/categories/`)
+            .post(`/api/academic/subcategories/`)
             .set('Authorization', `Bearer ${accessToken2}`)
             .set('Cookie', 'refreshToken=test1232')
             .send({
-                name: 'La mejor categoria',
-                careerId: career.id,
+                name: 'La mejor subcategoria',
+                categoryId: category.id,
             });
 
         expect(res1.status).toBe(201);
         expect(res1.body).toHaveProperty('id');
-        expect(res1.body.name).toBe('La mejor categoria');
+        expect(res1.body.name).toBe('La mejor subcategoria');
         expect(res1.body.order).toBe(1);
-        expect(res1.body.careerId).toBe(career.id);
+        expect(res1.body.categoryId).toBe(category.id);
 
 
         const res2 = await request(app)
-            .post(`/api/academic/categories/`)
+            .post(`/api/academic/subcategories/`)
             .set('Authorization', `Bearer ${accessToken2}`)
             .set('Cookie', 'refreshToken=test1232')
             .send({
-                name: 'La segunda mejor categoria',
-                careerId: career.id,
+                name: 'La segunda mejor subcategoria',
+                categoryId: category.id,
             });
 
         expect(res2.status).toBe(201);
         expect(res2.body).toHaveProperty('id');
-        expect(res2.body.name).toBe('La segunda mejor categoria');
+        expect(res2.body.name).toBe('La segunda mejor subcategoria');
         expect(res2.body.order).toBe(2);
-        expect(res2.body.careerId).toBe(career.id);
+        expect(res2.body.categoryId).toBe(category.id);
     });
 });
 
-describe("PATCH /:categoryId", () => {
-    it("retorna 400 Bad Request si el param categoryId está mal formado", async () => {
+
+describe("PATCH /:subcategoryId", () => {
+    it("retorna 400 Bad Request si el param subcategoryId está mal formado", async () => {
         const user = await userRepository.create({
             email: 'test@test.com',
             password: 'testpassword',
@@ -304,7 +321,7 @@ describe("PATCH /:categoryId", () => {
         );
 
         const res = await request(app)
-            .patch('/api/academic/categories/esto-no-es-uuid')
+            .patch('/api/academic/subcategories/esto-no-es-uuid')
             .set('Authorization', `Bearer ${accessToken}`)
             .set('Cookie', 'refreshToken=test123')
             .send({});
@@ -332,6 +349,11 @@ describe("PATCH /:categoryId", () => {
             careerId: career.id,
         }, 1);
 
+        const subcategory = await subcategoryRepository.create({
+            name: "La mejor subcategoria",
+            categoryId: category.id,
+        }, 1);
+
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
@@ -348,7 +370,7 @@ describe("PATCH /:categoryId", () => {
         );
 
         const res = await request(app)
-            .patch(`/api/academic/categories/${category.id}`)
+            .patch(`/api/academic/subcategories/${subcategory.id}`)
             .set('Authorization', `Bearer ${accessToken}`)
             .set('Cookie', 'refreshToken=test123')
             .send({
@@ -379,6 +401,11 @@ describe("PATCH /:categoryId", () => {
             careerId: career.id,
         }, 1);
 
+        const subcategory = await subcategoryRepository.create({
+            name: "La mejor subcategoria",
+            categoryId: category.id,
+        }, 1);
+
         const user2 = await userRepository.create({
             email: 'test2@test.com',
             password: 'testpassword2',
@@ -400,18 +427,18 @@ describe("PATCH /:categoryId", () => {
         );
 
         const res = await request(app)
-            .patch(`/api/academic/categories/${category.id}`)
+            .patch(`/api/academic/subcategories/${subcategory.id}`)
             .set('Authorization', `Bearer ${accessToken2}`)
             .set('Cookie', 'refreshToken=test1232')
             .send({
-                name: "La mejorsisima categoria",
+                name: "La mejorsisima subcategoria",
                 order: 2,
             });
 
         expect(res.status).toBe(403);
     });
 
-    it("retorna 404 Not Found si no existe un Category con ese categoryId", async () => {
+    it("retorna 404 Not Found si no existe un Subcategory con ese subcategoryId", async () => {
         const user = await userRepository.create({
             email: 'test@test.com',
             password: 'testpassword',
@@ -433,18 +460,18 @@ describe("PATCH /:categoryId", () => {
         );
 
         const res = await request(app)
-            .patch('/api/academic/categories/123e4567-e89b-12d3-a456-426614174000')
+            .patch('/api/academic/subcategories/123e4567-e89b-12d3-a456-426614174000')
             .set('Authorization', `Bearer ${accessToken}`)
             .set('Cookie', 'refreshToken=test123')
             .send({
-                name: "La mejorsisima categoria",
+                name: "La mejorsisima subcategoria",
                 order: 2,
             });
 
         expect(res.status).toBe(404);
     });
 
-    it("el usuario no es ADMIN, es exitoso y retorna 200 OK y el body con Category", async () => {
+    it("el usuario no es ADMIN, es exitoso y retorna 200 OK y el body con Subcategory", async () => {
         const user = await userRepository.create({
             email: 'test@test.com',
             password: 'testpassword',
@@ -478,23 +505,28 @@ describe("PATCH /:categoryId", () => {
             careerId: career.id,
         }, 1);
 
+        const subcategory = await subcategoryRepository.create({
+            name: "La mejor subcategoria",
+            categoryId: category.id,
+        }, 0);
+
         const res = await request(app)
-            .patch(`/api/academic/categories/${category.id}`)
+            .patch(`/api/academic/subcategories/${subcategory.id}`)
             .set('Authorization', `Bearer ${accessToken}`)
             .set('Cookie', 'refreshToken=test123')
             .send({
-                name: 'La mejorsisima categoria',
+                name: 'La mejorsisima subcategoria',
                 order: 2,
             });
 
         expect(res.status).toBe(200);
         expect(res.body).toHaveProperty('id');
-        expect(res.body.name).toBe('La mejorsisima categoria');
+        expect(res.body.name).toBe('La mejorsisima subcategoria');
         expect(res.body.order).toBe(2);
-        expect(res.body.careerId).toBe(career.id);
+        expect(res.body.categoryId).toBe(category.id);
     });
 
-    it("el usuario es ADMIN, no tiene ownership sobre la Career asociada, es exitoso y retorna 200 Created y el body con Category", async () => {
+    it("el usuario es ADMIN, no tiene ownership sobre la Career asociada, es exitoso y retorna 200 Created y el body con Subcategory", async () => {
         const user1 = await userRepository.create({
             email: 'test1@test.com',
             password: 'testpassword1',
@@ -509,14 +541,19 @@ describe("PATCH /:categoryId", () => {
             user1.id,
         );
 
-        const category1 = await categoryRepository.create({
-            name: "La mejor categoria 1",
+        const category = await categoryRepository.create({
+            name: "La mejor categoria",
             careerId: career.id,
         }, 1);
 
-        const category2 = await categoryRepository.create({
-            name: "La mejor categoria 2",
-            careerId: career.id,
+        const subcategory1 = await subcategoryRepository.create({
+            name: "La mejor subcategoria 1",
+            categoryId: category.id,
+        }, 1);
+
+        const subcategory2 = await subcategoryRepository.create({
+            name: "La mejor subcategoria 2",
+            categoryId: category.id,
         }, 2);
 
         const user2 = await userRepository.create({
@@ -541,38 +578,38 @@ describe("PATCH /:categoryId", () => {
         );
 
         const res1 = await request(app)
-            .patch(`/api/academic/categories/${category1.id}`)
+            .patch(`/api/academic/subcategories/${subcategory1.id}`)
             .set('Authorization', `Bearer ${accessToken2}`)
             .set('Cookie', 'refreshToken=test1232')
             .send({
-                name: 'La mejorsisima categoria 1',
+                name: 'La mejorsisima subcategoria 1',
                 order: 2,
             });
 
         const res2 = await request(app)
-            .patch(`/api/academic/categories/${category2.id}`)
+            .patch(`/api/academic/subcategories/${subcategory2.id}`)
             .set('Authorization', `Bearer ${accessToken2}`)
             .set('Cookie', 'refreshToken=test1232')
             .send({
-                name: 'La mejorsisima categoria 2',
+                name: 'La mejorsisima subcategoria 2',
             });
 
         expect(res1.status).toBe(200);
         expect(res1.body).toHaveProperty('id');
-        expect(res1.body.name).toBe('La mejorsisima categoria 1');
+        expect(res1.body.name).toBe('La mejorsisima subcategoria 1');
         expect(res1.body.order).toBe(2);
-        expect(res1.body.careerId).toBe(career.id);
+        expect(res1.body.categoryId).toBe(category.id);
 
         expect(res2.status).toBe(200);
         expect(res2.body).toHaveProperty("id");
-        expect(res2.body.name).toBe("La mejorsisima categoria 2");
+        expect(res2.body.name).toBe("La mejorsisima subcategoria 2");
         expect(res2.body.order).toBe(3);
-        expect(res2.body.careerId).toBe(career.id);
+        expect(res2.body.categoryId).toBe(category.id);
     });
 });
 
-describe("DELETE /:categoryId", () => {
-    it("retorna 400 Bad Request si el param categoryId está mal formado", async () => {
+describe("DELETE /:subcategoryId", () => {
+    it("retorna 400 Bad Request si el param subcategoryId está mal formado", async () => {
         const user = await userRepository.create({
             email: 'test@test.com',
             password: 'testpassword',
@@ -595,7 +632,7 @@ describe("DELETE /:categoryId", () => {
         );
 
         const res = await request(app)
-            .delete('/api/academic/categories/esto-no-es-uuid')
+            .delete('/api/academic/subcategories/esto-no-es-uuid')
             .set('Authorization', `Bearer ${accessToken}`)
             .set('Cookie', 'refreshToken=test123');
 
@@ -622,6 +659,11 @@ describe("DELETE /:categoryId", () => {
             careerId: career.id,
         }, 1);
 
+        const subcategory = await subcategoryRepository.create({
+            name: "La mejor subcategoria",
+            categoryId: category.id,
+        }, 1);
+
         const user2 = await userRepository.create({
             email: 'test2@test.com',
             password: 'testpassword2',
@@ -643,14 +685,14 @@ describe("DELETE /:categoryId", () => {
         );
 
         const res = await request(app)
-            .delete(`/api/academic/categories/${category.id}`)
+            .delete(`/api/academic/subcategories/${subcategory.id}`)
             .set('Authorization', `Bearer ${accessToken2}`)
             .set('Cookie', 'refreshToken=test1232');
 
         expect(res.status).toBe(403);
     });
 
-    it("retorna 404 Not Found si no existe un Category con ese categoryId", async () => {
+    it("retorna 404 Not Found si no existe un Subcategory con ese subcategoryId", async () => {
         const user = await userRepository.create({
             email: 'test@test.com',
             password: 'testpassword',
@@ -672,7 +714,7 @@ describe("DELETE /:categoryId", () => {
         );
 
         const res = await request(app)
-            .delete('/api/academic/categories/123e4567-e89b-12d3-a456-426614174000')
+            .delete('/api/academic/subcategories/123e4567-e89b-12d3-a456-426614174000')
             .set('Authorization', `Bearer ${accessToken}`)
             .set('Cookie', 'refreshToken=test123');
 
@@ -713,8 +755,13 @@ describe("DELETE /:categoryId", () => {
             careerId: career.id,
         }, 1);
 
+        const subcategory = await subcategoryRepository.create({
+            name: "La mejor subcategoria",
+            categoryId: category.id,
+        }, 1);
+
         const res = await request(app)
-            .delete(`/api/academic/categories/${category.id}`)
+            .delete(`/api/academic/subcategories/${subcategory.id}`)
             .set('Authorization', `Bearer ${accessToken}`)
             .set('Cookie', 'refreshToken=test123');
 
@@ -741,6 +788,11 @@ describe("DELETE /:categoryId", () => {
             careerId: career.id,
         }, 1);
 
+        const subcategory = await subcategoryRepository.create({
+            name: "La mejor subcategoria",
+            categoryId: category.id,
+        }, 1);
+
         const user2 = await userRepository.create({
             email: 'test2@test.com',
             password: 'testpassword2',
@@ -763,7 +815,7 @@ describe("DELETE /:categoryId", () => {
         );
 
         const res = await request(app)
-            .delete(`/api/academic/categories/${category.id}`)
+            .delete(`/api/academic/subcategories/${subcategory.id}`)
             .set('Authorization', `Bearer ${accessToken2}`)
             .set('Cookie', 'refreshToken=test1232');
 

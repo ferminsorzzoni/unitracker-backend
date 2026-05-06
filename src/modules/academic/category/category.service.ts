@@ -6,7 +6,6 @@ import * as categoryRepository from "./category.repository.js";
 import type { CreateCategoryDTO, UpdateCategoryDTO } from "./category.types.js";
 
 async function create(category: CreateCategoryDTO): Promise<Category> {
-
     const maxOrder = await findMaxOrder(category.careerId) + 1;
     return await categoryRepository.create(category, maxOrder);
 }

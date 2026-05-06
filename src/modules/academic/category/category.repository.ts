@@ -21,14 +21,31 @@ async function findById(categoryId: string): Promise<Category | null> {
 }
 
 async function update(category: UpdateCategoryDTO, categoryId: string): Promise<Category> {
-    return await prisma.category.update({
-        where: {
-            id: categoryId,
-        },
-        data: {
-            name: category.name,
-            order: category.order,
-        },
+    return await prisma.$transaction(async (tx) => {
+        const updatedCategory = await tx.category.update({
+            where: {
+                id: categoryId,
+            },
+            data: {
+                name: category.name,
+                order: category.order,
+            }
+        });
+
+        if(category.order) {
+            await tx.category.updateMany({
+                where: {
+                    careerId: updatedCategory.careerId,
+                    order: { gte: category.order },
+                    NOT: { id: categoryId },
+                },
+                data: {
+                    order: { increment: 1 },
+                },
+            });
+        }
+
+        return updatedCategory;
     });
 }
 

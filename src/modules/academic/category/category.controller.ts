@@ -3,7 +3,7 @@ import { requireAuth } from "../../../middleware/requireAuth.js";
 import { validateBody, validateParams } from "../../../middleware/validate.js";
 import { categoryParamsSchema, createCategorySchema, updateCategorySchema } from "./category.schema.js";
 import * as categoryService from "./category.service.js";
-import { checkCareerOwnershipFromBody } from "../../../middleware/checkCareerOwnership.js";
+import { checkCareerOwnershipFromBody } from "../../../middleware/checkOwnership.js";
 
 const createCategoryHandler = [requireAuth, validateBody(createCategorySchema), checkCareerOwnershipFromBody, createCategory];
 const updateCategoryHandler = [requireAuth, validateParams(categoryParamsSchema), validateBody(updateCategorySchema), checkCategoryOwnership, updateCategory];
