@@ -1,18 +1,46 @@
-import type { CreateSubjectDTO, UpdateSubjectDTO } from "./subject.types";
+import { prisma } from "../../../config/database.js";
+import type { Subject } from "../../../prisma/generated/prisma/client.js";
+import type { CreateSubjectDTO, UpdateSubjectDTO } from "./subject.types.js";
 
 
-async function create(subject: CreateSubjectDTO) {
-
+async function create(subject: CreateSubjectDTO): Promise<Subject> {
+    return await prisma.subject.create({
+        data: {
+            name: subject.name,
+            subcategoryId: subject.subcategoryId,
+            weeklyMinutes: subject.weeklyMinutes,
+        },
+    });
 }
 
-async function findById(subjectId: string) {
-
+async function findById(subjectId: string): Promise<Subject | null> {
+    return await prisma.subject.findUnique({
+        where: {
+            id: subjectId,
+        },
+    });
 }
 
-async function update(subject: UpdateSubjectDTO, subjectId: string) {
-
+async function update(subject: UpdateSubjectDTO, subjectId: string): Promise<Subject> {
+    return await prisma.subject.update({
+        where: {
+            id: subjectId,
+        },
+        data: {
+            name: subject.name,
+            mark: subject.mark,
+            state: subject.state,
+            weeklyMinutes: subject.weeklyMinutes,
+        }
+    });
 }
 
-async function remove(subjectId: string) {
-
+async function remove(subjectId: string): Promise<Subject> {
+    return await prisma.subject.delete({
+        where: {
+            id: subjectId,
+        },
+    });
 }
+
+export { create, findById, update, remove }
