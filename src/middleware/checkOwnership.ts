@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { checkCareerOwnership } from "../modules/academic/career/career.service.js";
 import { checkCategoryOwnership } from "../modules/academic/category/category.service.js";
+import { checkSubcategoryOwnership } from "../modules/academic/subcategory/subcategory.service.js";
 
 async function checkCareerOwnershipFromBody(req: Request, res: Response, next: NextFunction) {
     try {
@@ -22,12 +23,14 @@ async function checkCategoryOwnershipFromBody(req: Request, res: Response, next:
     }
 }
 
-async function checkSubjectOwnershipFromBody(req: Request, res: Response, next: NextFunction) {
+async function checkSubcategoryOwnershipFromBody(req: Request, res: Response, next: NextFunction) {
     try {
-        todo
+        const { subcategoryId } = res.locals.parsedBody;
+        await checkSubcategoryOwnership(subcategoryId, req.user!);
+        return next();
     } catch(err) {
         return next(err);
     }
 }
 
-export { checkCareerOwnershipFromBody, checkCategoryOwnershipFromBody, checkSubjectOwnershipFromBody };
+export { checkCareerOwnershipFromBody, checkCategoryOwnershipFromBody, checkSubcategoryOwnershipFromBody };

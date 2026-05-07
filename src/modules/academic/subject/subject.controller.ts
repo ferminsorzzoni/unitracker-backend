@@ -3,9 +3,9 @@ import * as subjectService from "./subject.service.js";
 import { requireAuth } from "../../../middleware/requireAuth.js";
 import { validateBody, validateParams } from "../../../middleware/validate.js";
 import { createSubjectSchema, subjectParamsSchema, updateSubjectSchema } from "./subject.schema.js";
-import { checkSubjectOwnershipFromBody } from "../../../middleware/checkOwnership.js";
+import { checkSubcategoryOwnershipFromBody } from "../../../middleware/checkOwnership.js";
 
-const createSubjectHandler = [requireAuth, validateBody(createSubjectSchema), checkSubjectOwnershipFromBody, createSubject];
+const createSubjectHandler = [requireAuth, validateBody(createSubjectSchema), checkSubcategoryOwnershipFromBody, createSubject];
 const updateSubjectHandler = [requireAuth, validateParams(subjectParamsSchema), validateBody(updateSubjectSchema), checkSubjectOwnership, updateSubject];
 const deleteSubjectHandler = [requireAuth, validateParams(subjectParamsSchema), checkSubjectOwnership, deleteSubject];
 
