@@ -4,12 +4,12 @@ import app from './../../../../app.js';
 import crypto from 'crypto';
 import * as userRepository from './../../../auth/user.repository.js';
 import * as refreshTokenRepository from './../../../auth/refreshToken.repository.js';
-import * as careerRepository from "./../../career/career.repository.js";
-import * as categoryRepository from "./../category.repository.js";
+import * as careerRepository from './../../career/career.repository.js';
+import * as categoryRepository from './../category.repository.js';
 import { generateAccessToken } from '../../../auth/auth.utils.js';
 
-describe("POST /", () => {
-    it("retorna 400 Bad Request si el body no existe", async () => {
+describe('POST /', () => {
+    it('retorna 400 Bad Request si el body no existe', async () => {
         const user = await userRepository.create({
             email: 'test@test.com',
             password: 'testpassword',
@@ -38,7 +38,7 @@ describe("POST /", () => {
         expect(res.status).toBe(400);
     });
 
-    it("retorna 400 Bad Request si el body está mal formado", async () => {
+    it('retorna 400 Bad Request si el body está mal formado', async () => {
         const user = await userRepository.create({
             email: 'test@test.com',
             password: 'testpassword',
@@ -64,14 +64,14 @@ describe("POST /", () => {
             .set('Authorization', `Bearer ${accessToken}`)
             .set('Cookie', 'refreshToken=test123')
             .send({
-                name: "",
-                careerId: "esto-no-es-un-uuid",
+                name: '',
+                careerId: 'esto-no-es-un-uuid',
             });
 
         expect(res.status).toBe(400);
     });
 
-    it("retorna 403 Forbidden si no tiene ownership sobre la Career asociada y el usuario no es ADMIN", async () => {
+    it('retorna 403 Forbidden si no tiene ownership sobre la Career asociada y el usuario no es ADMIN', async () => {
         const user1 = await userRepository.create({
             email: 'test1@test.com',
             password: 'testpassword1',
@@ -111,14 +111,14 @@ describe("POST /", () => {
             .set('Authorization', `Bearer ${accessToken2}`)
             .set('Cookie', 'refreshToken=test1232')
             .send({
-                name: "La mejor categoria",
+                name: 'La mejor categoria',
                 careerId: career.id,
             });
 
         expect(res.status).toBe(403);
     });
 
-    it("retorna 404 Not Found si no existe la Career asociada", async () => {
+    it('retorna 404 Not Found si no existe la Career asociada', async () => {
         const user = await userRepository.create({
             email: 'test@test.com',
             password: 'testpassword',
@@ -144,14 +144,14 @@ describe("POST /", () => {
             .set('Authorization', `Bearer ${accessToken}`)
             .set('Cookie', 'refreshToken=test123')
             .send({
-                name: "La mejor categoria",
-                careerId: "123e4567-e89b-12d3-a456-426614174000",
+                name: 'La mejor categoria',
+                careerId: '123e4567-e89b-12d3-a456-426614174000',
             });
 
         expect(res.status).toBe(404);
     });
 
-    it("el usuario no es ADMIN, es exitoso y retorna 201 Created y el body con Category", async () => {
+    it('el usuario no es ADMIN, es exitoso y retorna 201 Created y el body con Category', async () => {
         const user = await userRepository.create({
             email: 'test@test.com',
             password: 'testpassword',
@@ -211,7 +211,7 @@ describe("POST /", () => {
         expect(res2.body.careerId).toBe(career.id);
     });
 
-    it("el usuario es ADMIN, no tiene ownership sobre la Career asociada, es exitoso y retorna 201 Created y el body con Category", async () => {
+    it('el usuario es ADMIN, no tiene ownership sobre la Career asociada, es exitoso y retorna 201 Created y el body con Category', async () => {
         const user1 = await userRepository.create({
             email: 'test1@test.com',
             password: 'testpassword1',
@@ -262,7 +262,6 @@ describe("POST /", () => {
         expect(res1.body.order).toBe(1);
         expect(res1.body.careerId).toBe(career.id);
 
-
         const res2 = await request(app)
             .post(`/api/academic/categories/`)
             .set('Authorization', `Bearer ${accessToken2}`)
@@ -280,8 +279,8 @@ describe("POST /", () => {
     });
 });
 
-describe("PATCH /:categoryId", () => {
-    it("retorna 400 Bad Request si el param categoryId está mal formado", async () => {
+describe('PATCH /:categoryId', () => {
+    it('retorna 400 Bad Request si el param categoryId está mal formado', async () => {
         const user = await userRepository.create({
             email: 'test@test.com',
             password: 'testpassword',
@@ -312,7 +311,7 @@ describe("PATCH /:categoryId", () => {
         expect(res.status).toBe(400);
     });
 
-    it("retorna 400 Bad Request si el body está mal formado", async () => {
+    it('retorna 400 Bad Request si el body está mal formado', async () => {
         const user = await userRepository.create({
             email: 'test@test.com',
             password: 'testpassword',
@@ -327,10 +326,13 @@ describe("PATCH /:categoryId", () => {
             user.id,
         );
 
-        const category = await categoryRepository.create({
-            name: "La mejor categoria",
-            careerId: career.id,
-        }, 1);
+        const category = await categoryRepository.create(
+            {
+                name: 'La mejor categoria',
+                careerId: career.id,
+            },
+            1,
+        );
 
         const accessToken = generateAccessToken({
             id: user.id,
@@ -352,14 +354,14 @@ describe("PATCH /:categoryId", () => {
             .set('Authorization', `Bearer ${accessToken}`)
             .set('Cookie', 'refreshToken=test123')
             .send({
-                name: "",
-                order: "hola",
+                name: '',
+                order: 'hola',
             });
 
         expect(res.status).toBe(400);
     });
 
-    it("retorna 403 Forbidden si no tiene ownership sobre la Career asociada y el usuario no es ADMIN", async () => {
+    it('retorna 403 Forbidden si no tiene ownership sobre la Career asociada y el usuario no es ADMIN', async () => {
         const user1 = await userRepository.create({
             email: 'test1@test.com',
             password: 'testpassword1',
@@ -374,10 +376,13 @@ describe("PATCH /:categoryId", () => {
             user1.id,
         );
 
-        const category = await categoryRepository.create({
-            name: "La mejor categoria",
-            careerId: career.id,
-        }, 1);
+        const category = await categoryRepository.create(
+            {
+                name: 'La mejor categoria',
+                careerId: career.id,
+            },
+            1,
+        );
 
         const user2 = await userRepository.create({
             email: 'test2@test.com',
@@ -404,14 +409,14 @@ describe("PATCH /:categoryId", () => {
             .set('Authorization', `Bearer ${accessToken2}`)
             .set('Cookie', 'refreshToken=test1232')
             .send({
-                name: "La mejorsisima categoria",
+                name: 'La mejorsisima categoria',
                 order: 2,
             });
 
         expect(res.status).toBe(403);
     });
 
-    it("retorna 404 Not Found si no existe un Category con ese categoryId", async () => {
+    it('retorna 404 Not Found si no existe un Category con ese categoryId', async () => {
         const user = await userRepository.create({
             email: 'test@test.com',
             password: 'testpassword',
@@ -433,18 +438,20 @@ describe("PATCH /:categoryId", () => {
         );
 
         const res = await request(app)
-            .patch('/api/academic/categories/123e4567-e89b-12d3-a456-426614174000')
+            .patch(
+                '/api/academic/categories/123e4567-e89b-12d3-a456-426614174000',
+            )
             .set('Authorization', `Bearer ${accessToken}`)
             .set('Cookie', 'refreshToken=test123')
             .send({
-                name: "La mejorsisima categoria",
+                name: 'La mejorsisima categoria',
                 order: 2,
             });
 
         expect(res.status).toBe(404);
     });
 
-    it("el usuario no es ADMIN, es exitoso y retorna 200 OK y el body con Category", async () => {
+    it('el usuario no es ADMIN, es exitoso y retorna 200 OK y el body con Category', async () => {
         const user = await userRepository.create({
             email: 'test@test.com',
             password: 'testpassword',
@@ -473,10 +480,13 @@ describe("PATCH /:categoryId", () => {
             user.id,
         );
 
-        const category = await categoryRepository.create({
-            name: "La mejor categoria",
-            careerId: career.id,
-        }, 1);
+        const category = await categoryRepository.create(
+            {
+                name: 'La mejor categoria',
+                careerId: career.id,
+            },
+            1,
+        );
 
         const res = await request(app)
             .patch(`/api/academic/categories/${category.id}`)
@@ -494,7 +504,7 @@ describe("PATCH /:categoryId", () => {
         expect(res.body.careerId).toBe(career.id);
     });
 
-    it("el usuario es ADMIN, no tiene ownership sobre la Career asociada, es exitoso y retorna 200 Created y el body con Category", async () => {
+    it('el usuario es ADMIN, no tiene ownership sobre la Career asociada, es exitoso y retorna 200 Created y el body con Category', async () => {
         const user1 = await userRepository.create({
             email: 'test1@test.com',
             password: 'testpassword1',
@@ -509,15 +519,21 @@ describe("PATCH /:categoryId", () => {
             user1.id,
         );
 
-        const category1 = await categoryRepository.create({
-            name: "La mejor categoria 1",
-            careerId: career.id,
-        }, 1);
+        const category1 = await categoryRepository.create(
+            {
+                name: 'La mejor categoria 1',
+                careerId: career.id,
+            },
+            1,
+        );
 
-        const category2 = await categoryRepository.create({
-            name: "La mejor categoria 2",
-            careerId: career.id,
-        }, 2);
+        const category2 = await categoryRepository.create(
+            {
+                name: 'La mejor categoria 2',
+                careerId: career.id,
+            },
+            2,
+        );
 
         const user2 = await userRepository.create({
             email: 'test2@test.com',
@@ -564,15 +580,15 @@ describe("PATCH /:categoryId", () => {
         expect(res1.body.careerId).toBe(career.id);
 
         expect(res2.status).toBe(200);
-        expect(res2.body).toHaveProperty("id");
-        expect(res2.body.name).toBe("La mejorsisima categoria 2");
+        expect(res2.body).toHaveProperty('id');
+        expect(res2.body.name).toBe('La mejorsisima categoria 2');
         expect(res2.body.order).toBe(3);
         expect(res2.body.careerId).toBe(career.id);
     });
 });
 
-describe("DELETE /:categoryId", () => {
-    it("retorna 400 Bad Request si el param categoryId está mal formado", async () => {
+describe('DELETE /:categoryId', () => {
+    it('retorna 400 Bad Request si el param categoryId está mal formado', async () => {
         const user = await userRepository.create({
             email: 'test@test.com',
             password: 'testpassword',
@@ -602,7 +618,7 @@ describe("DELETE /:categoryId", () => {
         expect(res.status).toBe(400);
     });
 
-    it("retorna 403 Forbidden si no tiene ownership sobre la Career asociada y el usuario no es ADMIN", async () => {
+    it('retorna 403 Forbidden si no tiene ownership sobre la Career asociada y el usuario no es ADMIN', async () => {
         const user1 = await userRepository.create({
             email: 'test1@test.com',
             password: 'testpassword1',
@@ -617,10 +633,13 @@ describe("DELETE /:categoryId", () => {
             user1.id,
         );
 
-        const category = await categoryRepository.create({
-            name: "La mejor categoria",
-            careerId: career.id,
-        }, 1);
+        const category = await categoryRepository.create(
+            {
+                name: 'La mejor categoria',
+                careerId: career.id,
+            },
+            1,
+        );
 
         const user2 = await userRepository.create({
             email: 'test2@test.com',
@@ -650,7 +669,7 @@ describe("DELETE /:categoryId", () => {
         expect(res.status).toBe(403);
     });
 
-    it("retorna 404 Not Found si no existe un Category con ese categoryId", async () => {
+    it('retorna 404 Not Found si no existe un Category con ese categoryId', async () => {
         const user = await userRepository.create({
             email: 'test@test.com',
             password: 'testpassword',
@@ -672,14 +691,16 @@ describe("DELETE /:categoryId", () => {
         );
 
         const res = await request(app)
-            .delete('/api/academic/categories/123e4567-e89b-12d3-a456-426614174000')
+            .delete(
+                '/api/academic/categories/123e4567-e89b-12d3-a456-426614174000',
+            )
             .set('Authorization', `Bearer ${accessToken}`)
             .set('Cookie', 'refreshToken=test123');
 
         expect(res.status).toBe(404);
     });
 
-    it("el usuario no es ADMIN, es exitoso y retorna 204 No Content", async () => {
+    it('el usuario no es ADMIN, es exitoso y retorna 204 No Content', async () => {
         const user = await userRepository.create({
             email: 'test@test.com',
             password: 'testpassword',
@@ -708,10 +729,13 @@ describe("DELETE /:categoryId", () => {
             user.id,
         );
 
-        const category = await categoryRepository.create({
-            name: "La mejor categoria",
-            careerId: career.id,
-        }, 1);
+        const category = await categoryRepository.create(
+            {
+                name: 'La mejor categoria',
+                careerId: career.id,
+            },
+            1,
+        );
 
         const res = await request(app)
             .delete(`/api/academic/categories/${category.id}`)
@@ -721,7 +745,7 @@ describe("DELETE /:categoryId", () => {
         expect(res.status).toBe(204);
     });
 
-    it("el usuario es ADMIN, no tiene ownership sobre la Career asociada, es exitoso y retorna 204 No Content", async () => {
+    it('el usuario es ADMIN, no tiene ownership sobre la Career asociada, es exitoso y retorna 204 No Content', async () => {
         const user1 = await userRepository.create({
             email: 'test1@test.com',
             password: 'testpassword1',
@@ -736,10 +760,13 @@ describe("DELETE /:categoryId", () => {
             user1.id,
         );
 
-        const category = await categoryRepository.create({
-            name: "La mejor categoria",
-            careerId: career.id,
-        }, 1);
+        const category = await categoryRepository.create(
+            {
+                name: 'La mejor categoria',
+                careerId: career.id,
+            },
+            1,
+        );
 
         const user2 = await userRepository.create({
             email: 'test2@test.com',

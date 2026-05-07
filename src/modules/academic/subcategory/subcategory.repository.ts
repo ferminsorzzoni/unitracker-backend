@@ -1,8 +1,14 @@
-import { prisma } from "../../../config/database.js";
-import type { Subcategory } from "../../../prisma/generated/prisma/client.js";
-import type { CreateSubcategoryDTO, UpdateSubcategoryDTO } from "./subcategory.types.js";
+import { prisma } from '../../../config/database.js';
+import type { Subcategory } from '../../../prisma/generated/prisma/client.js';
+import type {
+    CreateSubcategoryDTO,
+    UpdateSubcategoryDTO,
+} from './subcategory.types.js';
 
-async function create(subcategory: CreateSubcategoryDTO, order: number): Promise<Subcategory> {
+async function create(
+    subcategory: CreateSubcategoryDTO,
+    order: number,
+): Promise<Subcategory> {
     return await prisma.subcategory.create({
         data: {
             name: subcategory.name,
@@ -16,11 +22,14 @@ async function findById(subcategoryId: string): Promise<Subcategory | null> {
     return await prisma.subcategory.findUnique({
         where: {
             id: subcategoryId,
-        }
+        },
     });
 }
 
-async function update(subcategory: UpdateSubcategoryDTO, subcategoryId: string): Promise<Subcategory> {
+async function update(
+    subcategory: UpdateSubcategoryDTO,
+    subcategoryId: string,
+): Promise<Subcategory> {
     return await prisma.$transaction(async (tx) => {
         const updatedSubcategory = await tx.subcategory.update({
             where: {
@@ -29,10 +38,10 @@ async function update(subcategory: UpdateSubcategoryDTO, subcategoryId: string):
             data: {
                 name: subcategory.name,
                 order: subcategory.order,
-            }
+            },
         });
 
-        if(subcategory.order) {
+        if (subcategory.order) {
             await tx.subcategory.updateMany({
                 where: {
                     categoryId: updatedSubcategory.categoryId,
@@ -52,7 +61,7 @@ async function update(subcategory: UpdateSubcategoryDTO, subcategoryId: string):
 async function remove(subcategoryId: string): Promise<Subcategory> {
     return await prisma.subcategory.delete({
         where: {
-            id: subcategoryId
+            id: subcategoryId,
         },
     });
 }

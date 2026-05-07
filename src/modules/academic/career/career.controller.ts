@@ -87,12 +87,16 @@ async function cloneCareer(req: Request, res: Response, next: NextFunction) {
     }
 }
 
-async function checkCareerOwnership(req: Request, res: Response, next: NextFunction) {
+async function checkCareerOwnership(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) {
     try {
         const { careerId } = res.locals.parsedParams;
         await careerService.checkCareerOwnership(careerId, req.user!);
         return next();
-    } catch(err) {
+    } catch (err) {
         return next(err);
     }
 }

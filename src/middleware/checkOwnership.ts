@@ -1,48 +1,69 @@
-import { Request, Response, NextFunction } from "express";
-import { checkCareerOwnership } from "../modules/academic/career/career.service.js";
-import { checkCategoryOwnership } from "../modules/academic/category/category.service.js";
-import { checkSubcategoryOwnership } from "../modules/academic/subcategory/subcategory.service.js";
-import { checkSubjectOwnership } from "../modules/academic/subject/subject.service.js";
+import { Request, Response, NextFunction } from 'express';
+import { checkCareerOwnership } from '../modules/academic/career/career.service.js';
+import { checkCategoryOwnership } from '../modules/academic/category/category.service.js';
+import { checkSubcategoryOwnership } from '../modules/academic/subcategory/subcategory.service.js';
+import { checkSubjectOwnership } from '../modules/academic/subject/subject.service.js';
 
-async function checkCareerOwnershipFromBody(req: Request, res: Response, next: NextFunction) {
+async function checkCareerOwnershipFromBody(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) {
     try {
         const { careerId } = res.locals.parsedBody;
         await checkCareerOwnership(careerId, req.user!);
         return next();
-    } catch(err) {
+    } catch (err) {
         return next(err);
     }
 }
 
-async function checkCategoryOwnershipFromBody(req: Request, res: Response, next: NextFunction) {
+async function checkCategoryOwnershipFromBody(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) {
     try {
         const { categoryId } = res.locals.parsedBody;
         await checkCategoryOwnership(categoryId, req.user!);
         return next();
-    } catch(err) {
+    } catch (err) {
         return next(err);
     }
 }
 
-async function checkSubcategoryOwnershipFromBody(req: Request, res: Response, next: NextFunction) {
+async function checkSubcategoryOwnershipFromBody(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) {
     try {
         const { subcategoryId } = res.locals.parsedBody;
         await checkSubcategoryOwnership(subcategoryId, req.user!);
         return next();
-    } catch(err) {
+    } catch (err) {
         return next(err);
     }
 }
 
-async function checkSubjectsOwnershipFromBody(req: Request, res: Response, next: NextFunction) {
+async function checkSubjectsOwnershipFromBody(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) {
     try {
         const { subjectId, prerequisiteId } = res.locals.parsedBody;
         await checkSubjectOwnership(subjectId, req.user!);
         await checkSubjectOwnership(prerequisiteId, req.user!);
         return next();
-    } catch(err) {
+    } catch (err) {
         return next(err);
     }
 }
 
-export { checkCareerOwnershipFromBody, checkCategoryOwnershipFromBody, checkSubcategoryOwnershipFromBody, checkSubjectsOwnershipFromBody };
+export {
+    checkCareerOwnershipFromBody,
+    checkCategoryOwnershipFromBody,
+    checkSubcategoryOwnershipFromBody,
+    checkSubjectsOwnershipFromBody,
+};

@@ -4,15 +4,15 @@ import app from './../../../../app.js';
 import crypto from 'crypto';
 import * as userRepository from './../../../auth/user.repository.js';
 import * as refreshTokenRepository from './../../../auth/refreshToken.repository.js';
-import * as careerRepository from "./../../career/career.repository.js";
-import * as categoryRepository from "./../../category/category.repository.js";
-import * as subcategoryRepository from "./../../subcategory/subcategory.repository.js";
-import * as subjectRepository from "./../../subject/subject.repository.js";
-import * as prerequisiteRepository from "./../prerequisite.repository.js";
+import * as careerRepository from './../../career/career.repository.js';
+import * as categoryRepository from './../../category/category.repository.js';
+import * as subcategoryRepository from './../../subcategory/subcategory.repository.js';
+import * as subjectRepository from './../../subject/subject.repository.js';
+import * as prerequisiteRepository from './../prerequisite.repository.js';
 import { generateAccessToken } from '../../../auth/auth.utils.js';
 
-describe("POST /", () => {
-    it("retorna 400 Bad Request si el body no existe", async () => {
+describe('POST /', () => {
+    it('retorna 400 Bad Request si el body no existe', async () => {
         const user = await userRepository.create({
             email: 'test@test.com',
             password: 'testpassword',
@@ -41,7 +41,7 @@ describe("POST /", () => {
         expect(res.status).toBe(400);
     });
 
-    it("retorna 400 Bad Request si el body está mal formado", async () => {
+    it('retorna 400 Bad Request si el body está mal formado', async () => {
         const user = await userRepository.create({
             email: 'test@test.com',
             password: 'testpassword',
@@ -68,14 +68,14 @@ describe("POST /", () => {
             .set('Cookie', 'refreshToken=test123')
             .send({
                 type: 1,
-                subjectId: "esto-no-es-uuid-1",
-                prerequisiteId: "esto-no-es-uuid-2",
+                subjectId: 'esto-no-es-uuid-1',
+                prerequisiteId: 'esto-no-es-uuid-2',
             });
 
         expect(res.status).toBe(400);
     });
 
-    it("retorna 403 Forbidden si no tiene ownership sobre la Career asociada y el usuario no es ADMIN", async () => {
+    it('retorna 403 Forbidden si no tiene ownership sobre la Career asociada y el usuario no es ADMIN', async () => {
         const user1 = await userRepository.create({
             email: 'test1@test.com',
             password: 'testpassword1',
@@ -90,24 +90,30 @@ describe("POST /", () => {
             user1.id,
         );
 
-        const category = await categoryRepository.create({
-            name: "La mejor categoria",
-            careerId: career.id,
-        }, 1);
+        const category = await categoryRepository.create(
+            {
+                name: 'La mejor categoria',
+                careerId: career.id,
+            },
+            1,
+        );
 
-        const subcategory = await subcategoryRepository.create({
-            name: "La mejor subcategoria",
-            categoryId: category.id,
-        }, 1);
+        const subcategory = await subcategoryRepository.create(
+            {
+                name: 'La mejor subcategoria',
+                categoryId: category.id,
+            },
+            1,
+        );
 
         const subject1 = await subjectRepository.create({
-            name: "La mejor materia 1",
+            name: 'La mejor materia 1',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
         });
 
         const subject2 = await subjectRepository.create({
-            name: "La mejor materia 2",
+            name: 'La mejor materia 2',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
         });
@@ -137,7 +143,7 @@ describe("POST /", () => {
             .set('Authorization', `Bearer ${accessToken2}`)
             .set('Cookie', 'refreshToken=test1232')
             .send({
-                type: "PASSED",
+                type: 'PASSED',
                 subjectId: subject1.id,
                 prerequisiteId: subject2.id,
             });
@@ -145,7 +151,7 @@ describe("POST /", () => {
         expect(res.status).toBe(403);
     });
 
-    it("retorna 404 Not Found si no existe el Subject asociado", async () => {
+    it('retorna 404 Not Found si no existe el Subject asociado', async () => {
         const user = await userRepository.create({
             email: 'test@test.com',
             password: 'testpassword',
@@ -171,15 +177,15 @@ describe("POST /", () => {
             .set('Authorization', `Bearer ${accessToken}`)
             .set('Cookie', 'refreshToken=test123')
             .send({
-                type: "PASSED",
-                subjectId: "123e4567-e89b-12d3-a456-426614174000",
-                prerequisiteId: "123e4567-e89b-12d3-a456-426614174000",
+                type: 'PASSED',
+                subjectId: '123e4567-e89b-12d3-a456-426614174000',
+                prerequisiteId: '123e4567-e89b-12d3-a456-426614174000',
             });
 
         expect(res.status).toBe(404);
     });
 
-    it("el usuario no es ADMIN, es exitoso y retorna 201 Created y el body con Prerequisite", async () => {
+    it('el usuario no es ADMIN, es exitoso y retorna 201 Created y el body con Prerequisite', async () => {
         const user = await userRepository.create({
             email: 'test@test.com',
             password: 'testpassword',
@@ -208,24 +214,30 @@ describe("POST /", () => {
             user.id,
         );
 
-        const category = await categoryRepository.create({
-            name: "La mejor categoria",
-            careerId: career.id
-        }, 1);
+        const category = await categoryRepository.create(
+            {
+                name: 'La mejor categoria',
+                careerId: career.id,
+            },
+            1,
+        );
 
-        const subcategory = await subcategoryRepository.create({
-            name: "La mejor subcategoria",
-            categoryId: category.id,
-        }, 1);
+        const subcategory = await subcategoryRepository.create(
+            {
+                name: 'La mejor subcategoria',
+                categoryId: category.id,
+            },
+            1,
+        );
 
         const subject1 = await subjectRepository.create({
-            name: "La mejor materia 1",
+            name: 'La mejor materia 1',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
         });
 
         const subject2 = await subjectRepository.create({
-            name: "La mejor materia 2",
+            name: 'La mejor materia 2',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
         });
@@ -235,7 +247,7 @@ describe("POST /", () => {
             .set('Authorization', `Bearer ${accessToken}`)
             .set('Cookie', 'refreshToken=test123')
             .send({
-                type: "PASSED",
+                type: 'PASSED',
                 subjectId: subject1.id,
                 prerequisiteId: subject2.id,
             });
@@ -247,7 +259,7 @@ describe("POST /", () => {
         expect(res.body.prerequisiteId).toBe(subject2.id);
     });
 
-    it("el usuario es ADMIN, no tiene ownership sobre la Career asociada, es exitoso y retorna 201 Created y el body con Prerequisite", async () => {
+    it('el usuario es ADMIN, no tiene ownership sobre la Career asociada, es exitoso y retorna 201 Created y el body con Prerequisite', async () => {
         const user1 = await userRepository.create({
             email: 'test1@test.com',
             password: 'testpassword1',
@@ -262,24 +274,30 @@ describe("POST /", () => {
             user1.id,
         );
 
-        const category = await categoryRepository.create({
-            name: "La mejor categoria",
-            careerId: career.id,
-        }, 1);
+        const category = await categoryRepository.create(
+            {
+                name: 'La mejor categoria',
+                careerId: career.id,
+            },
+            1,
+        );
 
-        const subcategory = await subcategoryRepository.create({
-            name: "La mejor subcategoria",
-            categoryId: category.id,
-        }, 1);
+        const subcategory = await subcategoryRepository.create(
+            {
+                name: 'La mejor subcategoria',
+                categoryId: category.id,
+            },
+            1,
+        );
 
         const subject1 = await subjectRepository.create({
-            name: "La mejor materia 1",
+            name: 'La mejor materia 1',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
         });
 
         const subject2 = await subjectRepository.create({
-            name: "La mejor materia 2",
+            name: 'La mejor materia 2',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
         });
@@ -310,7 +328,7 @@ describe("POST /", () => {
             .set('Authorization', `Bearer ${accessToken2}`)
             .set('Cookie', 'refreshToken=test1232')
             .send({
-                type: "PASSED",
+                type: 'PASSED',
                 subjectId: subject1.id,
                 prerequisiteId: subject2.id,
             });
@@ -323,8 +341,8 @@ describe("POST /", () => {
     });
 });
 
-describe("DELETE /:prerequisiteId", () => {
-    it("retorna 400 Bad Request si el param prerequisiteId está mal formado", async () => {
+describe('DELETE /:prerequisiteId', () => {
+    it('retorna 400 Bad Request si el param prerequisiteId está mal formado', async () => {
         const user = await userRepository.create({
             email: 'test@test.com',
             password: 'testpassword',
@@ -354,7 +372,7 @@ describe("DELETE /:prerequisiteId", () => {
         expect(res.status).toBe(400);
     });
 
-    it("retorna 403 Forbidden si no tiene ownership sobre la Career asociada y el usuario no es ADMIN", async () => {
+    it('retorna 403 Forbidden si no tiene ownership sobre la Career asociada y el usuario no es ADMIN', async () => {
         const user1 = await userRepository.create({
             email: 'test1@test.com',
             password: 'testpassword1',
@@ -369,30 +387,36 @@ describe("DELETE /:prerequisiteId", () => {
             user1.id,
         );
 
-        const category = await categoryRepository.create({
-            name: "La mejor categoria",
-            careerId: career.id,
-        }, 1);
+        const category = await categoryRepository.create(
+            {
+                name: 'La mejor categoria',
+                careerId: career.id,
+            },
+            1,
+        );
 
-        const subcategory = await subcategoryRepository.create({
-            name: "La mejor subcategoria",
-            categoryId: category.id,
-        }, 1);
+        const subcategory = await subcategoryRepository.create(
+            {
+                name: 'La mejor subcategoria',
+                categoryId: category.id,
+            },
+            1,
+        );
 
         const subject1 = await subjectRepository.create({
-            name: "La mejor materia 1",
+            name: 'La mejor materia 1',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
         });
 
         const subject2 = await subjectRepository.create({
-            name: "La mejor materia 2",
+            name: 'La mejor materia 2',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
         });
 
         const prerequisite = await prerequisiteRepository.create({
-            type: "PASSED",
+            type: 'PASSED',
             subjectId: subject1.id,
             prerequisiteId: subject2.id,
         });
@@ -425,7 +449,7 @@ describe("DELETE /:prerequisiteId", () => {
         expect(res.status).toBe(403);
     });
 
-    it("retorna 404 Not Found si no existe un Prerequisite con ese prerequisiteId", async () => {
+    it('retorna 404 Not Found si no existe un Prerequisite con ese prerequisiteId', async () => {
         const user = await userRepository.create({
             email: 'test@test.com',
             password: 'testpassword',
@@ -447,14 +471,16 @@ describe("DELETE /:prerequisiteId", () => {
         );
 
         const res = await request(app)
-            .delete('/api/academic/prerequisites/123e4567-e89b-12d3-a456-426614174000')
+            .delete(
+                '/api/academic/prerequisites/123e4567-e89b-12d3-a456-426614174000',
+            )
             .set('Authorization', `Bearer ${accessToken}`)
             .set('Cookie', 'refreshToken=test123');
 
         expect(res.status).toBe(404);
     });
 
-    it("el usuario no es ADMIN, es exitoso y retorna 204 No Content", async () => {
+    it('el usuario no es ADMIN, es exitoso y retorna 204 No Content', async () => {
         const user = await userRepository.create({
             email: 'test@test.com',
             password: 'testpassword',
@@ -483,30 +509,36 @@ describe("DELETE /:prerequisiteId", () => {
             user.id,
         );
 
-        const category = await categoryRepository.create({
-            name: "La mejor categoria",
-            careerId: career.id,
-        }, 1);
+        const category = await categoryRepository.create(
+            {
+                name: 'La mejor categoria',
+                careerId: career.id,
+            },
+            1,
+        );
 
-        const subcategory = await subcategoryRepository.create({
-            name: "La mejor subcategoria",
-            categoryId: category.id,
-        }, 1);
+        const subcategory = await subcategoryRepository.create(
+            {
+                name: 'La mejor subcategoria',
+                categoryId: category.id,
+            },
+            1,
+        );
 
         const subject1 = await subjectRepository.create({
-            name: "La mejor materia 1",
+            name: 'La mejor materia 1',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
         });
 
         const subject2 = await subjectRepository.create({
-            name: "La mejor materia 2",
+            name: 'La mejor materia 2',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
         });
 
         const prerequisite = await prerequisiteRepository.create({
-            type: "PASSED",
+            type: 'PASSED',
             subjectId: subject1.id,
             prerequisiteId: subject2.id,
         });
@@ -519,7 +551,7 @@ describe("DELETE /:prerequisiteId", () => {
         expect(res.status).toBe(204);
     });
 
-    it("el usuario es ADMIN, no tiene ownership sobre la Career asociada, es exitoso y retorna 204 No Content", async () => {
+    it('el usuario es ADMIN, no tiene ownership sobre la Career asociada, es exitoso y retorna 204 No Content', async () => {
         const user1 = await userRepository.create({
             email: 'test1@test.com',
             password: 'testpassword1',
@@ -534,30 +566,36 @@ describe("DELETE /:prerequisiteId", () => {
             user1.id,
         );
 
-        const category = await categoryRepository.create({
-            name: "La mejor categoria",
-            careerId: career.id,
-        }, 1);
+        const category = await categoryRepository.create(
+            {
+                name: 'La mejor categoria',
+                careerId: career.id,
+            },
+            1,
+        );
 
-        const subcategory = await subcategoryRepository.create({
-            name: "La mejor subcategoria",
-            categoryId: category.id,
-        }, 1);
+        const subcategory = await subcategoryRepository.create(
+            {
+                name: 'La mejor subcategoria',
+                categoryId: category.id,
+            },
+            1,
+        );
 
         const subject1 = await subjectRepository.create({
-            name: "La mejor materia 1",
+            name: 'La mejor materia 1',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
         });
 
         const subject2 = await subjectRepository.create({
-            name: "La mejor materia 2",
+            name: 'La mejor materia 2',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
         });
 
         const prerequisite = await prerequisiteRepository.create({
-            type: "PASSED",
+            type: 'PASSED',
             subjectId: subject1.id,
             prerequisiteId: subject2.id,
         });

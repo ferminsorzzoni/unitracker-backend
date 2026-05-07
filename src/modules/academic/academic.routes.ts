@@ -11,6 +11,6 @@ academicRouter.use('/careers', careerRouter);
 academicRouter.use('/categories', categoryRouter);
 academicRouter.use('/subcategories', subcategoryRouter);
 academicRouter.use('/subjects', subjectRouter);
-academicRouter.use("/prerequisites", prerequisiteRouter);
+academicRouter.use('/prerequisites', prerequisiteRouter);
 
 export default academicRouter;

@@ -1,4 +1,4 @@
-import z from "zod";
+import z from 'zod';
 
 const createSubcategorySchema = z.object({
     name: z.string().min(1),
@@ -14,4 +14,8 @@ const updateSubcategorySchema = z.object({
     order: z.int().positive().optional(),
 });
 
-export { createSubcategorySchema, subcategoryParamsSchema, updateSubcategorySchema };
+export {
+    createSubcategorySchema,
+    subcategoryParamsSchema,
+    updateSubcategorySchema,
+};

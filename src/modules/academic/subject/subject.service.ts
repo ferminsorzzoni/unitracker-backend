@@ -1,9 +1,9 @@
-import { Prisma, Subject } from "../../../prisma/generated/prisma/client.js";
-import type { User } from "../../../types/user.js";
-import { NotFoundError } from "../../../utils/errors.js";
-import { checkSubcategoryOwnership } from "../subcategory/subcategory.service.js";
-import * as subjectRepository from "./subject.repository.js";
-import type { CreateSubjectDTO, UpdateSubjectDTO } from "./subject.types.js";
+import { Prisma, Subject } from '../../../prisma/generated/prisma/client.js';
+import type { User } from '../../../types/user.js';
+import { NotFoundError } from '../../../utils/errors.js';
+import { checkSubcategoryOwnership } from '../subcategory/subcategory.service.js';
+import * as subjectRepository from './subject.repository.js';
+import type { CreateSubjectDTO, UpdateSubjectDTO } from './subject.types.js';
 
 async function create(subject: CreateSubjectDTO): Promise<Subject> {
     return await subjectRepository.create(subject);
@@ -11,16 +11,20 @@ async function create(subject: CreateSubjectDTO): Promise<Subject> {
 
 async function findById(subjectId: string): Promise<Subject> {
     const subject = await subjectRepository.findById(subjectId);
-    if(!subject) throw new NotFoundError("Subject not found");
+    if (!subject) throw new NotFoundError('Subject not found');
     return subject;
 }
 
-async function update(subject: UpdateSubjectDTO, subjectId: string): Promise<Subject> {
+async function update(
+    subject: UpdateSubjectDTO,
+    subjectId: string,
+): Promise<Subject> {
     try {
         return await subjectRepository.update(subject, subjectId);
-    } catch(err) {
-        if(err instanceof Prisma.PrismaClientKnownRequestError) {
-            if(err.code === "P2025") throw new NotFoundError("Subject not found");
+    } catch (err) {
+        if (err instanceof Prisma.PrismaClientKnownRequestError) {
+            if (err.code === 'P2025')
+                throw new NotFoundError('Subject not found');
         }
         throw err;
     }
@@ -29,9 +33,10 @@ async function update(subject: UpdateSubjectDTO, subjectId: string): Promise<Sub
 async function remove(subjectId: string): Promise<Subject> {
     try {
         return await subjectRepository.remove(subjectId);
-    } catch(err) {
-        if(err instanceof Prisma.PrismaClientKnownRequestError) {
-            if(err.code === "P2025") throw new NotFoundError("Subject not found");
+    } catch (err) {
+        if (err instanceof Prisma.PrismaClientKnownRequestError) {
+            if (err.code === 'P2025')
+                throw new NotFoundError('Subject not found');
         }
         throw err;
     }

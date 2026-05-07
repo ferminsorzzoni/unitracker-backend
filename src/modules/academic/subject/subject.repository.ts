@@ -1,7 +1,6 @@
-import { prisma } from "../../../config/database.js";
-import type { Subject } from "../../../prisma/generated/prisma/client.js";
-import type { CreateSubjectDTO, UpdateSubjectDTO } from "./subject.types.js";
-
+import { prisma } from '../../../config/database.js';
+import type { Subject } from '../../../prisma/generated/prisma/client.js';
+import type { CreateSubjectDTO, UpdateSubjectDTO } from './subject.types.js';
 
 async function create(subject: CreateSubjectDTO): Promise<Subject> {
     return await prisma.subject.create({
@@ -21,7 +20,10 @@ async function findById(subjectId: string): Promise<Subject | null> {
     });
 }
 
-async function update(subject: UpdateSubjectDTO, subjectId: string): Promise<Subject> {
+async function update(
+    subject: UpdateSubjectDTO,
+    subjectId: string,
+): Promise<Subject> {
     return await prisma.subject.update({
         where: {
             id: subjectId,
@@ -31,7 +33,7 @@ async function update(subject: UpdateSubjectDTO, subjectId: string): Promise<Sub
             mark: subject.mark,
             state: subject.state,
             weeklyMinutes: subject.weeklyMinutes,
-        }
+        },
     });
 }
 
@@ -43,4 +45,4 @@ async function remove(subjectId: string): Promise<Subject> {
     });
 }
 
-export { create, findById, update, remove }
+export { create, findById, update, remove };
