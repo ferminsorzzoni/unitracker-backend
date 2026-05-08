@@ -9,7 +9,7 @@ import type {
 async function create(
     subcategory: CreateSubcategoryDTO,
     order: number,
-    tx: DbClient = prisma
+    tx: DbClient = prisma,
 ): Promise<Subcategory> {
     return await tx.subcategory.create({
         data: {

@@ -8,7 +8,11 @@ import { clone as cloneCategory } from '../category/category.service.js';
 import { prisma } from '../../../config/database.js';
 import { DbClient } from '../../../types/dbClient.js';
 
-async function create(career: CreateCareerDTO, user: User, tx: DbClient = prisma): Promise<Career> {
+async function create(
+    career: CreateCareerDTO,
+    user: User,
+    tx: DbClient = prisma,
+): Promise<Career> {
     if (career.isOfficial && !isAdmin(user.role))
         throw new ForbiddenError(
             'User is not ADMIN, cannot set career as official',
@@ -24,7 +28,7 @@ async function findById(careerId: string): Promise<Career> {
 
 async function findByIdWithCategories(careerId: string, tx: DbClient = prisma) {
     const career = await careerRepository.findByIdWithCategories(careerId, tx);
-    if(!career) throw new NotFoundError("Career not found");
+    if (!career) throw new NotFoundError('Career not found');
     return career;
 }
 
@@ -63,8 +67,16 @@ async function remove(careerId: string): Promise<Career> {
 async function clone(careerId: string, user: User): Promise<Career> {
     const career = await findByIdWithCategories(careerId);
     return await prisma.$transaction(async (tx) => {
-        const clonedCareer = await create({ name: career.name, institution: career.institution ?? undefined }, user, tx);
-        await Promise.all(career.categories.map(category => cloneCategory(category, clonedCareer.id, tx)));
+        const clonedCareer = await create(
+            { name: career.name, institution: career.institution ?? undefined },
+            user,
+            tx,
+        );
+        await Promise.all(
+            career.categories.map((category) =>
+                cloneCategory(category, clonedCareer.id, tx),
+            ),
+        );
         return await findByIdWithCategories(clonedCareer.id, tx);
     });
 }
@@ -76,4 +88,12 @@ async function checkCareerOwnership(careerId: string, user: User) {
         throw new ForbiddenError('User does not own the career');
 }
 
-export { create, findById, findByIdWithCategories, update, remove, clone, checkCareerOwnership };
+export {
+    create,
+    findById,
+    findByIdWithCategories,
+    update,
+    remove,
+    clone,
+    checkCareerOwnership,
+};

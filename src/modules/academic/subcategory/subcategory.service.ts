@@ -16,9 +16,13 @@ import type {
 import { clone as cloneSubject } from '../subject/subject.service.js';
 import { clone as clonePrerequisites } from '../prerequisite/prerequisite.service.js';
 
-async function create(subcategory: CreateSubcategoryDTO, order?: number, tx: DbClient = prisma): Promise<Subcategory> {
+async function create(
+    subcategory: CreateSubcategoryDTO,
+    order?: number,
+    tx: DbClient = prisma,
+): Promise<Subcategory> {
     let nextOrder: number;
-    if(!order) {
+    if (!order) {
         nextOrder = (await findMaxOrder(subcategory.categoryId)) + 1;
     } else {
         nextOrder = order;
@@ -59,15 +63,33 @@ async function remove(subcategoryId: string): Promise<Subcategory> {
     }
 }
 
-async function clone(subcategory: CloneSubcategoryDTO, categoryId: string, tx: DbClient = prisma) {
-    const clonedSubcategory = await create({ name: subcategory.name, categoryId: categoryId }, subcategory.order, tx);
+async function clone(
+    subcategory: CloneSubcategoryDTO,
+    categoryId: string,
+    tx: DbClient = prisma,
+) {
+    const clonedSubcategory = await create(
+        { name: subcategory.name, categoryId: categoryId },
+        subcategory.order,
+        tx,
+    );
     const subjectIdMap = new Map<string, string>();
-    await Promise.all(subcategory.subjects.map(async subject => {
-        const clonedSubject = await cloneSubject(subject, clonedSubcategory.id, tx);
-        subjectIdMap.set(subject.id, clonedSubject.id);
-        return clonedSubject;
-    }));
-    await Promise.all(subcategory.subjects.map(subject => clonePrerequisites(subject.prerequisites, subjectIdMap, tx)));
+    await Promise.all(
+        subcategory.subjects.map(async (subject) => {
+            const clonedSubject = await cloneSubject(
+                subject,
+                clonedSubcategory.id,
+                tx,
+            );
+            subjectIdMap.set(subject.id, clonedSubject.id);
+            return clonedSubject;
+        }),
+    );
+    await Promise.all(
+        subcategory.subjects.map((subject) =>
+            clonePrerequisites(subject.prerequisites, subjectIdMap, tx),
+        ),
+    );
 }
 
 async function findMaxOrder(categoryId: string): Promise<number> {

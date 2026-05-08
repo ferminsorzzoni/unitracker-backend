@@ -5,9 +5,16 @@ import type { User } from '../../../types/user.js';
 import { NotFoundError } from '../../../utils/errors.js';
 import { checkSubcategoryOwnership } from '../subcategory/subcategory.service.js';
 import * as subjectRepository from './subject.repository.js';
-import type { CloneSubjectDTO, CreateSubjectDTO, UpdateSubjectDTO } from './subject.types.js';
+import type {
+    CloneSubjectDTO,
+    CreateSubjectDTO,
+    UpdateSubjectDTO,
+} from './subject.types.js';
 
-async function create(subject: CreateSubjectDTO, tx: DbClient = prisma): Promise<Subject> {
+async function create(
+    subject: CreateSubjectDTO,
+    tx: DbClient = prisma,
+): Promise<Subject> {
     return await subjectRepository.create(subject, tx);
 }
 
@@ -44,8 +51,19 @@ async function remove(subjectId: string): Promise<Subject> {
     }
 }
 
-async function clone(subject: CloneSubjectDTO, subcategoryId: string, tx: DbClient = prisma) {
-    return await create({ name: subject.name, subcategoryId: subcategoryId, weeklyMinutes: subject.weeklyMinutes ?? undefined }, tx);
+async function clone(
+    subject: CloneSubjectDTO,
+    subcategoryId: string,
+    tx: DbClient = prisma,
+) {
+    return await create(
+        {
+            name: subject.name,
+            subcategoryId: subcategoryId,
+            weeklyMinutes: subject.weeklyMinutes ?? undefined,
+        },
+        tx,
+    );
 }
 
 async function checkSubjectOwnership(subjectId: string, user: User) {

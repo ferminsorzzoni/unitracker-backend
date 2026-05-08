@@ -5,12 +5,20 @@ import type { User } from '../../../types/user.js';
 import { NotFoundError } from '../../../utils/errors.js';
 import { checkCareerOwnership } from '../career/career.service.js';
 import * as categoryRepository from './category.repository.js';
-import type { CloneCategoryDTO, CreateCategoryDTO, UpdateCategoryDTO } from './category.types.js';
-import { clone as cloneSubcategory } from "./../subcategory/subcategory.service.js";
+import type {
+    CloneCategoryDTO,
+    CreateCategoryDTO,
+    UpdateCategoryDTO,
+} from './category.types.js';
+import { clone as cloneSubcategory } from './../subcategory/subcategory.service.js';
 
-async function create(category: CreateCategoryDTO, order?: number, tx: DbClient = prisma): Promise<Category> {
+async function create(
+    category: CreateCategoryDTO,
+    order?: number,
+    tx: DbClient = prisma,
+): Promise<Category> {
     let nextOrder: number;
-    if(!order) {
+    if (!order) {
         nextOrder = (await findMaxOrder(category.careerId, tx)) + 1;
     } else {
         nextOrder = order;
@@ -51,12 +59,27 @@ async function remove(categoryId: string): Promise<Category> {
     }
 }
 
-async function clone(category: CloneCategoryDTO, careerId: string, tx: DbClient = prisma) {
-    const clonedCategory = await create({ name: category.name, careerId: careerId }, category.order, tx);
-    await Promise.all(category.subcategories.map(subcategory => cloneSubcategory(subcategory, clonedCategory.id, tx)));
+async function clone(
+    category: CloneCategoryDTO,
+    careerId: string,
+    tx: DbClient = prisma,
+) {
+    const clonedCategory = await create(
+        { name: category.name, careerId: careerId },
+        category.order,
+        tx,
+    );
+    await Promise.all(
+        category.subcategories.map((subcategory) =>
+            cloneSubcategory(subcategory, clonedCategory.id, tx),
+        ),
+    );
 }
 
-async function findMaxOrder(careerId: string, tx: DbClient = prisma): Promise<number> {
+async function findMaxOrder(
+    careerId: string,
+    tx: DbClient = prisma,
+): Promise<number> {
     const result = await categoryRepository.findMaxOrder(careerId, tx);
     const maxOrder = result._max.order ?? 0;
     return maxOrder;

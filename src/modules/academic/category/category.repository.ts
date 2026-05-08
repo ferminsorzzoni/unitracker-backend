@@ -6,7 +6,7 @@ import type { CreateCategoryDTO, UpdateCategoryDTO } from './category.types.js';
 async function create(
     category: CreateCategoryDTO,
     order: number,
-    tx: DbClient = prisma
+    tx: DbClient = prisma,
 ): Promise<Category> {
     return await tx.category.create({
         data: {

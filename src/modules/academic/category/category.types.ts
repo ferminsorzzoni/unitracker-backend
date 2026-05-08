@@ -9,7 +9,7 @@ import { Category } from '../../../prisma/generated/prisma/client.js';
 type CreateCategoryDTO = z.infer<typeof createCategorySchema>;
 type UpdateCategoryDTO = z.infer<typeof updateCategorySchema>;
 type CloneCategoryDTO = Category & {
-    subcategories: CloneSubcategoryDTO[],
+    subcategories: CloneSubcategoryDTO[];
 };
 
 export { CreateCategoryDTO, UpdateCategoryDTO, CloneCategoryDTO };

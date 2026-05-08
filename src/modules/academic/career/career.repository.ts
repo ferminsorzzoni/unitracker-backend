@@ -39,12 +39,12 @@ async function findByIdWithCategories(careerId: string, tx: DbClient = prisma) {
                             subjects: {
                                 include: {
                                     prerequisites: true,
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+                                },
+                            },
+                        },
+                    },
+                },
+            },
         },
     });
 }

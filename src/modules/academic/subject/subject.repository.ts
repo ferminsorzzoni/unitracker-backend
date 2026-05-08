@@ -3,7 +3,10 @@ import type { Subject } from '../../../prisma/generated/prisma/client.js';
 import type { DbClient } from '../../../types/dbClient.js';
 import type { CreateSubjectDTO, UpdateSubjectDTO } from './subject.types.js';
 
-async function create(subject: CreateSubjectDTO, tx: DbClient = prisma): Promise<Subject> {
+async function create(
+    subject: CreateSubjectDTO,
+    tx: DbClient = prisma,
+): Promise<Subject> {
     return await tx.subject.create({
         data: {
             name: subject.name,

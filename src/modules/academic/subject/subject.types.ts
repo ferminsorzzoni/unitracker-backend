@@ -7,7 +7,7 @@ type CreateSubjectDTO = z.infer<typeof createSubjectSchema>;
 type UpdateSubjectDTO = z.infer<typeof updateSubjectSchema>;
 
 type CloneSubjectDTO = Subject & {
-    prerequisites: ClonePrerequisiteDTO[],
+    prerequisites: ClonePrerequisiteDTO[];
 };
 
 export { CreateSubjectDTO, UpdateSubjectDTO, CloneSubjectDTO };

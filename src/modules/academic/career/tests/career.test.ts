@@ -288,7 +288,7 @@ describe('GET /:careerId', () => {
         expect(res.body.institution).toBe('La mejor institucion');
         expect(res.body.isOfficial).toBe(false);
         expect(res.body.userId).toBe(user.id);
-        expect(res.body).toHaveProperty("categories");
+        expect(res.body).toHaveProperty('categories');
     });
 });
 
@@ -752,7 +752,7 @@ describe('DELETE /:careerId', () => {
     });
 });
 
-describe("POST /:careerId/clone", () => {
+describe('POST /:careerId/clone', () => {
     it('retorna 400 Bad Request si el param careerId está mal formado', async () => {
         const user = await userRepository.create({
             email: 'test@test.com',
@@ -804,7 +804,9 @@ describe("POST /:careerId/clone", () => {
         );
 
         const res = await request(app)
-            .post('/api/academic/careers/123e4567-e89b-12d3-a456-426614174000/clone')
+            .post(
+                '/api/academic/careers/123e4567-e89b-12d3-a456-426614174000/clone',
+            )
             .set('Authorization', `Bearer ${accessToken}`)
             .set('Cookie', 'refreshToken=test123');
 
@@ -861,7 +863,6 @@ describe("POST /:careerId/clone", () => {
             prerequisiteId: subject2.id,
         });
 
-
         const user2 = await userRepository.create({
             email: 'test2@test.com',
             password: 'testpassword2',
@@ -894,7 +895,6 @@ describe("POST /:careerId/clone", () => {
         expect(res.body.institution).toBe('La mejor institucion');
         expect(res.body.isOfficial).toBe(false);
         expect(res.body.userId).toBe(user2.id);
-
 
         const clonedCategory = res.body.categories[0];
         expect(clonedCategory.id).not.toBe(category.id);

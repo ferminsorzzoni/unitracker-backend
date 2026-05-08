@@ -28,7 +28,11 @@ const deleteCareerHandler = [
     deleteCareer,
 ];
 
-const cloneCareerHandler = [requireAuth, validateParams(careerParamsSchema), cloneCareer];
+const cloneCareerHandler = [
+    requireAuth,
+    validateParams(careerParamsSchema),
+    cloneCareer,
+];
 
 async function createCareer(req: Request, res: Response, next: NextFunction) {
     try {
