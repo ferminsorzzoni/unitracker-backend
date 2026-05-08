@@ -3,15 +3,18 @@ import {
     Prerequisite,
 } from '../../../prisma/generated/prisma/client.js';
 import type { User } from '../../../types/user.js';
-import type { CreatePrerequisiteDTO } from './prerequisite.types.js';
+import type { ClonePrerequisiteDTO, CreatePrerequisiteDTO } from './prerequisite.types.js';
 import * as prerequisiteRepository from './prerequisite.repository.js';
 import { NotFoundError } from '../../../utils/errors.js';
 import { checkSubjectOwnership } from '../subject/subject.service.js';
+import type { DbClient } from '../../../types/dbClient.js';
+import { prisma } from '../../../config/database.js';
 
 async function create(
     prerequisite: CreatePrerequisiteDTO,
+    tx: DbClient = prisma,
 ): Promise<Prerequisite> {
-    return await prerequisiteRepository.create(prerequisite);
+    return await prerequisiteRepository.create(prerequisite, tx);
 }
 
 async function findById(prerequisiteId: string): Promise<Prerequisite> {
@@ -32,10 +35,19 @@ async function remove(prerequisiteId: string): Promise<Prerequisite> {
     }
 }
 
+async function clone(prerequisites: ClonePrerequisiteDTO[], subjectIdMap: Map<string, string>, tx: DbClient = prisma) {
+    prerequisites.forEach(async (prerequisite) => {
+        const newSubjectId = subjectIdMap.get(prerequisite.subjectId);
+        const newPrerequisiteId = subjectIdMap.get(prerequisite.prerequisiteId)!;
+        if(!newSubjectId || !newPrerequisiteId) throw new NotFoundError("Prerequisite not found");
+        await create({ subjectId: newSubjectId, prerequisiteId: newPrerequisiteId, type: prerequisite.type }, tx);
+    });
+}
+
 async function checkPrerequisiteOwnership(prerequisiteId: string, user: User) {
     const prerequisite = await findById(prerequisiteId);
     await checkSubjectOwnership(prerequisite.subjectId, user);
     await checkSubjectOwnership(prerequisite.prerequisiteId, user);
 }
 
-export { create, findById, remove, checkPrerequisiteOwnership };
+export { create, findById, remove, clone, checkPrerequisiteOwnership };

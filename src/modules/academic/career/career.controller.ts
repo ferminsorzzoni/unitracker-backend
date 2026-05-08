@@ -27,8 +27,8 @@ const deleteCareerHandler = [
     checkCareerOwnership,
     deleteCareer,
 ];
-// TODO
-const cloneCareerHandler = [cloneCareer];
+
+const cloneCareerHandler = [requireAuth, validateParams(careerParamsSchema), cloneCareer];
 
 async function createCareer(req: Request, res: Response, next: NextFunction) {
     try {
@@ -44,7 +44,7 @@ async function createCareer(req: Request, res: Response, next: NextFunction) {
 async function getCareer(req: Request, res: Response, next: NextFunction) {
     try {
         const { careerId } = res.locals.parsedParams;
-        const career = await careerService.findById(careerId);
+        const career = await careerService.findByIdWithCategories(careerId);
         return res.json(career);
     } catch (err) {
         return next(err);

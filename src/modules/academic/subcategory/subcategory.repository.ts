@@ -1,5 +1,6 @@
 import { prisma } from '../../../config/database.js';
 import type { Subcategory } from '../../../prisma/generated/prisma/client.js';
+import type { DbClient } from '../../../types/dbClient.js';
 import type {
     CreateSubcategoryDTO,
     UpdateSubcategoryDTO,
@@ -8,8 +9,9 @@ import type {
 async function create(
     subcategory: CreateSubcategoryDTO,
     order: number,
+    tx: DbClient = prisma
 ): Promise<Subcategory> {
-    return await prisma.subcategory.create({
+    return await tx.subcategory.create({
         data: {
             name: subcategory.name,
             order: order,

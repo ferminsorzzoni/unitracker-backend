@@ -1,11 +1,13 @@
 import { prisma } from '../../../config/database.js';
-import { Prerequisite } from '../../../prisma/generated/prisma/client.js';
-import { CreatePrerequisiteDTO } from './prerequisite.types.js';
+import type { Prerequisite } from '../../../prisma/generated/prisma/client.js';
+import type { DbClient } from '../../../types/dbClient.js';
+import type { CreatePrerequisiteDTO } from './prerequisite.types.js';
 
 async function create(
     prerequisite: CreatePrerequisiteDTO,
+    tx: DbClient = prisma,
 ): Promise<Prerequisite> {
-    return await prisma.prerequisite.create({
+    return await tx.prerequisite.create({
         data: {
             type: prerequisite.type,
             subjectId: prerequisite.subjectId,

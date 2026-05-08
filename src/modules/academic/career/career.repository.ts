@@ -1,12 +1,14 @@
 import { prisma } from '../../../config/database.js';
 import { Career } from '../../../prisma/generated/prisma/client.js';
+import { DbClient } from '../../../types/dbClient.js';
 import type { CreateCareerDTO, UpdateCareerDTO } from './career.types.js';
 
 async function create(
     career: CreateCareerDTO,
     userId: string,
+    tx: DbClient = prisma,
 ): Promise<Career> {
-    return await prisma.career.create({
+    return await tx.career.create({
         data: {
             name: career.name,
             institution: career.institution,
@@ -20,6 +22,29 @@ async function findById(careerId: string): Promise<Career | null> {
     return await prisma.career.findUnique({
         where: {
             id: careerId,
+        },
+    });
+}
+
+async function findByIdWithCategories(careerId: string, tx: DbClient = prisma) {
+    return await tx.career.findUnique({
+        where: {
+            id: careerId,
+        },
+        include: {
+            categories: {
+                include: {
+                    subcategories: {
+                        include: {
+                            subjects: {
+                                include: {
+                                    prerequisites: true,
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         },
     });
 }
@@ -48,4 +73,4 @@ async function remove(careerId: string): Promise<Career> {
     });
 }
 
-export { create, findById, update, remove };
+export { create, findById, findByIdWithCategories, update, remove };

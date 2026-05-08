@@ -1,12 +1,14 @@
 import { prisma } from '../../../config/database.js';
 import { Category } from '../../../prisma/generated/prisma/client.js';
+import { DbClient } from '../../../types/dbClient.js';
 import type { CreateCategoryDTO, UpdateCategoryDTO } from './category.types.js';
 
 async function create(
     category: CreateCategoryDTO,
     order: number,
+    tx: DbClient = prisma
 ): Promise<Category> {
-    return await prisma.category.create({
+    return await tx.category.create({
         data: {
             name: category.name,
             order: order,
@@ -63,8 +65,8 @@ async function remove(categoryId: string): Promise<Category> {
     });
 }
 
-async function findMaxOrder(careerId: string) {
-    return await prisma.category.aggregate({
+async function findMaxOrder(careerId: string, tx: DbClient = prisma) {
+    return await tx.category.aggregate({
         where: {
             careerId: careerId,
         },
