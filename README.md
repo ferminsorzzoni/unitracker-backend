@@ -61,8 +61,8 @@ When the Access Token expires, a new one is obtained using the Refresh Token, wh
 - Required body:
   ```json
   {
-    email: "user@example.com",
-    password: "password123",
+    "email": "user@example.com",
+    "password": "password123",
   }
   ```
 - Success response:
