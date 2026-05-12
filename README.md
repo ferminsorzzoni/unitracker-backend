@@ -265,6 +265,7 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
   - `400 Bad Request`: Invalid body format.
   - `401 Unauthorized`: Unauthorized user.
   - `403 Forbidden`: User does not own the career.
+  - `404 Not Found`: CareerId not found.
 
 #### PATCH `/api/academic/categories/:categoryId`
 - Actualiza una Category. Requires Auth.
@@ -320,6 +321,7 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
   - `400 Bad Request`: Invalid body format.
   - `401 Unauthorized`: Unauthorized user.
   - `403 Forbidden`: User does not own the career.
+  - `404 Not Found`: CateogryId not found.
 
 #### PATCH `/api/academic/subcategories/:subcategoryId`
 - Actualiza una Subcategory. Requires Auth.
@@ -385,6 +387,7 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
   - `400 Bad Request`: Invalid body format.
   - `401 Unauthorized`: User unauthorized.
   - `403 Forbidden`: User does not own the career.
+  - `404 Not Found`: SubcategoryId not found.
 
 #### PATCH `/api/academic/subjects/:subjectId`
 - Actualiza un Subject. Requires Auth.
@@ -452,6 +455,7 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
   - `400 Bad Request`: Invalid body format.
   - `401 Unauthorized`: User unauthorized.
   - `403 Forbidden`: User does not own the career.
+  - `404 Not Found`: SubjectId/PrerequisiteId not found.
 
 #### DELETE `/api/academic/prerequisites/:prerequisiteId`
 - Borra un Prerequisite. Requires Auth.
