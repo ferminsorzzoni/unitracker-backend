@@ -151,7 +151,7 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
     {
       "id": "1example7",
       "name": "Example Career",
-      "institution": "University of Examples",
+      "institution": "University of Examples" | null,
       "isOfficial": false,
       "userId": "3userexample42",
     }
@@ -170,7 +170,7 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
     {
       "id": "1example7",
       "name": "Example Career",
-      "institution": "University of Examples",
+      "institution": "University of Examples" | null,
       "isOfficial": false,
       "userId": "3userexample42",
       "categories": [categoryExample1, categoryExample2, categoryExampleN],
@@ -197,7 +197,7 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
     {
       "id": "1example7",
       "name": "Example Career",
-      "institution": "University of Examples",
+      "institution": "University of Examples" | null,
       "isOfficial": false,
       "userId": "3userexample42",
       "categories": [categoryExample1, categoryExample2, categoryExampleN],
@@ -228,7 +228,7 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
     {
       "id": "1example7",
       "name": "Example Career",
-      "institution": "University of Examples",
+      "institution": "University of Examples" | null,
       "isOfficial": false,
       "userId": "3userexample42",
       "categories": [categoryExample1, categoryExample2, categoryExampleN],
@@ -359,20 +359,72 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
 
 ### Subject
 #### POST `/api/academic/subjects`
-- Crea un nuevo Subject.
+- Crea un nuevo Subject. Requires Auth.
+- Required body:
+  ```json
+  {
+    "name": "Example Subject",
+    "weeklyMinutes": 60 (optional),
+    "subcategoryId": "47examplesubcategory9",
+  }
+  ```
 - Success response:
+  - HTTP Code: `201 Created`
+  - Body:
+    ```json
+    {
+      "id": "02examplesubject33",
+      "mark": 8 | null,
+      "name": "Example Subject",
+      "state": "PENDING",
+      "subcategoryId": "47examplesubcategory9",
+      "weeklyMinutes": 60 | null,
+    }
+    ```
 - Errors:
+  - `400 Bad Request`: Invalid body format.
+  - `401 Unauthorized`: User unauthorized.
+  - `403 Forbidden`: User does not own the career.
 
 #### PATCH `/api/academic/subjects/:subjectId`
-- Actualiza un Subject.
+- Actualiza un Subject. Requires Auth.
+- Required body:
+  ```json
+  {
+    "name": "Example Subject" (optional),
+    "mark": 7 (optional),
+    "state": "PASSED" (optional),
+    "weeklyMinutes": 60 (optional),
+  }
+  ```
 - Success response:
+  - HTTP Code: `200 OK`
+  - Body:
+    ```json
+    {
+      "id": "02examplesubject33",
+      "mark": 7 | null,
+      "name": "Example Subject",
+      "state": "PASSED",
+      "subcategoryId": "47examplesubcategory9",
+      "weeklyMinutes": 60 | null,
+    }
+    ```
 - Errors:
+  - `400 Bad Request`: Invalid body or param format.
+  - `401 Unauthorized`: User unauthorized.
+  - `403 Forbidden`: User does not own the career.
+  - `404 Not Found`: Subject not found.
 
 #### DELETE `/api/academic/subjects/:subjectId`
-- Borra un Subject.
+- Borra un Subject. Requires Auth.
 - Success response:
+  - HTTP Code: `204 No Content`
 - Errors:
-
+  - `400 Bad Request`: Invalid param format.
+  - `401 Unauthorized`: User unauthorized.
+  - `403 Forbidden`: User does not own the career.
+  - `404 Not Found`: Subject not found.
 
 ### Prerequisite
 #### POST `/api/academic/prerequisites`
