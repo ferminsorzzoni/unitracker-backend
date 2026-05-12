@@ -1,10 +1,10 @@
-# Descripción
-Unitracker es una aplicación web para el seguimiento del progreso académico. Permite a los usuarios cargar el plan de estudios de su carrera, registrar el estado de cada materia y visualizar qué materias tienen disponbles para cursar según sus correlativas.
-Entre las características principales del backend se encuentran la autenticación con email/password y Google OAuth, gestión de carreras personalizables, seguimiento del estado de las materias, sistema de correlativas y clonado de carreras para compartir planes de estudio.
+# Description
+Unitracker is a web application for tracking academic progress. It allows users to upload their degree plan, record the status of each subject, and visualize which subjects are available to take based on their prerequisites.
+Key backend features include email/password and Google OAuth authentication, customizable degree management, subject status tracking, a prerequisites system, and career cloning for sharing study plans.
 
-# Configuración
-## Variables de entorno
-Para levantar el ambiente se necesitan especificar las siguientes variables de entorno:
+# Configuration
+## Environment variables
+The following Environment Variables are required:
 - JWT_SECRET
 - GOOGLE_CLIENT_ID
 - GOOGLE_CLIENT_SECRET
@@ -12,27 +12,27 @@ Para levantar el ambiente se necesitan especificar las siguientes variables de e
 - DATABASE_URL
 
 ## Scripts
-- `npm run dev`: Inicia el servidor en modo desarrollo usando tsx con watch.
-- `npm run build`: Compila TypeScript a JavaScript usando tsc.
-- `npm start`: Ejecuta la versión compilada en dist/server.js.
-- `npm test`: Ejecuta los test usando Vitest.
-- `npm run lint`: Ejecuta ESLint.
-- `npm run format`: Formatea el código usando Prettier.
+- `npm run dev`: Initializes the server in dev mode using tsx watch.
+- `npm run build`: Compiles TypeScript to JavaScript using tsc.
+- `npm start`: Starts compiled file from dist/server.js.
+- `npm test`: Executes test with Vitest.
+- `npm run lint`: Executes ESLint.
+- `npm run format`: Formats code using Prettier.
 
-# Autenticación
-La API utiliza autenticación basada en JWT mediante Bearer Tokens.
-Los endpoints protegidos requieren el siguiente header:
+# Auth
+The API implements authentication using JWT with Bearer Tokens.
+Protected endpoints require the following header:
 ```http
 Authorization: Bearer <access_token>
 ```
-El Access Token se obtiene al iniciar sesión o registrarse.
-Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se almacena en una cookie HTTP-only llamada "refreshToken".
+The Access Token is obtained when logging-in or signing-up.
+When the Access Token expires, a new one is obtained using the Refresh Token, which is saved in a HTTP-only cookie "refreshToken".
 
 # Endpoints
 ## Auth
 #### POST `/api/auth/register`
-- Crea una nueva cuenta de usuario.
-- Body esperado:
+- Creates new User.
+- Required body:
   ```json
   {
     email: "user@example.com",
@@ -40,8 +40,8 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
     name: "John Doe",
   }
   ```
-- Respuesta exitosa:
-  - Código: `201 Created`
+- Success response:
+  - HTTP Code: `201 Created`
   - Body:
     ```json
     {
@@ -52,21 +52,21 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
     ```http
     Set-Cookie: refreshToken=<token>; HttpOnly
     ```
-- Errores:
+- Errors:
   - `400 Bad Request`: Invalid body format.
   - `409 Conflict`: Email already registered.
 
 #### POST `/api/auth/login`
-- Inicia sesión y devuelve los tokens de autenticación.
-- Body esperado:
+- Login and returns auth tokens.
+- Required body:
   ```json
   {
     email: "user@example.com",
     password: "password123",
   }
   ```
-- Respuesta exitosa:
-  - Código: `200 OK`
+- Success response:
+  - HTTP Code: `200 OK`
   - Body:
     ```json
     {
@@ -77,47 +77,47 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
     ```http
     Set-Cookie: refreshToken=<token>; HttpOnly
     ```
-- Errores:
+- Errors:
   - `400 Bad Request`: Invalid body format.
   - `401 Unauthorized`: Invalid credentials.
 
 #### POST `/api/auth/refresh`
-- Genera un nuevo Access Token usando el Refresh Token.
-- Cookies esperadas:
+- Creates new Access Token using the Refresh Token..
+- Required cookies:
   ```http
   refreshToken=<token>
   ```
-- Respuesta exitosa:
-  - Código: `200 OK`
+- Success response:
+  - HTTP Code: `200 OK`
   - Body:
     ```json
     {
       "accessToken": "jwt_token"
     }
     ```
-- Errores:
+- Errors:
   - `401 Unauthorized`: Invalid or expired Refresh Token.
   - `404 Not Found`: User not found.
 
 #### POST `/api/auth/logout`
-- Cierra la sesión actual e invalida el Refresh Token. Requiere Auth.
-- Cookies esperadas:
+- Logout and invalidates Refresh Token. Requires Auth.
+- Required cookies:
   ```http
   refreshToken=<token>
   ```
-- Respuesta exitosa:
-  - Código: `204 No Content`
-- Errores:
+- Success response:
+  - HTTP Code: `204 No Content`
+- Errors:
   - `400 Bad Request`: Invalid cookie format.
   - `401 Unauthorized`: Unauthorized user.
 
 #### GET `/api/auth/google`
-- Inicia el flujo OAuth con Google.
+- Starts Google OAuth.
 
 #### GET `/api/auth/google/callback`
-- Callback utilizado por Google OAuth luego de la autenticación.
-- Respuesta exitosa:
-  - Código: `200 OK`
+- Callback used by Google OAuth.
+- Success response:
+  - HTTP Code: `200 OK`
   - Body:
     ```json
     {
@@ -128,15 +128,15 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
     ```http
     Set-Cookie: refreshToken=<token>; HttpOnly
     ```
-- Errores:
+- Errors:
   - `401 Unauthorized`: Failed Google Auth.
 
 
 ## Academic
 ### Career
 #### POST `/api/academic/careers`
-- Crea una nueva Career. Requiere Auth.
-- Body esperado:
+- Creates new Career. Requires Auth.
+- Required body:
   ```json
     {
       "name": "Example Career",
@@ -144,8 +144,8 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
       "isOfficial": false (optional),
     }
   ```
-- Respuesta exitosa:
-  - Código: `201 Created`
+- Success response:
+  - HTTP Code: `201 Created`
   - Body:
     ```json
     {
@@ -156,15 +156,15 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
       "userId": "3userexample42",
     }
     ```
-- Errores:
+- Errors:
   - `400 Bad Request`: Invalid body format.
   - `401 Unauthorized`: Unauthorized user.
   - `403 Forbidden`: User is not ADMIN, cannot set isOfficial.
 
 #### GET `/api/academic/careers/:careerId`
-- Obtiene una Career.
-- Respuesta exitosa:
-  - Código: `200 OK`
+- Gets a Career.
+- Success response:
+  - HTTP Code: `200 OK`
   - Body:
     ```json
     {
@@ -176,13 +176,13 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
       "categories": [categoryExample1, categoryExample2, categoryExampleN],
     }
     ```
-- Errores:
+- Errors:
   - `400 Bad Request`: Invalid param format.
   - `404 Not Found`: Career not found.
 
 #### PATCH `/api/academic/careers/:careerId`
-- Actualiza una Career. Requiere Auth.
-- Body esperado:
+- Updates a Career. Requires Auth.
+- Required body:
   ```json
   {
     "name": "Example Career" (opcional),
@@ -190,8 +190,8 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
     "isOfficial": false (opcional),
   }
   ```
-- Respuesta exitosa:
-  - Código: `200 OK`
+- Success response:
+  - HTTP Code: `200 OK`
   - Body:
     ```json
     {
@@ -203,14 +203,14 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
       "categories": [categoryExample1, categoryExample2, categoryExampleN],
     }
     ```
-- Errores:
+- Errors:
   - `400 Bad Request`: Invalid body or param format.
   - `401 Unauthorized`: Unauthorized user.
   - `403 Forbidden`: User does not own the career / User is not ADMIN, cannot set isOfficial.
   - `404 Not Found`: Career not found.
 
 #### DELETE `/api/academic/careers/:careerId`
-- Borra una Career. Requiere Auth.
+- Deletes a Career. Requires Auth.
 - Success response:
   - HTTP Code: `204 No Content`
 - Errors:
@@ -220,7 +220,7 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
   - `404 Not Found`: Career not found.
 
 #### POST `/api/academic/careers/:careerId/clone`
-- Clona una Career (sin tener en cuenta el progreso del usuario original). Requiere Auth.
+- Clones a Career (without user's original progress). Requires Auth.
 - Success response:
   - HTTP Code: `201 Created`
   - Body:
@@ -242,7 +242,7 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
 
 ### Category
 #### POST `/api/academic/categories`
-- Crea una nueva Category. Requires Auth.
+- Creates a new Category. Requires Auth.
 - Required body:
   ```json
   {
@@ -268,7 +268,7 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
   - `404 Not Found`: CareerId not found.
 
 #### PATCH `/api/academic/categories/:categoryId`
-- Actualiza una Category. Requires Auth.
+- Updates a Category. Requires Auth.
 - Success response:
   - HTTP Code: `200 OK`
   - Body:
@@ -287,7 +287,7 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
   - `404 Not Found`: Category not found.
 
 #### DELETE `/api/academic/categories/:categoryId`
-- Borra una Category. Requires Auth.
+- Deletes a Category. Requires Auth.
 - Success response:
   - HTTP Code: `204 No Content`
 - Errors:
@@ -298,7 +298,7 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
 
 ### Subcategory
 #### POST `/api/academic/subcategories`
-- Crea una nueva Subcategory. Requires Auth.
+- Creates a new Subcategory. Requires Auth.
 - Required body:
   ```json
   {
@@ -324,7 +324,7 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
   - `404 Not Found`: CateogryId not found.
 
 #### PATCH `/api/academic/subcategories/:subcategoryId`
-- Actualiza una Subcategory. Requires Auth.
+- Updates a Subcategory. Requires Auth.
 - Required body:
   ```json
   {
@@ -350,7 +350,7 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
   - `404 Not Found`: Subcategory not found.
 
 #### DELETE `/api/academic/subcategories/:subcategoryId`
-- Borra una Subcategory. Requires Auth.
+- Deletes a Subcategory. Requires Auth.
 - Success response:
   - HTTP Code: `204 No Content`
 - Errors:
@@ -361,7 +361,7 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
 
 ### Subject
 #### POST `/api/academic/subjects`
-- Crea un nuevo Subject. Requires Auth.
+- Creates a new Subject. Requires Auth.
 - Required body:
   ```json
   {
@@ -390,7 +390,7 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
   - `404 Not Found`: SubcategoryId not found.
 
 #### PATCH `/api/academic/subjects/:subjectId`
-- Actualiza un Subject. Requires Auth.
+- Updates a Subject. Requires Auth.
 - Required body:
   ```json
   {
@@ -420,7 +420,7 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
   - `404 Not Found`: Subject not found.
 
 #### DELETE `/api/academic/subjects/:subjectId`
-- Borra un Subject. Requires Auth.
+- Deletes a Subject. Requires Auth.
 - Success response:
   - HTTP Code: `204 No Content`
 - Errors:
@@ -431,7 +431,7 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
 
 ### Prerequisite
 #### POST `/api/academic/prerequisites`
-- Crea un nuevo Prerequisite. Requires Auth.
+- Creates a new Prerequisite. Requires Auth.
 - Required body:
   ```json
   {
@@ -458,7 +458,7 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
   - `404 Not Found`: SubjectId/PrerequisiteId not found.
 
 #### DELETE `/api/academic/prerequisites/:prerequisiteId`
-- Borra un Prerequisite. Requires Auth.
+- Deletes a Prerequisite. Requires Auth.
 - Success response:
   - HTTP Code: `204 No Content`
 - Errors:
