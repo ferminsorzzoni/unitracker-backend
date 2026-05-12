@@ -297,20 +297,65 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
 
 ### Subcategory
 #### POST `/api/academic/subcategories`
-- Crea una nueva Subcategory.
+- Crea una nueva Subcategory. Requires Auth.
+- Required body:
+  ```json
+  {
+    "name": "Example Subcategory",
+    "categoryId": "57examplecategory6"
+  }
+  ```
 - Success response:
+  - HTTP Code: `201 Created`
+  - Body:
+    ```json
+    {
+      "id": "2examplesubcategory63",
+      "categoryId": "57examplecategory6",
+      "name": "Example Subcategory",
+      "order": 1,
+    }
+    ```
 - Errors:
+  - `400 Bad Request`: Invalid body format.
+  - `401 Unauthorized`: Unauthorized user.
+  - `403 Forbidden`: User does not own the career.
 
 #### PATCH `/api/academic/subcategories/:subcategoryId`
-- Actualiza una Subcategory.
+- Actualiza una Subcategory. Requires Auth.
+- Required body:
+  ```json
+  {
+    "name": "Subcategory Example" (optional),
+    "order": 1 (optional),
+  }
+  ```
 - Success response:
+  - HTTP Code: `200 OK`
+  - Body:
+    ```json
+    {
+      "id": "2examplesubcategory63",
+      "categoryId": "57examplecategory6",
+      "name": "Example Subcategory",
+      "order": 1,
+    }
+    ```
 - Errors:
+  - `400 Bad Request`: Invalid body or param format.
+  - `401 Unauthorized`: User unauthorized.
+  - `403 Forbidden`: User does not own the career.
+  - `404 Not Found`: Subcategory not found.
 
 #### DELETE `/api/academic/subcategories/:subcategoryId`
-- Borra una Subcategory.
+- Borra una Subcategory. Requires Auth.
 - Success response:
+  - HTTP Code: `204 No Content`
 - Errors:
-
+  - `400 Bad Request`: Invalid param format.
+  - `401 Unauthorized`: User unauthorized.
+  - `403 Forbidden`: User does not own the career.
+  - `404 Not Found`: Subcategory not found.
 
 ### Subject
 #### POST `/api/academic/subjects`
