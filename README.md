@@ -428,11 +428,37 @@ Cuando el Access Token expira, se renueva utilizando el Refresh Token, que se al
 
 ### Prerequisite
 #### POST `/api/academic/prerequisites`
-- Crea un nuevo Prerequisite.
+- Crea un nuevo Prerequisite. Requires Auth.
+- Required body:
+  ```json
+  {
+    "type": "PASSED",
+    "subjectId": "02examplesubject33",
+    "prerequisiteId": "11exampleprerequisitesubject0",
+  }
+  ```
 - Success response:
+  - HTTP Code: `201 Created`
+  - Body:
+    ```json
+    {
+      "id": "7exampleprerequisite99",
+      "subjectId": "02examplesubject33",
+      "prerequisiteId": "11exampleprerequisitesubject0",
+      "type": "PASSED",
+    }
+    ```
 - Errors:
+  - `400 Bad Request`: Invalid body format.
+  - `401 Unauthorized`: User unauthorized.
+  - `403 Forbidden`: User does not own the career.
 
 #### DELETE `/api/academic/prerequisites/:prerequisiteId`
-- Borra un Prerequisite.
+- Borra un Prerequisite. Requires Auth.
 - Success response:
+  - HTTP Code: `204 No Content`
 - Errors:
+  - `400 Bad Request`: Invalid param format.
+  - `401 Unauthorized`: User unauthorized.
+  - `403 Forbidden`: User does not own the career.
+  - `404 Not Found`: Prerequisite not found.
