@@ -1,7 +1,7 @@
 import z from 'zod';
 
 const createCategorySchema = z.object({
-    name: z.string().min(1),
+    name: z.string().trim().min(1),
     careerId: z.uuid(),
 });
 
@@ -10,7 +10,7 @@ const categoryParamsSchema = z.object({
 });
 
 const updateCategorySchema = z.object({
-    name: z.string().min(1).optional(),
+    name: z.string().trim().min(1).optional(),
     order: z.int().positive().optional(),
 });
 

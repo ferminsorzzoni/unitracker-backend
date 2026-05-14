@@ -1,7 +1,7 @@
 import z from 'zod';
 
 const createSubcategorySchema = z.object({
-    name: z.string().min(1),
+    name: z.string().trim().min(1),
     categoryId: z.uuid(),
 });
 
@@ -10,7 +10,7 @@ const subcategoryParamsSchema = z.object({
 });
 
 const updateSubcategorySchema = z.object({
-    name: z.string().min(1).optional(),
+    name: z.string().trim().min(1).optional(),
     order: z.int().positive().optional(),
 });
 
