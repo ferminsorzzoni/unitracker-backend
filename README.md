@@ -188,7 +188,40 @@ When the Access Token expires, a new one is obtained using the Refresh Token, wh
       "institution": "University of Examples" | null,
       "isOfficial": false,
       "userId": "3userexample42",
-      "categories": [categoryExample1, categoryExample2, categoryExampleN],
+      "categories": [
+          {
+            "id": "123examplecategory4",
+            "name": "Example Category",
+            "careerId": "1example7",
+            "order": 1,
+            "subcategories": [
+                  {
+                    "id": "56examplesubcategory2",
+                    "name": "Example Subcategory",
+                    "categoryId": "123examplecategory4",
+                    "order": 1,
+                    "subjects": [
+                      {
+                        "id": "11examplesubject0",
+                        "mark": 8 | null,
+                        "name": "Example Subject",
+                        "state": "PENDING",
+                        "weeklyMinutes": 120 | null,
+                        "subcategoryId": "56examplesubcategory2",
+                        "prerequisites": [
+                          {
+                            "id": "exampleprerequisite532",
+                            "type": "PASSED",
+                            "subjectId": "11examplesubject0",
+                            "prerequisiteId": "07exampleprerequisitesubject32",
+                          }
+                        ],
+                      }
+                    ],
+                  }
+            ],
+          }
+      ],
     }
     ```
 - Errors:
