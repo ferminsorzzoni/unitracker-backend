@@ -317,6 +317,13 @@ When the Access Token expires, a new one is obtained using the Refresh Token, wh
 
 #### PATCH `/api/academic/categories/:categoryId`
 - Updates a Category. Requires Auth.
+- Required body:
+  ```json
+  {
+    "name": "Example Category",
+    "order": 1,
+  }
+  ```
 - Success response:
   - HTTP Code: `200 OK`
   - Body:
