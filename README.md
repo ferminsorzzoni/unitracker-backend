@@ -45,7 +45,12 @@ When the Access Token expires, a new one is obtained using the Refresh Token, wh
   - Body:
     ```json
     {
-      "accessToken": "jwt_token"
+      "accessToken": "jwt_token",
+      "user": {
+        "id": "this-is-uuid",
+        "role": "USER",
+        "email": "user@example.com",
+      },
     }
     ```
   - Cookie:
@@ -70,7 +75,12 @@ When the Access Token expires, a new one is obtained using the Refresh Token, wh
   - Body:
     ```json
     {
-      "accessToken": "jwt_token"
+      "accessToken": "jwt_token",
+      "user": {
+        "id": "this-is-uuid",
+        "role": "USER",
+        "email": "user@example.com",
+      },
     }
     ```
   - Cookie:
@@ -121,7 +131,12 @@ When the Access Token expires, a new one is obtained using the Refresh Token, wh
   - Body:
     ```json
     {
-      "accessToken": "jwt_token"
+      "accessToken": "jwt_token",
+      "user": {
+        "id": "this-is-uuid",
+        "role": "USER",
+        "email": "user@example.com",
+      },
     }
     ```
   - Cookie:

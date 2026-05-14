@@ -21,13 +21,13 @@ const registerHandler = [
     registerController,
     setRefreshToken,
     setStatus(201),
-    sendAccessToken,
+    sendAccessTokenAndUser,
 ];
 const loginHandler = [
     validateBody(loginSchema),
     loginController,
     setRefreshToken,
-    sendAccessToken,
+    sendAccessTokenAndUser,
 ];
 const logoutHandler = [
     requireAuth,
@@ -40,7 +40,7 @@ const googleHandler = [
 const googleCallbackHandler = [
     passport.authenticate('google', { session: false }),
     setRefreshToken,
-    sendAccessToken,
+    sendAccessTokenAndUser,
 ];
 
 async function verifyRefreshToken(
@@ -62,6 +62,12 @@ function sendAccessToken(req: Request, res: Response) {
     const user = req.user!;
     const accessToken = generateAccessToken(user);
     return res.json({ accessToken });
+}
+
+function sendAccessTokenAndUser(req: Request, res: Response) {
+    const user = req.user!;
+    const accessToken = generateAccessToken(user);
+    return res.json({accessToken, user});
 }
 
 async function setRefreshToken(

@@ -121,6 +121,11 @@ describe('/register', () => {
         expect(res.status).toBe(201);
         expect(res.headers['set-cookie'][0]).toContain('refreshToken');
         expect(res.body).toHaveProperty('accessToken');
+        expect(res.body.user).toMatchObject({
+            id: expect.any(String),
+            role: "USER",
+            email: "test@test.com",
+        });
     });
 });
 
@@ -164,6 +169,11 @@ describe('/login', () => {
         expect(res.status).toBe(200);
         expect(res.headers['set-cookie'][0]).toContain('refreshToken');
         expect(res.body).toHaveProperty('accessToken');
+        expect(res.body.user).toMatchObject({
+            id: expect.any(String),
+            role: "USER",
+            email: "test@test.com",
+        });
     });
 });
 
@@ -177,6 +187,7 @@ describe('/logout', () => {
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
+            email: user.email,
         });
 
         const hashedToken = crypto
@@ -205,6 +216,7 @@ describe('/logout', () => {
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
+            email: user.email,
         });
 
         const hashedToken = crypto
@@ -234,6 +246,7 @@ describe('/logout', () => {
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
+            email: user.email,
         });
 
         const hashedToken = crypto

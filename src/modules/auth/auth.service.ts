@@ -33,7 +33,7 @@ async function validateRefreshToken(token: string): Promise<PublicUserDTO> {
     const user = await userRepository.findById(refreshToken.userId);
     if (!user) throw new NotFoundError('User not found');
 
-    return { id: user.id, role: user.role };
+    return { id: user.id, email: user.email, role: user.role };
 }
 
 async function register(
@@ -48,7 +48,7 @@ async function register(
             password: hashedPassword,
             name,
         });
-        return { id: user.id, role: user.role };
+        return { id: user.id, email: user.email, role: user.role };
     } catch (err) {
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
             if (err.code === 'P2002')
@@ -66,7 +66,7 @@ async function login(email: string, password: string): Promise<PublicUserDTO> {
     const isPassword = await bcrypt.compare(password, user.password);
     if (!isPassword) throw new UnauthorizedError('Invalid credentials');
 
-    return { id: user.id, role: user.role };
+    return { id: user.id, email: user.email, role: user.role };
 }
 
 async function logout(refreshToken: string, userId: string) {

@@ -1,7 +1,7 @@
 import { User } from '../../prisma/generated/prisma/client.js';
 import { Role } from '../../types/user.js';
 
-type PublicUserDTO = Pick<User, 'id' | 'role'>;
+type PublicUserDTO = Pick<User, 'id' | 'email' | 'role'>;
 
 type CreateUserDTO = {
     email: string;
