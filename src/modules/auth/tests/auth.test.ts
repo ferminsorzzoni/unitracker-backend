@@ -123,8 +123,8 @@ describe('/register', () => {
         expect(res.body).toHaveProperty('accessToken');
         expect(res.body.user).toMatchObject({
             id: expect.any(String),
-            role: "USER",
-            email: "test@test.com",
+            role: 'USER',
+            email: 'test@test.com',
         });
     });
 });
@@ -171,8 +171,8 @@ describe('/login', () => {
         expect(res.body).toHaveProperty('accessToken');
         expect(res.body.user).toMatchObject({
             id: expect.any(String),
-            role: "USER",
-            email: "test@test.com",
+            role: 'USER',
+            email: 'test@test.com',
         });
     });
 });

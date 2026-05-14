@@ -67,7 +67,7 @@ function sendAccessToken(req: Request, res: Response) {
 function sendAccessTokenAndUser(req: Request, res: Response) {
     const user = req.user!;
     const accessToken = generateAccessToken(user);
-    return res.json({accessToken, user});
+    return res.json({ accessToken, user });
 }
 
 async function setRefreshToken(
