@@ -176,6 +176,25 @@ When the Access Token expires, a new one is obtained using the Refresh Token, wh
   - `401 Unauthorized`: Unauthorized user.
   - `403 Forbidden`: User is not ADMIN, cannot set isOfficial.
 
+#### GET `/api/academic/careers/my`
+- Gets all the logged user's careers. Requires Auth.
+- Success response:
+  - HTTP Code: `200 OK`
+  - Body:
+  ```json
+  {
+    [
+      {
+        "id": "1example7",
+        "name": "Example Career",
+        "institution": "University of Examples" | null,
+        "isOfficial": false,
+        "userId": "3userexample42",
+      },
+    ]
+  }
+  ```
+
 #### GET `/api/academic/careers/:careerId`
 - Gets a Career.
 - Success response:

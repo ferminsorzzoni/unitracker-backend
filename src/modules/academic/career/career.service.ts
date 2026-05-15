@@ -20,6 +20,10 @@ async function create(
     return await careerRepository.create(career, user.id, tx);
 }
 
+async function findManyByUserId(userId: string) {
+    return await careerRepository.findManyByUserId(userId);
+}
+
 async function findById(careerId: string): Promise<Career> {
     const career = await careerRepository.findById(careerId);
     if (!career) throw new NotFoundError('Career not found');
@@ -90,6 +94,7 @@ async function checkCareerOwnership(careerId: string, user: User) {
 
 export {
     create,
+    findManyByUserId,
     findById,
     findByIdWithCategories,
     update,

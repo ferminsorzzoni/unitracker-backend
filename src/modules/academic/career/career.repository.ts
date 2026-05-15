@@ -18,6 +18,13 @@ async function create(
     });
 }
 
+async function findManyByUserId(userId: string): Promise<Career[]> {
+    return await prisma.career.findMany({
+        where: { userId: userId },
+        orderBy: { name: "asc" },
+    });
+}
+
 async function findById(careerId: string): Promise<Career | null> {
     return await prisma.career.findUnique({
         where: {
@@ -73,4 +80,4 @@ async function remove(careerId: string): Promise<Career> {
     });
 }
 
-export { create, findById, findByIdWithCategories, update, remove };
+export { create, findManyByUserId, findById, findByIdWithCategories, update, remove };

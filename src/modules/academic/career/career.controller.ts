@@ -13,6 +13,7 @@ const createCareerHandler = [
     validateBody(createCareerSchema),
     createCareer,
 ];
+const getMyCareersHandler = [requireAuth, getMyCareers];
 const getCareerHandler = [validateParams(careerParamsSchema), getCareer];
 const updateCareerHandler = [
     requireAuth,
@@ -41,6 +42,17 @@ async function createCareer(req: Request, res: Response, next: NextFunction) {
 
         return res.status(201).json(career);
     } catch (err) {
+        return next(err);
+    }
+}
+
+async function getMyCareers(req: Request, res: Response, next: NextFunction) {
+    try {
+        const user = req.user!;
+        const careers = await careerService.findManyByUserId(user.id);
+
+        return res.json(careers);
+    } catch(err) {
         return next(err);
     }
 }
@@ -108,6 +120,7 @@ async function checkCareerOwnership(
 export {
     createCareerHandler,
     getCareerHandler,
+    getMyCareersHandler,
     updateCareerHandler,
     deleteCareerHandler,
     cloneCareerHandler,
