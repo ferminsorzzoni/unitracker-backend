@@ -267,7 +267,6 @@ When the Access Token expires, a new one is obtained using the Refresh Token, wh
       "institution": "University of Examples" | null,
       "isOfficial": false,
       "userId": "3userexample42",
-      "categories": [categoryExample1, categoryExample2, categoryExampleN],
     }
     ```
 - Errors:
