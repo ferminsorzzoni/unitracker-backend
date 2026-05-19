@@ -10,6 +10,7 @@ The following Environment Variables are required:
 - GOOGLE_CLIENT_SECRET
 - BASE_URL
 - DATABASE_URL
+- FRONTEND_URL
 
 ## Scripts
 - `npm run dev`: Initializes the server in dev mode using tsx watch.

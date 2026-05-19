@@ -10,6 +10,7 @@ import { setStatus } from '../../middleware/setStatus.js';
 import { Request, Response, NextFunction } from 'express';
 import { generateAccessToken } from './auth.utils.js';
 import { requireAuth } from '../../middleware/requireAuth.js';
+import { env } from '../../config/env.js';
 
 const refreshAccessHandler = [
     validateCookies(refreshTokenSchema),
@@ -67,7 +68,15 @@ function sendAccessToken(req: Request, res: Response) {
 function sendAccessTokenAndUser(req: Request, res: Response) {
     const user = req.user!;
     const accessToken = generateAccessToken(user);
-    return res.json({ accessToken, user });
+    return res.send(`
+        <script>
+            window.opener.postMessage(
+                ${JSON.stringify({ accessToken, user })},
+                '${env.FRONTEND_URL}'
+            )
+            window.close()
+        </script>
+    `)
 }
 
 async function setRefreshToken(
