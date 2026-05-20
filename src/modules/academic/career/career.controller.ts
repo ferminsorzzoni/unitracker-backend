@@ -52,7 +52,7 @@ async function getMyCareers(req: Request, res: Response, next: NextFunction) {
         const careers = await careerService.findManyByUserId(user.id);
 
         return res.json(careers);
-    } catch(err) {
+    } catch (err) {
         return next(err);
     }
 }

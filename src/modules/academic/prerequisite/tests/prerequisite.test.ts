@@ -21,6 +21,7 @@ describe('POST /', () => {
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
+            email: user.email,
         });
 
         const hashedToken = crypto
@@ -50,6 +51,7 @@ describe('POST /', () => {
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
+            email: user.email,
         });
 
         const hashedToken = crypto
@@ -126,6 +128,7 @@ describe('POST /', () => {
         const accessToken2 = generateAccessToken({
             id: user2.id,
             role: user2.role,
+            email: user2.email,
         });
 
         const hashedToken2 = crypto
@@ -160,6 +163,7 @@ describe('POST /', () => {
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
+            email: user.email,
         });
 
         const hashedToken = crypto
@@ -194,6 +198,7 @@ describe('POST /', () => {
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
+            email: user.email,
         });
 
         const hashedToken = crypto
@@ -311,6 +316,7 @@ describe('POST /', () => {
         const accessToken2 = generateAccessToken({
             id: user2.id,
             role: user2.role,
+            email: user2.email,
         });
 
         const hashedToken2 = crypto
@@ -352,6 +358,7 @@ describe('DELETE /:prerequisiteId', () => {
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
+            email: user.email,
         });
 
         const hashedToken = crypto
@@ -429,6 +436,7 @@ describe('DELETE /:prerequisiteId', () => {
         const accessToken2 = generateAccessToken({
             id: user2.id,
             role: user2.role,
+            email: user2.email,
         });
 
         const hashedToken2 = crypto
@@ -458,6 +466,7 @@ describe('DELETE /:prerequisiteId', () => {
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
+            email: user.email,
         });
 
         const hashedToken = crypto
@@ -489,6 +498,7 @@ describe('DELETE /:prerequisiteId', () => {
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
+            email: user.email,
         });
 
         const hashedToken = crypto
@@ -609,6 +619,7 @@ describe('DELETE /:prerequisiteId', () => {
         const accessToken2 = generateAccessToken({
             id: user2.id,
             role: user2.role,
+            email: user2.email,
         });
 
         const hashedToken2 = crypto

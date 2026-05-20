@@ -76,7 +76,7 @@ function sendAccessTokenAndUser(req: Request, res: Response) {
             )
             window.close()
         </script>
-    `)
+    `);
 }
 
 async function setRefreshToken(

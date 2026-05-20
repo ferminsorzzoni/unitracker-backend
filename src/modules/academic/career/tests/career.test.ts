@@ -21,6 +21,7 @@ describe('POST /', () => {
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
+            email: user.email,
         });
 
         const hashedToken = crypto
@@ -50,6 +51,7 @@ describe('POST /', () => {
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
+            email: user.email,
         });
 
         const hashedToken = crypto
@@ -84,6 +86,7 @@ describe('POST /', () => {
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
+            email: user.email,
         });
 
         const hashedToken = crypto
@@ -118,6 +121,7 @@ describe('POST /', () => {
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
+            email: user.email,
         });
 
         const hashedToken = crypto
@@ -157,6 +161,7 @@ describe('POST /', () => {
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
+            email: user.email,
         });
 
         const hashedToken = crypto
@@ -198,6 +203,7 @@ describe('GET /:careerId', () => {
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
+            email: user.email,
         });
 
         const hashedToken = crypto
@@ -227,6 +233,7 @@ describe('GET /:careerId', () => {
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
+            email: user.email,
         });
 
         const hashedToken = crypto
@@ -265,6 +272,7 @@ describe('GET /:careerId', () => {
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
+            email: user.email,
         });
 
         const hashedToken = crypto
@@ -302,6 +310,7 @@ describe('PATCH /:careerId', () => {
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
+            email: user.email,
         });
 
         const hashedToken = crypto
@@ -336,6 +345,7 @@ describe('PATCH /:careerId', () => {
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
+            email: user.email,
         });
 
         const hashedToken = crypto
@@ -384,6 +394,7 @@ describe('PATCH /:careerId', () => {
         const accessToken2 = generateAccessToken({
             id: user2.id,
             role: user2.role,
+            email: user2.email,
         });
 
         const hashedToken2 = crypto
@@ -414,6 +425,7 @@ describe('PATCH /:careerId', () => {
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
+            email: user.email,
         });
 
         const hashedToken = crypto
@@ -454,6 +466,7 @@ describe('PATCH /:careerId', () => {
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
+            email: user.email,
         });
 
         const hashedToken = crypto
@@ -484,6 +497,7 @@ describe('PATCH /:careerId', () => {
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
+            email: user.email,
         });
 
         const hashedToken = crypto
@@ -545,6 +559,7 @@ describe('PATCH /:careerId', () => {
         const accessToken2 = generateAccessToken({
             id: user2.id,
             role: user2.role,
+            email: user2.email,
         });
 
         const hashedToken2 = crypto
@@ -586,6 +601,7 @@ describe('DELETE /:careerId', () => {
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
+            email: user.email,
         });
 
         const hashedToken = crypto
@@ -629,6 +645,7 @@ describe('DELETE /:careerId', () => {
         const accessToken2 = generateAccessToken({
             id: user2.id,
             role: user2.role,
+            email: user2.email,
         });
 
         const hashedToken2 = crypto
@@ -658,6 +675,7 @@ describe('DELETE /:careerId', () => {
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
+            email: user.email,
         });
 
         const hashedToken = crypto
@@ -689,6 +707,7 @@ describe('DELETE /:careerId', () => {
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
+            email: user.email,
         });
 
         const career = await careerRepository.create(
@@ -731,6 +750,7 @@ describe('DELETE /:careerId', () => {
         const accessToken2 = generateAccessToken({
             id: user2.id,
             role: user2.role,
+            email: user2.email,
         });
 
         const hashedToken2 = crypto
@@ -762,6 +782,7 @@ describe('POST /:careerId/clone', () => {
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
+            email: user.email,
         });
 
         const hashedToken = crypto
@@ -791,6 +812,7 @@ describe('POST /:careerId/clone', () => {
         const accessToken = generateAccessToken({
             id: user.id,
             role: user.role,
+            email: user.email,
         });
 
         const hashedToken = crypto
@@ -872,6 +894,7 @@ describe('POST /:careerId/clone', () => {
         const accessToken2 = generateAccessToken({
             id: user2.id,
             role: user2.role,
+            email: user2.email,
         });
 
         const hashedToken2 = crypto

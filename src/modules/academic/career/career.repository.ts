@@ -21,7 +21,7 @@ async function create(
 async function findManyByUserId(userId: string): Promise<Career[]> {
     return await prisma.career.findMany({
         where: { userId: userId },
-        orderBy: { name: "asc" },
+        orderBy: { name: 'asc' },
     });
 }
 
@@ -80,4 +80,11 @@ async function remove(careerId: string): Promise<Career> {
     });
 }
 
-export { create, findManyByUserId, findById, findByIdWithCategories, update, remove };
+export {
+    create,
+    findManyByUserId,
+    findById,
+    findByIdWithCategories,
+    update,
+    remove,
+};
