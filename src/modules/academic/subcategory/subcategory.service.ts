@@ -1,8 +1,4 @@
 import { prisma } from '../../../config/database.js';
-import {
-    Prisma,
-    Subcategory,
-} from '../../../prisma/generated/prisma/client.js';
 import type { DbClient } from '../../../types/dbClient.js';
 import type { User } from '../../../types/user.js';
 import { NotFoundError } from '../../../utils/errors.js';
@@ -15,6 +11,7 @@ import type {
 } from './subcategory.types.js';
 import { clone as cloneSubject } from '../subject/subject.service.js';
 import { clone as clonePrerequisites } from '../prerequisite/prerequisite.service.js';
+import { Prisma, type Subcategory } from '../../../generated/prisma/index.js';
 
 async function create(
     subcategory: CreateSubcategoryDTO,

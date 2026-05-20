@@ -1,5 +1,5 @@
 import { prisma } from '../../config/database.js';
-import { RefreshToken } from '../../prisma/generated/prisma/client.js';
+import { RefreshToken } from '../../generated/prisma/index.js';
 
 async function findByToken(hashedToken: string): Promise<RefreshToken | null> {
     return await prisma.refreshToken.findUnique({

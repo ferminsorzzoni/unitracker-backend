@@ -1,4 +1,3 @@
-import { Career, Prisma } from '../../../prisma/generated/prisma/client.js';
 import type { Role, User } from '../../../types/user.js';
 import { ForbiddenError, NotFoundError } from '../../../utils/errors.js';
 import { isAdmin } from '../academic.utils.js';
@@ -7,6 +6,7 @@ import type { CreateCareerDTO, UpdateCareerDTO } from './career.types.js';
 import { clone as cloneCategory } from '../category/category.service.js';
 import { prisma } from '../../../config/database.js';
 import { DbClient } from '../../../types/dbClient.js';
+import { Career, Prisma } from '../../../generated/prisma/index.js';
 
 async function create(
     career: CreateCareerDTO,

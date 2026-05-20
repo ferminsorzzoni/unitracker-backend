@@ -1,3 +1,3 @@
-import { Prisma, PrismaClient } from '../prisma/generated/prisma/client.js';
+import { Prisma, PrismaClient } from '../generated/prisma';
 
 export type DbClient = PrismaClient | Prisma.TransactionClient;

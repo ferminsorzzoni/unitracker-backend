@@ -1,7 +1,3 @@
-import {
-    Prisma,
-    Prerequisite,
-} from '../../../prisma/generated/prisma/client.js';
 import type { User } from '../../../types/user.js';
 import type {
     ClonePrerequisiteDTO,
@@ -12,6 +8,7 @@ import { NotFoundError } from '../../../utils/errors.js';
 import { checkSubjectOwnership } from '../subject/subject.service.js';
 import type { DbClient } from '../../../types/dbClient.js';
 import { prisma } from '../../../config/database.js';
+import { type Prerequisite, Prisma } from '../../../generated/prisma/index.js';
 
 async function create(
     prerequisite: CreatePrerequisiteDTO,

@@ -1,5 +1,4 @@
 import { prisma } from '../../../config/database.js';
-import { Category, Prisma } from '../../../prisma/generated/prisma/client.js';
 import type { DbClient } from '../../../types/dbClient.js';
 import type { User } from '../../../types/user.js';
 import { NotFoundError } from '../../../utils/errors.js';
@@ -11,6 +10,7 @@ import type {
     UpdateCategoryDTO,
 } from './category.types.js';
 import { clone as cloneSubcategory } from './../subcategory/subcategory.service.js';
+import { Category, Prisma } from '../../../generated/prisma/index.js';
 
 async function create(
     category: CreateCategoryDTO,

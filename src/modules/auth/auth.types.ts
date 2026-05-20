@@ -1,5 +1,5 @@
-import { User } from '../../prisma/generated/prisma/client.js';
-import { Role } from '../../types/user.js';
+import type { User } from '../../generated/prisma/index.js';
+import type { Role } from '../../types/user.js';
 
 type PublicUserDTO = Pick<User, 'id' | 'email' | 'role'>;
 

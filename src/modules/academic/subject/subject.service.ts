@@ -1,5 +1,5 @@
 import { prisma } from '../../../config/database.js';
-import { Prisma, Subject } from '../../../prisma/generated/prisma/client.js';
+import { Prisma, type Subject } from '../../../generated/prisma/index.js';
 import type { DbClient } from '../../../types/dbClient.js';
 import type { User } from '../../../types/user.js';
 import { NotFoundError } from '../../../utils/errors.js';

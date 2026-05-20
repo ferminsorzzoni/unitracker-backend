@@ -4,7 +4,7 @@ import {
     updateSubcategorySchema,
 } from './subcategory.schema.js';
 import type { CloneSubjectDTO } from '../subject/subject.types.js';
-import { Subcategory } from '../../../prisma/generated/prisma/client.js';
+import type { Subcategory } from '../../../generated/prisma/index.js';
 
 type CreateSubcategoryDTO = z.infer<typeof createSubcategorySchema>;
 type UpdateSubcategoryDTO = z.infer<typeof updateSubcategorySchema>;

@@ -1,5 +1,5 @@
 import { prisma } from '../../config/database.js';
-import { User } from '../../prisma/generated/prisma/client.js';
+import { User } from '../../generated/prisma/index.js';
 import { CreateUserDTO } from './auth.types.js';
 
 async function findById(id: string): Promise<User | null> {

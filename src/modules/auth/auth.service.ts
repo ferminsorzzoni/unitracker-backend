@@ -6,9 +6,9 @@ import {
     UnauthorizedError,
 } from '../../utils/errors.js';
 import type { PublicUserDTO } from './auth.types.js';
-import { Prisma } from '../../prisma/generated/prisma/client.js';
 import * as userRepository from './user.repository.js';
 import * as refreshTokenRepository from './refreshToken.repository.js';
+import { Prisma } from '../../generated/prisma/index.js';
 
 async function createRefreshToken(userId: string): Promise<string> {
     const token = crypto.randomBytes(64).toString('hex');

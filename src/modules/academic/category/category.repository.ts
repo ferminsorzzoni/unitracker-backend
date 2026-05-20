@@ -1,5 +1,5 @@
 import { prisma } from '../../../config/database.js';
-import { Category } from '../../../prisma/generated/prisma/client.js';
+import type { Category } from '../../../generated/prisma/index.js';
 import { DbClient } from '../../../types/dbClient.js';
 import type { CreateCategoryDTO, UpdateCategoryDTO } from './category.types.js';
 

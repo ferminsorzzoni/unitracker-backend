@@ -1,6 +1,6 @@
 import { prisma } from '../../../config/database.js';
-import { Career } from '../../../prisma/generated/prisma/client.js';
-import { DbClient } from '../../../types/dbClient.js';
+import type { Career } from '../../../generated/prisma/index.js';
+import type { DbClient } from '../../../types/dbClient.js';
 import type { CreateCareerDTO, UpdateCareerDTO } from './career.types.js';
 
 async function create(

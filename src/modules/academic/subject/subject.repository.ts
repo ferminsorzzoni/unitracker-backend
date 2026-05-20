@@ -1,5 +1,5 @@
 import { prisma } from '../../../config/database.js';
-import type { Subject } from '../../../prisma/generated/prisma/client.js';
+import type { Subject } from '../../../generated/prisma/index.js';
 import type { DbClient } from '../../../types/dbClient.js';
 import type { CreateSubjectDTO, UpdateSubjectDTO } from './subject.types.js';
 
