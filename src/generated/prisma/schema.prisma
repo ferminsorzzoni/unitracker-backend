@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  name          String
+  password      String?
+  googleId      String?        @unique
+  createdAt     DateTime       @default(now())
+  role          Role           @default(USER)
+  refreshTokens RefreshToken[]
+  careers       Career[]
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  expiresAt DateTime
+}
+
+model Career {
+  id          String     @id @default(uuid())
+  name        String
+  institution String?
+  isOfficial  Boolean    @default(false)
+  userId      String
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categories  Category[]
+}
+
+model Category {
+  id            String        @id @default(uuid())
+  name          String
+  order         Int
+  careerId      String
+  career        Career        @relation(fields: [careerId], references: [id], onDelete: Cascade)
+  subcategories Subcategory[]
+}
+
+model Subcategory {
+  id         String    @id @default(uuid())
+  name       String
+  order      Int
+  categoryId String
+  category   Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  subjects   Subject[]
+}
+
+enum SubjectState {
+  PENDING
+  IN_PROGRESS
+  REGULARIZED
+  FAILED
+  PASSED
+}
+
+model Subject {
+  id            String         @id @default(uuid())
+  name          String
+  mark          Int?
+  state         SubjectState   @default(PENDING)
+  weeklyMinutes Int?
+  subcategoryId String
+  subcategory   Subcategory    @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+  prerequisites Prerequisite[] @relation("SubjectPrerequisites")
+  requiredBy    Prerequisite[] @relation("PrerequisiteOf")
+}
+
+enum PrerequisiteType {
+  ATTEMPTED
+  REGULARIZED
+  PASSED
+}
+
+model Prerequisite {
+  id             String           @id @default(uuid())
+  type           PrerequisiteType
+  subjectId      String
+  subject        Subject          @relation("SubjectPrerequisites", fields: [subjectId], references: [id], onDelete: Cascade)
+  prerequisiteId String
+  prerequisite   Subject          @relation("PrerequisiteOf", fields: [prerequisiteId], references: [id], onDelete: Cascade)
+
+  @@unique([subjectId, prerequisiteId])
+}
