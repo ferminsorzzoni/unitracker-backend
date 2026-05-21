@@ -68,15 +68,8 @@ function sendAccessToken(req: Request, res: Response) {
 function sendAccessTokenAndUser(req: Request, res: Response) {
     const user = req.user!;
     const accessToken = generateAccessToken(user);
-    return res.send(`
-        <script>
-            window.opener.postMessage(
-                ${JSON.stringify({ accessToken, user })},
-                '${env.FRONTEND_URL}'
-            )
-            window.close()
-        </script>
-    `);
+    const params = encodeURIComponent(JSON.stringify({ accessToken, user }));
+    return res.redirect(`${env.FRONTEND_URL}/auth/callback?data=${params}`);
 }
 
 async function setRefreshToken(

@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const career_controller_js_1 = require("./career.controller.js");
+const careerRouter = (0, express_1.Router)();
+careerRouter.post('/', career_controller_js_1.createCareerHandler);
+careerRouter.get('/my', career_controller_js_1.getMyCareersHandler);
+careerRouter.get('/:careerId', career_controller_js_1.getCareerHandler);
+careerRouter.patch('/:careerId', career_controller_js_1.updateCareerHandler);
+careerRouter.delete('/:careerId', career_controller_js_1.deleteCareerHandler);
+careerRouter.post('/:careerId/clone', career_controller_js_1.cloneCareerHandler);
+exports.default = careerRouter;

@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.prisma = void 0;
+const adapter_pg_1 = require("@prisma/adapter-pg");
+const env_js_1 = require("./env.js");
+const index_js_1 = require("../generated/prisma/index.js");
+const connectionString = `${env_js_1.env.DATABASE_URL}`;
+const adapter = new adapter_pg_1.PrismaPg({ connectionString });
+const prisma = new index_js_1.PrismaClient({ adapter });
+exports.prisma = prisma;
