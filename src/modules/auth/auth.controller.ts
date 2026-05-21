@@ -41,7 +41,7 @@ const googleHandler = [
 const googleCallbackHandler = [
     passport.authenticate('google', { session: false }),
     setRefreshToken,
-    sendAccessTokenAndUser,
+    sendAccessTokenAndUserRedirect,
 ];
 
 async function verifyRefreshToken(
@@ -66,6 +66,12 @@ function sendAccessToken(req: Request, res: Response) {
 }
 
 function sendAccessTokenAndUser(req: Request, res: Response) {
+    const user = req.user!;
+    const accessToken = generateAccessToken(user);
+    return res.json({ accessToken, user });
+}
+
+function sendAccessTokenAndUserRedirect(req: Request, res: Response) {
     const user = req.user!;
     const accessToken = generateAccessToken(user);
     const params = encodeURIComponent(JSON.stringify({ accessToken, user }));
