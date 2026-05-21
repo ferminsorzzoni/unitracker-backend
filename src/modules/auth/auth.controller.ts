@@ -75,7 +75,6 @@ function sendAccessTokenAndUserRedirect(req: Request, res: Response) {
     const user = req.user!;
     const accessToken = generateAccessToken(user);
     const params = encodeURIComponent(JSON.stringify({ accessToken, user }));
-    res.setHeader("Cross-Origin-Opener-Policy", "unsafe-none");
     return res.redirect(`${env.FRONTEND_URL}/auth/callback?data=${params}`);
 }
 
