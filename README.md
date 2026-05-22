@@ -11,6 +11,7 @@ The following Environment Variables are required:
 - BASE_URL
 - DATABASE_URL
 - FRONTEND_URL
+- NODE_ENV ("production" or "development")
 
 ## Scripts
 - `npm run dev`: Initializes the server in dev mode using tsx watch.
@@ -129,7 +130,7 @@ When the Access Token expires, a new one is obtained using the Refresh Token, wh
 - Callback used by Google OAuth.
 - Success response:
   - HTTP Code: `200 OK`
-  - Body:
+  - Redirects to `FRONTEND_URL/auth/callback?data=<encoded_json>` where the encoded JSON contains::
     ```json
     {
       "accessToken": "jwt_token",

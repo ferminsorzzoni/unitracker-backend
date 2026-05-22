@@ -9,6 +9,7 @@ const envSchema = z.object({
     DATABASE_URL: z.string(),
     BASE_URL: z.string(),
     FRONTEND_URL: z.string(),
+    NODE_ENV: z.string(),
 });
 
 export const env = envSchema.parse(process.env);

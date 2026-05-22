@@ -88,8 +88,8 @@ async function setRefreshToken(
         const token = await authService.createRefreshToken(id);
         res.cookie('refreshToken', token, {
             httpOnly: true,
-            secure: true,
-            sameSite: 'none',
+            secure: env.NODE_ENV === "production",
+            sameSite: env.NODE_ENV === "production" ? "none" : "lax",
         });
         return next();
     } catch (err) {
