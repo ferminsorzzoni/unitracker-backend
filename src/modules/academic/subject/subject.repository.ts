@@ -30,17 +30,34 @@ async function update(
     subject: UpdateSubjectDTO,
     subjectId: string,
 ): Promise<Subject> {
-    return await prisma.subject.update({
-        where: {
-            id: subjectId,
-        },
-        data: {
-            name: subject.name,
-            mark: subject.mark,
-            state: subject.state,
-            order: subject.order,
-            weeklyMinutes: subject.weeklyMinutes,
-        },
+    return await prisma.$transaction(async (tx) => {
+        const updatedSubject = await tx.subject.update({
+            where: {
+                id: subjectId,
+            },
+            data: {
+                name: subject.name,
+                mark: subject.mark,
+                state: subject.state,
+                order: subject.order,
+                weeklyMinutes: subject.weeklyMinutes,
+            },
+        });
+
+        if (subject.order) {
+            await tx.subject.updateMany({
+                where: {
+                    subcategoryId: updatedSubject.subcategoryId,
+                    order: { gte: subject.order },
+                    NOT: { id: subjectId },
+                },
+                data: {
+                    order: { increment: 1 },
+                },
+            });
+        }
+
+        return updatedSubject;
     });
 }
 

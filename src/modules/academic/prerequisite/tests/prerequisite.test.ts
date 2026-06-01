@@ -112,13 +112,13 @@ describe('POST /', () => {
             name: 'La mejor materia 1',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
-        });
+        }, 1);
 
         const subject2 = await subjectRepository.create({
             name: 'La mejor materia 2',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
-        });
+        }, 2);
 
         const user2 = await userRepository.create({
             email: 'test2@test.com',
@@ -239,13 +239,13 @@ describe('POST /', () => {
             name: 'La mejor materia 1',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
-        });
+        }, 1);
 
         const subject2 = await subjectRepository.create({
             name: 'La mejor materia 2',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
-        });
+        }, 2);
 
         const res = await request(app)
             .post(`/api/academic/prerequisites/`)
@@ -299,13 +299,13 @@ describe('POST /', () => {
             name: 'La mejor materia 1',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
-        });
+        }, 1);
 
         const subject2 = await subjectRepository.create({
             name: 'La mejor materia 2',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
-        });
+        }, 2);
 
         const user2 = await userRepository.create({
             email: 'test2@test.com',
@@ -414,13 +414,13 @@ describe('DELETE /:prerequisiteId', () => {
             name: 'La mejor materia 1',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
-        });
+        }, 1);
 
         const subject2 = await subjectRepository.create({
             name: 'La mejor materia 2',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
-        });
+        }, 2);
 
         const prerequisite = await prerequisiteRepository.create({
             type: 'PASSED',
@@ -539,13 +539,13 @@ describe('DELETE /:prerequisiteId', () => {
             name: 'La mejor materia 1',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
-        });
+        }, 1);
 
         const subject2 = await subjectRepository.create({
             name: 'La mejor materia 2',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
-        });
+        }, 2);
 
         const prerequisite = await prerequisiteRepository.create({
             type: 'PASSED',
@@ -596,13 +596,13 @@ describe('DELETE /:prerequisiteId', () => {
             name: 'La mejor materia 1',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
-        });
+        }, 1);
 
         const subject2 = await subjectRepository.create({
             name: 'La mejor materia 2',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
-        });
+        }, 2);
 
         const prerequisite = await prerequisiteRepository.create({
             type: 'PASSED',

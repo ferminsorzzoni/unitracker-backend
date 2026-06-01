@@ -868,16 +868,20 @@ describe('POST /:careerId/clone', () => {
         );
 
         const subject1 = await subjectRepository.create({
-            name: 'La mejor materia 1',
-            weeklyMinutes: 2,
-            subcategoryId: subcategory.id,
-        });
+                name: 'La mejor materia 1',
+                weeklyMinutes: 2,
+                subcategoryId: subcategory.id,
+            },
+            1
+        );
 
         const subject2 = await subjectRepository.create({
             name: 'La mejor materia 2',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
-        });
+            },
+            2
+        );
 
         const prerequisite = await prerequisiteRepository.create({
             type: 'PASSED',

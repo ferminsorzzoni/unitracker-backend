@@ -378,7 +378,7 @@ describe('PATCH /:subjectId', () => {
             name: 'La mejor materia',
             weeklyMinutes: 120,
             subcategoryId: subcategory.id,
-        });
+        }, 1);
 
         const accessToken = generateAccessToken({
             id: user.id,
@@ -445,7 +445,7 @@ describe('PATCH /:subjectId', () => {
             name: 'La mejor materia',
             weeklyMinutes: 120,
             subcategoryId: subcategory.id,
-        });
+        }, 1);
 
         const user2 = await userRepository.create({
             email: 'test2@test.com',
@@ -570,7 +570,7 @@ describe('PATCH /:subjectId', () => {
             name: 'La mejor materia',
             weeklyMinutes: 120,
             subcategoryId: subcategory.id,
-        });
+        }, 1);
 
         const res = await request(app)
             .patch(`/api/academic/subjects/${subject.id}`)
@@ -627,7 +627,7 @@ describe('PATCH /:subjectId', () => {
             name: 'La mejor materia',
             weeklyMinutes: 120,
             subcategoryId: subcategory.id,
-        });
+        }, 1);
 
         const user2 = await userRepository.create({
             email: 'test2@test.com',
@@ -739,7 +739,7 @@ describe('DELETE /:subjectId', () => {
             name: 'La mejor materia',
             weeklyMinutes: 120,
             subcategoryId: subcategory.id,
-        });
+        }, 1);
 
         const user2 = await userRepository.create({
             email: 'test2@test.com',
@@ -852,7 +852,7 @@ describe('DELETE /:subjectId', () => {
             name: 'La mejor materia',
             weeklyMinutes: 120,
             subcategoryId: subcategory.id,
-        });
+        }, 1);
 
         const res = await request(app)
             .delete(`/api/academic/subjects/${subject.id}`)
@@ -897,7 +897,9 @@ describe('DELETE /:subjectId', () => {
             name: 'La mejor materia',
             weeklyMinutes: 120,
             subcategoryId: subcategory.id,
-        });
+        },
+        1
+        );
 
         const user2 = await userRepository.create({
             email: 'test2@test.com',
