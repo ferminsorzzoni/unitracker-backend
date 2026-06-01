@@ -16,6 +16,7 @@ const updateSubjectSchema = z.object({
     state: z
         .enum(['PENDING', 'IN_PROGRESS', 'REGULARIZED', 'FAILED', 'PASSED'])
         .optional(),
+    order: z.int().positive().optional(),
     weeklyMinutes: z.int().positive().optional(),
 });
 

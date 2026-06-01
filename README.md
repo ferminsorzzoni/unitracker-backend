@@ -227,6 +227,7 @@ When the Access Token expires, a new one is obtained using the Refresh Token, wh
                   "mark": 8 | null,
                   "name": "Example Subject",
                   "state": "PENDING",
+                  "order": 1,
                   "weeklyMinutes": 120 | null,
                   "subcategoryId": "56examplesubcategory2",
                   "prerequisites": [
@@ -454,6 +455,7 @@ When the Access Token expires, a new one is obtained using the Refresh Token, wh
       "mark": 8 | null,
       "name": "Example Subject",
       "state": "PENDING",
+      "order": 1,
       "subcategoryId": "47examplesubcategory9",
       "weeklyMinutes": 60 | null,
     }
@@ -472,6 +474,7 @@ When the Access Token expires, a new one is obtained using the Refresh Token, wh
     "name": "Example Subject" (optional),
     "mark": 7 (optional),
     "state": "PASSED" (optional),
+    "order": 1 (optional),
     "weeklyMinutes": 60 (optional),
   }
   ```
@@ -484,6 +487,7 @@ When the Access Token expires, a new one is obtained using the Refresh Token, wh
       "mark": 7 | null,
       "name": "Example Subject",
       "state": "PASSED",
+      "order": 1,
       "subcategoryId": "47examplesubcategory9",
       "weeklyMinutes": 60 | null,
     }

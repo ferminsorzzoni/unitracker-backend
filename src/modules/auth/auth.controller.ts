@@ -139,6 +139,7 @@ async function logoutController(
 
     try {
         await authService.logout(refreshToken, id);
+        res.clearCookie("refreshToken");
         return res.sendStatus(204);
     } catch (err) {
         return next(err);

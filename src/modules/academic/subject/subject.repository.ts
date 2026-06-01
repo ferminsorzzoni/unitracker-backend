@@ -38,6 +38,7 @@ async function update(
             name: subject.name,
             mark: subject.mark,
             state: subject.state,
+            order: subject.order,
             weeklyMinutes: subject.weeklyMinutes,
         },
     });
