@@ -100,4 +100,4 @@ async function checkSubcategoryOwnership(subcategoryId: string, user: User) {
     await checkCategoryOwnership(subcategory.categoryId, user);
 }
 
-export { create, update, remove, clone, checkSubcategoryOwnership };
+export { create, update, remove, clone, findMaxOrder, checkSubcategoryOwnership };

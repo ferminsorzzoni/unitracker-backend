@@ -7143,11 +7143,13 @@ export namespace Prisma {
 
   export type SubjectAvgAggregateOutputType = {
     mark: number | null
+    order: number | null
     weeklyMinutes: number | null
   }
 
   export type SubjectSumAggregateOutputType = {
     mark: number | null
+    order: number | null
     weeklyMinutes: number | null
   }
 
@@ -7155,6 +7157,7 @@ export namespace Prisma {
     id: string | null
     name: string | null
     mark: number | null
+    order: number | null
     state: $Enums.SubjectState | null
     weeklyMinutes: number | null
     subcategoryId: string | null
@@ -7164,6 +7167,7 @@ export namespace Prisma {
     id: string | null
     name: string | null
     mark: number | null
+    order: number | null
     state: $Enums.SubjectState | null
     weeklyMinutes: number | null
     subcategoryId: string | null
@@ -7173,6 +7177,7 @@ export namespace Prisma {
     id: number
     name: number
     mark: number
+    order: number
     state: number
     weeklyMinutes: number
     subcategoryId: number
@@ -7182,11 +7187,13 @@ export namespace Prisma {
 
   export type SubjectAvgAggregateInputType = {
     mark?: true
+    order?: true
     weeklyMinutes?: true
   }
 
   export type SubjectSumAggregateInputType = {
     mark?: true
+    order?: true
     weeklyMinutes?: true
   }
 
@@ -7194,6 +7201,7 @@ export namespace Prisma {
     id?: true
     name?: true
     mark?: true
+    order?: true
     state?: true
     weeklyMinutes?: true
     subcategoryId?: true
@@ -7203,6 +7211,7 @@ export namespace Prisma {
     id?: true
     name?: true
     mark?: true
+    order?: true
     state?: true
     weeklyMinutes?: true
     subcategoryId?: true
@@ -7212,6 +7221,7 @@ export namespace Prisma {
     id?: true
     name?: true
     mark?: true
+    order?: true
     state?: true
     weeklyMinutes?: true
     subcategoryId?: true
@@ -7308,6 +7318,7 @@ export namespace Prisma {
     id: string
     name: string
     mark: number | null
+    order: number
     state: $Enums.SubjectState
     weeklyMinutes: number | null
     subcategoryId: string
@@ -7336,6 +7347,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     mark?: boolean
+    order?: boolean
     state?: boolean
     weeklyMinutes?: boolean
     subcategoryId?: boolean
@@ -7349,6 +7361,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     mark?: boolean
+    order?: boolean
     state?: boolean
     weeklyMinutes?: boolean
     subcategoryId?: boolean
@@ -7359,6 +7372,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     mark?: boolean
+    order?: boolean
     state?: boolean
     weeklyMinutes?: boolean
     subcategoryId?: boolean
@@ -7369,12 +7383,13 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     mark?: boolean
+    order?: boolean
     state?: boolean
     weeklyMinutes?: boolean
     subcategoryId?: boolean
   }
 
-  export type SubjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "mark" | "state" | "weeklyMinutes" | "subcategoryId", ExtArgs["result"]["subject"]>
+  export type SubjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "mark" | "order" | "state" | "weeklyMinutes" | "subcategoryId", ExtArgs["result"]["subject"]>
   export type SubjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     subcategory?: boolean | SubcategoryDefaultArgs<ExtArgs>
     prerequisites?: boolean | Subject$prerequisitesArgs<ExtArgs>
@@ -7399,6 +7414,7 @@ export namespace Prisma {
       id: string
       name: string
       mark: number | null
+      order: number
       state: $Enums.SubjectState
       weeklyMinutes: number | null
       subcategoryId: string
@@ -7831,6 +7847,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Subject", 'String'>
     readonly name: FieldRef<"Subject", 'String'>
     readonly mark: FieldRef<"Subject", 'Int'>
+    readonly order: FieldRef<"Subject", 'Int'>
     readonly state: FieldRef<"Subject", 'SubjectState'>
     readonly weeklyMinutes: FieldRef<"Subject", 'Int'>
     readonly subcategoryId: FieldRef<"Subject", 'String'>
@@ -9431,6 +9448,7 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     mark: 'mark',
+    order: 'order',
     state: 'state',
     weeklyMinutes: 'weeklyMinutes',
     subcategoryId: 'subcategoryId'
@@ -9879,6 +9897,7 @@ export namespace Prisma {
     id?: StringFilter<"Subject"> | string
     name?: StringFilter<"Subject"> | string
     mark?: IntNullableFilter<"Subject"> | number | null
+    order?: IntFilter<"Subject"> | number
     state?: EnumSubjectStateFilter<"Subject"> | $Enums.SubjectState
     weeklyMinutes?: IntNullableFilter<"Subject"> | number | null
     subcategoryId?: StringFilter<"Subject"> | string
@@ -9891,6 +9910,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     mark?: SortOrderInput | SortOrder
+    order?: SortOrder
     state?: SortOrder
     weeklyMinutes?: SortOrderInput | SortOrder
     subcategoryId?: SortOrder
@@ -9906,6 +9926,7 @@ export namespace Prisma {
     NOT?: SubjectWhereInput | SubjectWhereInput[]
     name?: StringFilter<"Subject"> | string
     mark?: IntNullableFilter<"Subject"> | number | null
+    order?: IntFilter<"Subject"> | number
     state?: EnumSubjectStateFilter<"Subject"> | $Enums.SubjectState
     weeklyMinutes?: IntNullableFilter<"Subject"> | number | null
     subcategoryId?: StringFilter<"Subject"> | string
@@ -9918,6 +9939,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     mark?: SortOrderInput | SortOrder
+    order?: SortOrder
     state?: SortOrder
     weeklyMinutes?: SortOrderInput | SortOrder
     subcategoryId?: SortOrder
@@ -9935,6 +9957,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Subject"> | string
     name?: StringWithAggregatesFilter<"Subject"> | string
     mark?: IntNullableWithAggregatesFilter<"Subject"> | number | null
+    order?: IntWithAggregatesFilter<"Subject"> | number
     state?: EnumSubjectStateWithAggregatesFilter<"Subject"> | $Enums.SubjectState
     weeklyMinutes?: IntNullableWithAggregatesFilter<"Subject"> | number | null
     subcategoryId?: StringWithAggregatesFilter<"Subject"> | string
@@ -10287,6 +10310,7 @@ export namespace Prisma {
     id?: string
     name: string
     mark?: number | null
+    order: number
     state?: $Enums.SubjectState
     weeklyMinutes?: number | null
     subcategory: SubcategoryCreateNestedOneWithoutSubjectsInput
@@ -10298,6 +10322,7 @@ export namespace Prisma {
     id?: string
     name: string
     mark?: number | null
+    order: number
     state?: $Enums.SubjectState
     weeklyMinutes?: number | null
     subcategoryId: string
@@ -10309,6 +10334,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     mark?: NullableIntFieldUpdateOperationsInput | number | null
+    order?: IntFieldUpdateOperationsInput | number
     state?: EnumSubjectStateFieldUpdateOperationsInput | $Enums.SubjectState
     weeklyMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     subcategory?: SubcategoryUpdateOneRequiredWithoutSubjectsNestedInput
@@ -10320,6 +10346,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     mark?: NullableIntFieldUpdateOperationsInput | number | null
+    order?: IntFieldUpdateOperationsInput | number
     state?: EnumSubjectStateFieldUpdateOperationsInput | $Enums.SubjectState
     weeklyMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     subcategoryId?: StringFieldUpdateOperationsInput | string
@@ -10331,6 +10358,7 @@ export namespace Prisma {
     id?: string
     name: string
     mark?: number | null
+    order: number
     state?: $Enums.SubjectState
     weeklyMinutes?: number | null
     subcategoryId: string
@@ -10340,6 +10368,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     mark?: NullableIntFieldUpdateOperationsInput | number | null
+    order?: IntFieldUpdateOperationsInput | number
     state?: EnumSubjectStateFieldUpdateOperationsInput | $Enums.SubjectState
     weeklyMinutes?: NullableIntFieldUpdateOperationsInput | number | null
   }
@@ -10348,6 +10377,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     mark?: NullableIntFieldUpdateOperationsInput | number | null
+    order?: IntFieldUpdateOperationsInput | number
     state?: EnumSubjectStateFieldUpdateOperationsInput | $Enums.SubjectState
     weeklyMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     subcategoryId?: StringFieldUpdateOperationsInput | string
@@ -10788,6 +10818,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     mark?: SortOrder
+    order?: SortOrder
     state?: SortOrder
     weeklyMinutes?: SortOrder
     subcategoryId?: SortOrder
@@ -10795,6 +10826,7 @@ export namespace Prisma {
 
   export type SubjectAvgOrderByAggregateInput = {
     mark?: SortOrder
+    order?: SortOrder
     weeklyMinutes?: SortOrder
   }
 
@@ -10802,6 +10834,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     mark?: SortOrder
+    order?: SortOrder
     state?: SortOrder
     weeklyMinutes?: SortOrder
     subcategoryId?: SortOrder
@@ -10811,6 +10844,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     mark?: SortOrder
+    order?: SortOrder
     state?: SortOrder
     weeklyMinutes?: SortOrder
     subcategoryId?: SortOrder
@@ -10818,6 +10852,7 @@ export namespace Prisma {
 
   export type SubjectSumOrderByAggregateInput = {
     mark?: SortOrder
+    order?: SortOrder
     weeklyMinutes?: SortOrder
   }
 
@@ -11950,6 +11985,7 @@ export namespace Prisma {
     id?: string
     name: string
     mark?: number | null
+    order: number
     state?: $Enums.SubjectState
     weeklyMinutes?: number | null
     prerequisites?: PrerequisiteCreateNestedManyWithoutSubjectInput
@@ -11960,6 +11996,7 @@ export namespace Prisma {
     id?: string
     name: string
     mark?: number | null
+    order: number
     state?: $Enums.SubjectState
     weeklyMinutes?: number | null
     prerequisites?: PrerequisiteUncheckedCreateNestedManyWithoutSubjectInput
@@ -12024,6 +12061,7 @@ export namespace Prisma {
     id?: StringFilter<"Subject"> | string
     name?: StringFilter<"Subject"> | string
     mark?: IntNullableFilter<"Subject"> | number | null
+    order?: IntFilter<"Subject"> | number
     state?: EnumSubjectStateFilter<"Subject"> | $Enums.SubjectState
     weeklyMinutes?: IntNullableFilter<"Subject"> | number | null
     subcategoryId?: StringFilter<"Subject"> | string
@@ -12163,6 +12201,7 @@ export namespace Prisma {
     id?: string
     name: string
     mark?: number | null
+    order: number
     state?: $Enums.SubjectState
     weeklyMinutes?: number | null
     subcategory: SubcategoryCreateNestedOneWithoutSubjectsInput
@@ -12173,6 +12212,7 @@ export namespace Prisma {
     id?: string
     name: string
     mark?: number | null
+    order: number
     state?: $Enums.SubjectState
     weeklyMinutes?: number | null
     subcategoryId: string
@@ -12188,6 +12228,7 @@ export namespace Prisma {
     id?: string
     name: string
     mark?: number | null
+    order: number
     state?: $Enums.SubjectState
     weeklyMinutes?: number | null
     subcategory: SubcategoryCreateNestedOneWithoutSubjectsInput
@@ -12198,6 +12239,7 @@ export namespace Prisma {
     id?: string
     name: string
     mark?: number | null
+    order: number
     state?: $Enums.SubjectState
     weeklyMinutes?: number | null
     subcategoryId: string
@@ -12224,6 +12266,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     mark?: NullableIntFieldUpdateOperationsInput | number | null
+    order?: IntFieldUpdateOperationsInput | number
     state?: EnumSubjectStateFieldUpdateOperationsInput | $Enums.SubjectState
     weeklyMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     subcategory?: SubcategoryUpdateOneRequiredWithoutSubjectsNestedInput
@@ -12234,6 +12277,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     mark?: NullableIntFieldUpdateOperationsInput | number | null
+    order?: IntFieldUpdateOperationsInput | number
     state?: EnumSubjectStateFieldUpdateOperationsInput | $Enums.SubjectState
     weeklyMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     subcategoryId?: StringFieldUpdateOperationsInput | string
@@ -12255,6 +12299,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     mark?: NullableIntFieldUpdateOperationsInput | number | null
+    order?: IntFieldUpdateOperationsInput | number
     state?: EnumSubjectStateFieldUpdateOperationsInput | $Enums.SubjectState
     weeklyMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     subcategory?: SubcategoryUpdateOneRequiredWithoutSubjectsNestedInput
@@ -12265,6 +12310,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     mark?: NullableIntFieldUpdateOperationsInput | number | null
+    order?: IntFieldUpdateOperationsInput | number
     state?: EnumSubjectStateFieldUpdateOperationsInput | $Enums.SubjectState
     weeklyMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     subcategoryId?: StringFieldUpdateOperationsInput | string
@@ -12381,6 +12427,7 @@ export namespace Prisma {
     id?: string
     name: string
     mark?: number | null
+    order: number
     state?: $Enums.SubjectState
     weeklyMinutes?: number | null
   }
@@ -12389,6 +12436,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     mark?: NullableIntFieldUpdateOperationsInput | number | null
+    order?: IntFieldUpdateOperationsInput | number
     state?: EnumSubjectStateFieldUpdateOperationsInput | $Enums.SubjectState
     weeklyMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     prerequisites?: PrerequisiteUpdateManyWithoutSubjectNestedInput
@@ -12399,6 +12447,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     mark?: NullableIntFieldUpdateOperationsInput | number | null
+    order?: IntFieldUpdateOperationsInput | number
     state?: EnumSubjectStateFieldUpdateOperationsInput | $Enums.SubjectState
     weeklyMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     prerequisites?: PrerequisiteUncheckedUpdateManyWithoutSubjectNestedInput
@@ -12409,6 +12458,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     mark?: NullableIntFieldUpdateOperationsInput | number | null
+    order?: IntFieldUpdateOperationsInput | number
     state?: EnumSubjectStateFieldUpdateOperationsInput | $Enums.SubjectState
     weeklyMinutes?: NullableIntFieldUpdateOperationsInput | number | null
   }

@@ -163,6 +163,7 @@ exports.Prisma.SubjectScalarFieldEnum = {
   id: 'id',
   name: 'name',
   mark: 'mark',
+  order: 'order',
   state: 'state',
   weeklyMinutes: 'weeklyMinutes',
   subcategoryId: 'subcategoryId'

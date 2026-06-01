@@ -13,9 +13,16 @@ import type {
 
 async function create(
     subject: CreateSubjectDTO,
+    order?: number,
     tx: DbClient = prisma,
 ): Promise<Subject> {
-    return await subjectRepository.create(subject, tx);
+    let nextOrder: number;
+    if(!order) {
+        nextOrder = (await findMaxOrder(subject.subcategoryId)) + 1;
+    } else {
+        nextOrder = order;
+    }
+    return await subjectRepository.create(subject, nextOrder, tx);
 }
 
 async function findById(subjectId: string): Promise<Subject> {
@@ -62,8 +69,15 @@ async function clone(
             subcategoryId: subcategoryId,
             weeklyMinutes: subject.weeklyMinutes ?? undefined,
         },
+        subject.order,
         tx,
     );
+}
+
+async function findMaxOrder(subcategoryId: string): Promise<number> {
+    const result = await subjectRepository.findMaxOrder(subcategoryId);
+    const maxOrder = result._max.order ?? 0;
+    return maxOrder;
 }
 
 async function checkSubjectOwnership(subjectId: string, user: User) {

@@ -5,11 +5,13 @@ import type { CreateSubjectDTO, UpdateSubjectDTO } from './subject.types.js';
 
 async function create(
     subject: CreateSubjectDTO,
+    order: number,
     tx: DbClient = prisma,
 ): Promise<Subject> {
     return await tx.subject.create({
         data: {
             name: subject.name,
+            order: order,
             subcategoryId: subject.subcategoryId,
             weeklyMinutes: subject.weeklyMinutes,
         },
@@ -49,4 +51,15 @@ async function remove(subjectId: string): Promise<Subject> {
     });
 }
 
-export { create, findById, update, remove };
+async function findMaxOrder(subcategoryId: string) {
+    return await prisma.subject.aggregate({
+        where: {
+            subcategoryId: subcategoryId,
+        },
+        _max: {
+            order: true,
+        },
+    });
+}
+
+export { create, findById, update, remove, findMaxOrder };
