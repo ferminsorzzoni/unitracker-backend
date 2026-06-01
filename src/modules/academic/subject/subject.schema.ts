@@ -3,6 +3,7 @@ import z from 'zod';
 const createSubjectSchema = z.object({
     name: z.string().trim().min(1),
     weeklyMinutes: z.int().positive().optional(),
+    order: z.int().positive().optional(),
     subcategoryId: z.uuid(),
 });
 
