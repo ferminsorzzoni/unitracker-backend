@@ -120,12 +120,12 @@ const auth_utils_js_1 = require("../../../auth/auth.utils.js");
             name: 'La mejor materia 1',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
-        });
+        }, 1);
         const subject2 = await subjectRepository.create({
             name: 'La mejor materia 2',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
-        });
+        }, 2);
         const user2 = await userRepository.create({
             email: 'test2@test.com',
             password: 'testpassword2',
@@ -211,12 +211,12 @@ const auth_utils_js_1 = require("../../../auth/auth.utils.js");
             name: 'La mejor materia 1',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
-        });
+        }, 1);
         const subject2 = await subjectRepository.create({
             name: 'La mejor materia 2',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
-        });
+        }, 2);
         const res = await (0, supertest_1.default)(app_js_1.default)
             .post(`/api/academic/prerequisites/`)
             .set('Authorization', `Bearer ${accessToken}`)
@@ -254,12 +254,12 @@ const auth_utils_js_1 = require("../../../auth/auth.utils.js");
             name: 'La mejor materia 1',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
-        });
+        }, 1);
         const subject2 = await subjectRepository.create({
             name: 'La mejor materia 2',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
-        });
+        }, 2);
         const user2 = await userRepository.create({
             email: 'test2@test.com',
             password: 'testpassword2',
@@ -337,12 +337,12 @@ const auth_utils_js_1 = require("../../../auth/auth.utils.js");
             name: 'La mejor materia 1',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
-        });
+        }, 1);
         const subject2 = await subjectRepository.create({
             name: 'La mejor materia 2',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
-        });
+        }, 2);
         const prerequisite = await prerequisiteRepository.create({
             type: 'PASSED',
             subjectId: subject1.id,
@@ -423,12 +423,12 @@ const auth_utils_js_1 = require("../../../auth/auth.utils.js");
             name: 'La mejor materia 1',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
-        });
+        }, 1);
         const subject2 = await subjectRepository.create({
             name: 'La mejor materia 2',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
-        });
+        }, 2);
         const prerequisite = await prerequisiteRepository.create({
             type: 'PASSED',
             subjectId: subject1.id,
@@ -462,12 +462,12 @@ const auth_utils_js_1 = require("../../../auth/auth.utils.js");
             name: 'La mejor materia 1',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
-        });
+        }, 1);
         const subject2 = await subjectRepository.create({
             name: 'La mejor materia 2',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
-        });
+        }, 2);
         const prerequisite = await prerequisiteRepository.create({
             type: 'PASSED',
             subjectId: subject1.id,

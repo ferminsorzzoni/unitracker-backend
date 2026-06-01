@@ -37,6 +37,7 @@ exports.create = create;
 exports.update = update;
 exports.remove = remove;
 exports.clone = clone;
+exports.findMaxOrder = findMaxOrder;
 exports.checkSubcategoryOwnership = checkSubcategoryOwnership;
 const database_js_1 = require("../../../config/database.js");
 const errors_js_1 = require("../../../utils/errors.js");

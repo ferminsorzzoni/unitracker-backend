@@ -307,7 +307,7 @@ const auth_utils_js_1 = require("../../../auth/auth.utils.js");
             name: 'La mejor materia',
             weeklyMinutes: 120,
             subcategoryId: subcategory.id,
-        });
+        }, 1);
         const accessToken = (0, auth_utils_js_1.generateAccessToken)({
             id: user.id,
             role: user.role,
@@ -352,7 +352,7 @@ const auth_utils_js_1 = require("../../../auth/auth.utils.js");
             name: 'La mejor materia',
             weeklyMinutes: 120,
             subcategoryId: subcategory.id,
-        });
+        }, 1);
         const user2 = await userRepository.create({
             email: 'test2@test.com',
             password: 'testpassword2',
@@ -440,7 +440,7 @@ const auth_utils_js_1 = require("../../../auth/auth.utils.js");
             name: 'La mejor materia',
             weeklyMinutes: 120,
             subcategoryId: subcategory.id,
-        });
+        }, 1);
         const res = await (0, supertest_1.default)(app_js_1.default)
             .patch(`/api/academic/subjects/${subject.id}`)
             .set('Authorization', `Bearer ${accessToken}`)
@@ -481,7 +481,7 @@ const auth_utils_js_1 = require("../../../auth/auth.utils.js");
             name: 'La mejor materia',
             weeklyMinutes: 120,
             subcategoryId: subcategory.id,
-        });
+        }, 1);
         const user2 = await userRepository.create({
             email: 'test2@test.com',
             password: 'testpassword2',
@@ -562,7 +562,7 @@ const auth_utils_js_1 = require("../../../auth/auth.utils.js");
             name: 'La mejor materia',
             weeklyMinutes: 120,
             subcategoryId: subcategory.id,
-        });
+        }, 1);
         const user2 = await userRepository.create({
             email: 'test2@test.com',
             password: 'testpassword2',
@@ -638,7 +638,7 @@ const auth_utils_js_1 = require("../../../auth/auth.utils.js");
             name: 'La mejor materia',
             weeklyMinutes: 120,
             subcategoryId: subcategory.id,
-        });
+        }, 1);
         const res = await (0, supertest_1.default)(app_js_1.default)
             .delete(`/api/academic/subjects/${subject.id}`)
             .set('Authorization', `Bearer ${accessToken}`)
@@ -667,7 +667,7 @@ const auth_utils_js_1 = require("../../../auth/auth.utils.js");
             name: 'La mejor materia',
             weeklyMinutes: 120,
             subcategoryId: subcategory.id,
-        });
+        }, 1);
         const user2 = await userRepository.create({
             email: 'test2@test.com',
             password: 'testpassword2',

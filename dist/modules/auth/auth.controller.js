@@ -79,7 +79,7 @@ exports.googleHandler = googleHandler;
 const googleCallbackHandler = [
     passport_1.default.authenticate('google', { session: false }),
     setRefreshToken,
-    sendAccessTokenAndUser,
+    sendAccessTokenAndUserRedirect,
 ];
 exports.googleCallbackHandler = googleCallbackHandler;
 async function verifyRefreshToken(req, res, next) {
@@ -101,15 +101,13 @@ function sendAccessToken(req, res) {
 function sendAccessTokenAndUser(req, res) {
     const user = req.user;
     const accessToken = (0, auth_utils_js_1.generateAccessToken)(user);
-    return res.send(`
-        <script>
-            window.opener.postMessage(
-                ${JSON.stringify({ accessToken, user })},
-                '${env_js_1.env.FRONTEND_URL}'
-            )
-            window.close()
-        </script>
-    `);
+    return res.json({ accessToken, user });
+}
+function sendAccessTokenAndUserRedirect(req, res) {
+    const user = req.user;
+    const accessToken = (0, auth_utils_js_1.generateAccessToken)(user);
+    const params = encodeURIComponent(JSON.stringify({ accessToken, user }));
+    return res.redirect(`${env_js_1.env.FRONTEND_URL}/auth/callback?data=${params}`);
 }
 async function setRefreshToken(req, res, next) {
     try {
@@ -117,7 +115,8 @@ async function setRefreshToken(req, res, next) {
         const token = await authService.createRefreshToken(id);
         res.cookie('refreshToken', token, {
             httpOnly: true,
-            sameSite: 'strict',
+            secure: env_js_1.env.NODE_ENV === "production",
+            sameSite: env_js_1.env.NODE_ENV === "production" ? "none" : "lax",
         });
         return next();
     }
@@ -152,6 +151,7 @@ async function logoutController(req, res, next) {
     const { id } = req.user;
     try {
         await authService.logout(refreshToken, id);
+        res.clearCookie("refreshToken");
         return res.sendStatus(204);
     }
     catch (err) {

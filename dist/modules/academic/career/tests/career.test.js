@@ -683,12 +683,12 @@ const auth_utils_js_1 = require("../../../auth/auth.utils.js");
             name: 'La mejor materia 1',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
-        });
+        }, 1);
         const subject2 = await subjectRepository.create({
             name: 'La mejor materia 2',
             weeklyMinutes: 2,
             subcategoryId: subcategory.id,
-        });
+        }, 2);
         const prerequisite = await prerequisiteRepository.create({
             type: 'PASSED',
             subjectId: subject1.id,

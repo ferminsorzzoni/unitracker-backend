@@ -72,7 +72,7 @@ passport_1.default.use(new passport_google_oauth20_1.Strategy({
                 name: profile.displayName,
             });
         }
-        return cb(null, { id: user.id, role: user.role });
+        return cb(null, { id: user.id, role: user.role, email: user.email });
     }
     catch (err) {
         return cb(err);

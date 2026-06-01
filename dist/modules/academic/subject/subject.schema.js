@@ -21,6 +21,7 @@ const updateSubjectSchema = zod_1.default.object({
     state: zod_1.default
         .enum(['PENDING', 'IN_PROGRESS', 'REGULARIZED', 'FAILED', 'PASSED'])
         .optional(),
+    order: zod_1.default.int().positive().optional(),
     weeklyMinutes: zod_1.default.int().positive().optional(),
 });
 exports.updateSubjectSchema = updateSubjectSchema;

@@ -43,8 +43,15 @@ const index_js_1 = require("../../../generated/prisma/index.js");
 const errors_js_1 = require("../../../utils/errors.js");
 const subcategory_service_js_1 = require("../subcategory/subcategory.service.js");
 const subjectRepository = __importStar(require("./subject.repository.js"));
-async function create(subject, tx = database_js_1.prisma) {
-    return await subjectRepository.create(subject, tx);
+async function create(subject, order, tx = database_js_1.prisma) {
+    let nextOrder;
+    if (!order) {
+        nextOrder = (await findMaxOrder(subject.subcategoryId)) + 1;
+    }
+    else {
+        nextOrder = order;
+    }
+    return await subjectRepository.create(subject, nextOrder, tx);
 }
 async function findById(subjectId) {
     const subject = await subjectRepository.findById(subjectId);
@@ -81,7 +88,12 @@ async function clone(subject, subcategoryId, tx = database_js_1.prisma) {
         name: subject.name,
         subcategoryId: subcategoryId,
         weeklyMinutes: subject.weeklyMinutes ?? undefined,
-    }, tx);
+    }, subject.order, tx);
+}
+async function findMaxOrder(subcategoryId) {
+    const result = await subjectRepository.findMaxOrder(subcategoryId);
+    const maxOrder = result._max.order ?? 0;
+    return maxOrder;
 }
 async function checkSubjectOwnership(subjectId, user) {
     const subject = await findById(subjectId);
