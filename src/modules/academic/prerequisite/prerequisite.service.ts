@@ -41,12 +41,14 @@ async function clone(
     tx: DbClient = prisma,
 ) {
     await Promise.all(
-        prerequisites.map(async (prerequisite) => {
+        prerequisites.map((prerequisite) => {
             const newSubjectId = subjectIdMap.get(prerequisite.subjectId);
             const newPrerequisiteId = subjectIdMap.get(
                 prerequisite.prerequisiteId,
             );
 
+            console.log("newsubjectid", newSubjectId);
+            console.log("newprerequisiteid", newPrerequisiteId);
             if (!newSubjectId || !newPrerequisiteId) {
                 throw new NotFoundError('Prerequisite not found');
             }
