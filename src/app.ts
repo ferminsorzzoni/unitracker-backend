@@ -12,7 +12,7 @@ const app = express();
 
 app.use(helmet());
 app.use(cors({
-  origin: ['https://unitracker-frontend.onrender.com'],
+  origin: ['https://unitracker.dev'],
   credentials: true
 }))
 app.use(cookieParser());
