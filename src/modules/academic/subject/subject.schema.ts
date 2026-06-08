@@ -12,7 +12,7 @@ const subjectParamsSchema = z.object({
 
 const updateSubjectSchema = z.object({
     name: z.string().trim().min(1).optional(),
-    mark: z.int().min(0).max(10).optional(),
+    mark: z.int().min(0).max(10).nullable().optional(),
     state: z
         .enum(['PENDING', 'IN_PROGRESS', 'REGULARIZED', 'FAILED', 'PASSED'])
         .optional(),
