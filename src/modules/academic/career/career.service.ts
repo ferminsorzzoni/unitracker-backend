@@ -7,6 +7,7 @@ import { clone as cloneCategory } from '../category/category.service.js';
 import { prisma } from '../../../config/database.js';
 import { DbClient } from '../../../types/dbClient.js';
 import { Career, Prisma } from '../../../generated/prisma/index.js';
+import { clone as clonePrerequisites } from "../prerequisite/prerequisite.service.js";
 
 async function create(
     career: CreateCareerDTO,
@@ -76,14 +77,21 @@ async function clone(careerId: string, user: User): Promise<Career> {
             user,
             tx,
         );
+
+        const subjectIdMap = new Map<string, string>();
+
         await Promise.all(
             career.categories.map((category) =>
-                cloneCategory(category, clonedCareer.id, tx),
+                cloneCategory(category, clonedCareer.id, subjectIdMap, tx),
             ),
         );
+
+        await clonePrerequisites(career, subjectIdMap, tx);
         return await findByIdWithCategories(clonedCareer.id, tx);
     });
 }
+
+
 
 async function checkCareerOwnership(careerId: string, user: User) {
     const career = await findById(careerId);

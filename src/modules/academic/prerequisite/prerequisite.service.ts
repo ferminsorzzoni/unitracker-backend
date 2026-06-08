@@ -1,6 +1,5 @@
 import type { User } from '../../../types/user.js';
 import type {
-    ClonePrerequisiteDTO,
     CreatePrerequisiteDTO,
 } from './prerequisite.types.js';
 import * as prerequisiteRepository from './prerequisite.repository.js';
@@ -35,22 +34,37 @@ async function remove(prerequisiteId: string): Promise<Prerequisite> {
     }
 }
 
+type CareerWithRelations = Prisma.CareerGetPayload<{include: {
+    categories: {
+      include: {
+        subcategories: {
+          include: {
+            subjects: {
+              include: { prerequisites: true }
+            }
+          }
+        }
+      }
+    }
+  }}>;
+
 async function clone(
-    prerequisites: ClonePrerequisiteDTO[],
+    originalCareer: CareerWithRelations,
     subjectIdMap: Map<string, string>,
     tx: DbClient = prisma,
 ) {
-    await Promise.all(
-        prerequisites.map((prerequisite) => {
-            const newSubjectId = subjectIdMap.get(prerequisite.subjectId);
-            const newPrerequisiteId = subjectIdMap.get(
-                prerequisite.prerequisiteId,
-            );
+    const allPrerequisites = originalCareer.categories
+        .flatMap((cat) => cat.subcategories)
+        .flatMap((sub) => sub.subjects)
+        .flatMap((subj) => subj.prerequisites);
 
-            console.log("newsubjectid", newSubjectId);
-            console.log("newprerequisiteid", newPrerequisiteId);
-            if (!newSubjectId || !newPrerequisiteId) {
-                throw new NotFoundError('Prerequisite not found');
+    await Promise.all(
+        allPrerequisites.map((prerequisite) => {
+            const newSubjectId = subjectIdMap.get(prerequisite.subjectId);
+            const newPrerequisiteId = subjectIdMap.get(prerequisite.prerequisiteId);
+
+            if(!newSubjectId || !newPrerequisiteId) {
+                throw new NotFoundError("Prerequisite not found")
             }
 
             return create(
@@ -61,8 +75,8 @@ async function clone(
                 },
                 tx,
             );
-        }),
-    );
+        })
+    )
 }
 
 async function checkPrerequisiteOwnership(prerequisiteId: string, user: User) {

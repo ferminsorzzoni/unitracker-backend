@@ -10,7 +10,6 @@ import type {
     UpdateSubcategoryDTO,
 } from './subcategory.types.js';
 import { clone as cloneSubject } from '../subject/subject.service.js';
-import { clone as clonePrerequisites } from '../prerequisite/prerequisite.service.js';
 import { Prisma, type Subcategory } from '../../../generated/prisma/index.js';
 
 async function create(
@@ -63,6 +62,7 @@ async function remove(subcategoryId: string): Promise<Subcategory> {
 async function clone(
     subcategory: CloneSubcategoryDTO,
     categoryId: string,
+    subjectIdMap: Map<string, string>,
     tx: DbClient = prisma,
 ) {
     const clonedSubcategory = await create(
@@ -70,7 +70,7 @@ async function clone(
         subcategory.order,
         tx,
     );
-    const subjectIdMap = new Map<string, string>();
+    
     await Promise.all(
         subcategory.subjects.map(async (subject) => {
             const clonedSubject = await cloneSubject(
@@ -81,11 +81,6 @@ async function clone(
             subjectIdMap.set(subject.id, clonedSubject.id);
             return clonedSubject;
         }),
-    );
-    await Promise.all(
-        subcategory.subjects.map((subject) =>
-            clonePrerequisites(subject.prerequisites, subjectIdMap, tx),
-        ),
     );
 }
 

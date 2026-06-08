@@ -62,6 +62,7 @@ async function remove(categoryId: string): Promise<Category> {
 async function clone(
     category: CloneCategoryDTO,
     careerId: string,
+    subjectIdMap: Map<string, string>,
     tx: DbClient = prisma,
 ) {
     const clonedCategory = await create(
@@ -71,7 +72,7 @@ async function clone(
     );
     await Promise.all(
         category.subcategories.map((subcategory) =>
-            cloneSubcategory(subcategory, clonedCategory.id, tx),
+            cloneSubcategory(subcategory, clonedCategory.id, subjectIdMap, tx),
         ),
     );
 }
