@@ -40,22 +40,27 @@ async function clone(
     subjectIdMap: Map<string, string>,
     tx: DbClient = prisma,
 ) {
-    prerequisites.forEach(async (prerequisite) => {
-        const newSubjectId = subjectIdMap.get(prerequisite.subjectId);
-        const newPrerequisiteId = subjectIdMap.get(
-            prerequisite.prerequisiteId,
-        )!;
-        if (!newSubjectId || !newPrerequisiteId)
-            throw new NotFoundError('Prerequisite not found');
-        await create(
-            {
-                subjectId: newSubjectId,
-                prerequisiteId: newPrerequisiteId,
-                type: prerequisite.type,
-            },
-            tx,
-        );
-    });
+    await Promise.all(
+        prerequisites.map(async (prerequisite) => {
+            const newSubjectId = subjectIdMap.get(prerequisite.subjectId);
+            const newPrerequisiteId = subjectIdMap.get(
+                prerequisite.prerequisiteId,
+            );
+
+            if (!newSubjectId || !newPrerequisiteId) {
+                throw new NotFoundError('Prerequisite not found');
+            }
+
+            return create(
+                {
+                    subjectId: newSubjectId,
+                    prerequisiteId: newPrerequisiteId,
+                    type: prerequisite.type,
+                },
+                tx,
+            );
+        }),
+    );
 }
 
 async function checkPrerequisiteOwnership(prerequisiteId: string, user: User) {
